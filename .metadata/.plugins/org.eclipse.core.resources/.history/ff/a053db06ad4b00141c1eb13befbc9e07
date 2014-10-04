@@ -1,0 +1,238 @@
+package snippet;
+
+import java.awt.Point;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.*;
+import java.io.IOException;
+import javax.swing.*;
+
+
+//and here is the button to drag   
+public class DndLabel extends JLabel implements DropTargetListener {
+
+    private DropTarget target;
+    private DndButton button;
+    public DndLabel last;
+
+    //initialize the JTable with the data
+    public DndLabel() {
+        super();
+
+        //mark this a DropTarget
+        target = new DropTarget(this, this);
+
+        //have it utilize a custom transfer handler
+        setTransferHandler(new MyTransferHandler());
+    }
+
+    public void dragEnter(DropTargetDragEvent dtde) {
+        System.out.println("enter");
+
+        try {
+            //get the Point where the drop occurred
+            Point loc = dtde.getLocation();
+
+            //get Transfer data
+            Transferable t = dtde.getTransferable();
+
+            //get the Data flavors transferred with the Transferable
+            DataFlavor[] d = t.getTransferDataFlavors();
+
+            button = (DndButton) t.getTransferData(d[0]);
+
+            button.setBounds(loc.x, 0, 100, 50);
+
+            add(button);
+
+            //and if the DataFlavors match for the DnDTable 
+            //(ie., we don't want an ImageFlavor marking an image transfer)
+            if (getTransferHandler().canImport(this, d)) {
+
+                //then import the Draggable JComponent and repaint() the JTable
+                ((MyTransferHandler) getTransferHandler()).importData(this, (DndButton) t.getTransferData(d[0]), loc);
+                repaint();
+            } else {
+                return;
+            }
+        } catch (UnsupportedFlavorException  ex) {
+            ex.printStackTrace();
+        } catch(IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void dragOver(DropTargetDragEvent dtde) {
+        button.setLocation(dtde.getLocation().x, 0);
+    }
+
+    public void dragExit(DropTargetEvent dte) {
+        System.out.println("remove");
+
+        last = null;
+        remove(button);
+        repaint();
+
+    }
+
+    //This is what happens when a Drop occurs
+    public void drop(DropTargetDropEvent dtde) {
+        System.out.println("drop!");
+        try {
+            //get the Point where the drop occurred
+            Point loc = dtde.getLocation();
+
+            //get Transfer data
+            Transferable t = dtde.getTransferable();
+
+            //get the Data flavors transferred with the Transferable
+            DataFlavor[] d = t.getTransferDataFlavors();
+
+            DndButton tempButton = (DndButton) t.getTransferData(d[0]);
+
+            tempButton.setBounds(loc.x, 0, 100, 50);
+
+            add(tempButton);
+
+            //and if the DataFlavors match for the DnDTable 
+            //(ie., we don't want an ImageFlavor marking an image transfer)
+            if (getTransferHandler().canImport(this, d)) {
+
+                //then import the Draggable JComponent and repaint() the JTable
+                ((MyTransferHandler) getTransferHandler()).importData(this, (DndButton) t.getTransferData(d[0]), loc);
+                repaint();
+            } else {
+                return;
+            }
+
+        } catch (UnsupportedFlavorException ex) {
+            ex.printStackTrace();
+        }catch(IOException ex){
+
+        }finally {
+            dtde.dropComplete(true);
+        }
+    }
+
+    @Override
+    public void dropActionChanged(DropTargetDragEvent dtde) {
+    }
+
+    class MyTransferHandler extends TransferHandler {
+
+        //tests for a valid JButton DataFlavor
+        public boolean canImport(JComponent c, DataFlavor[] f) {
+            DataFlavor temp = new DataFlavor(DndButton.class, "JButton");
+            for (DataFlavor d : f) {
+                if (d.equals(temp)) {
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
+        //add the data into the JTable
+        public boolean importData(JComponent comp, Transferable t, Point p) {
+            try {
+                DndButton tempButton = (DndButton) t.getTransferData(new DataFlavor(DndButton.class, "JButton"));
+
+            } catch (UnsupportedFlavorException | IOException ex) {
+                System.err.println(ex);
+            }
+            return true;
+        }
+    }
+}
+class DndButton extends JButton implements Transferable, DragSourceListener, DragGestureListener {
+
+    //marks this JButton as the source of the Drag
+    private DragSource source;
+    private TransferHandler t;
+
+    public DndButton() {
+        this("");
+    }
+
+    public DndButton(String message) {
+        super(message);
+
+        //The TransferHandler returns a new DnDButton
+        //to be transferred in the Drag
+        t = new TransferHandler() {
+
+            public Transferable createTransferable(JComponent c) {
+                return new DndButton(getText());
+            }
+        };
+        setTransferHandler(t);
+
+        //The Drag will copy the DnDButton rather than moving it
+        source = new DragSource();
+        source.createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE, this);
+    }
+
+    //The DataFlavor is a marker to let the DropTarget know how to
+    //handle the Transferable
+    public DataFlavor[] getTransferDataFlavors() {
+        return new DataFlavor[]{new DataFlavor(DndButton.class, "JButton")};
+    }
+
+    public boolean isDataFlavorSupported(DataFlavor flavor) {
+        return true;
+    }
+
+    public Object getTransferData(DataFlavor flavor) {
+        return this;
+    }
+
+    public void dragEnter(DragSourceDragEvent dsde) {
+    }
+
+    public void dragOver(DragSourceDragEvent dsde) {
+        //this.setLocation(dsde.getX()-150,0);
+    }
+
+    public void dropActionchanged(DragSourceDragEvent dsde) {
+    }
+
+    public void dragExit(DragSourceEvent dse) {
+    }
+
+    //when the drag finishes, then repaint the DnDButton
+    //so it doesn't look like it has still been pressed down
+    public void dragDropEnd(DragSourceDropEvent dsde) {
+        // JComponent c = (JComponent) this.getParent();
+        //c.remove(this);
+        //c.repaint();
+    }
+
+    //when a DragGesture is recognized, initiate the Drag
+    public void dragGestureRecognized(DragGestureEvent dge) {
+        source.startDrag(dge, DragSource.DefaultMoveDrop, DndButton.this, this);
+    }
+
+    @Override
+    public void dropActionChanged(DragSourceDragEvent dsde) {
+    }
+}
+
+class Main {
+
+    public static void main(String[] args) {
+        JFrame f = new JFrame("sscce");
+        f.setBounds(0, 0, 500, 80);
+        f.setVisible(true);
+        DndLabel trackOne = new DndLabel();
+        trackOne.setBounds(0, 0, 500, 50);
+        f.add(trackOne);
+        DndButton b = new DndButton("hello");
+        b.setBounds(0, 0, 100, trackOne.getHeight());
+
+        trackOne.add(b);
+        trackOne.revalidate();
+        trackOne.repaint();
+    }
+}

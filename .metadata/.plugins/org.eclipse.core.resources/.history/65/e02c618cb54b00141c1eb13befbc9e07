@@ -1,0 +1,30 @@
+package snippet;
+
+import java.awt.BorderLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+class DragFrame extends JFrame {
+	
+	public DragFrame() {
+		JButton butt = new JButton("huhu");
+		JPanel panel = new JPanel();
+		panel.add(butt, BorderLayout.NORTH);
+		panel.setSize(400,400);
+		
+		getContentPane().add(panel);
+		this.setSize(400,400);
+		this.setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		
+		JFrame frame = new DragFrame();
+		
+	}
+	
+	
+}
+

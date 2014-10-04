@@ -1,0 +1,12 @@
+package snippet;
+
+import javax.swing.JButton;
+
+class DragFrame extends JFrame {
+	
+	JButton butt = new JButton();
+	
+	this.add(butt)
+	
+}
+
