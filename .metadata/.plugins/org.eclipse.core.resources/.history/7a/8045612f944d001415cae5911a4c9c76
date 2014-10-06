@@ -1,0 +1,19 @@
+package q8388415.brero_massimiliano.PTNetEditor.views;
+
+import snippet.ButtListener;
+
+public class TransitionView extends NodeView {
+	
+	ButtListener listener;
+	
+	public TransitionView() {
+		super("square.png");
+		this.init();
+	}
+	
+	private void init() {
+		nodeLabel.setBounds(+50, -5, 10,20);
+		setIconTextGap((int)Math.floor(-getWidth()/3.2));
+	}
+
+}

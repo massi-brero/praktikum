@@ -1,0 +1,58 @@
+package snippet;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Insets;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+class DragFrame extends JFrame {
+	
+	private JButton butt1;
+	private JButton butt2;
+	
+	public DragFrame() {
+		syso("hä");
+		butt1 = new JButton("1");
+		butt2 = new JButton("2");
+		JPanel panel = new JPanel();
+		panel.setPreferredSize(new Dimension(400,400));
+		ButtListener mListernerButt1 = new ButtListener(this);
+		ButtListener mListernerButt2 = new ButtListener(this);
+		
+		butt1.setBounds(10, 10, 35, 35);
+		butt1.addMouseMotionListener(mListernerButt1);
+		butt1.addMouseListener(mListernerButt1);
+		butt1.setContentAreaFilled(false);
+		butt1.setIcon(new ImageIcon("circle.png"));
+		butt1.setIconTextGap((int)Math.floor(-butt1.getWidth()/1.7));
+		butt1.setBorder(null);
+		
+		panel.add(butt1);
+		
+		butt2.setBounds(100, 100, 100, 100);
+		butt2.addMouseMotionListener(mListernerButt2);
+		butt2.addMouseListener(mListernerButt2);
+		butt2.setContentAreaFilled(false);
+		butt2.setIconTextGap((int)Math.floor(-butt1.getWidth()/1.8));
+		butt2.setIcon(new ImageIcon("square.png"));
+		butt2.setBorder(null);
+		
+		panel.add(butt2);
+	
+		getContentPane().add(panel);
+		this.pack();
+		this.setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		
+		JFrame frame = new DragFrame();
+		
+	}
+	
+}
+

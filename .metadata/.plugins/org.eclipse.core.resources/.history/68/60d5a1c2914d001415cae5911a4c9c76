@@ -1,0 +1,54 @@
+package q8388415.brero_massimiliano.PTNetEditor.views;
+
+import java.awt.FlowLayout;
+
+import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+import snippet.ButtListener;
+
+public abstract class NodeView extends JLabel {
+	
+	ButtListener listener;
+	protected ImageIcon icon;
+	protected JLabel nodeLabel;
+
+	
+	public NodeView() {
+		
+		addMouseMotionListener(listener);
+		addMouseListener(listener);
+		//butt1.setContentAreaFilled(false);
+		setIcon(icon);
+		setIconTextGap((int)Math.floor(-getWidth()/1.7));
+		setBorder(null);
+		
+		setLayout(new FlowLayout());
+		this.nodeLabel = new JLabel("");
+		add(nodeLabel);
+		
+	}
+	
+	
+	/**
+	 * Sets image source path for icon representing this node type
+	 * @param $s String
+	 */
+	public void setIconSource(String $s) {
+		//@Todo check if path exists
+		this.icon = new ImageIcon($s);
+	}
+	
+	public JLabel getLabel() {
+		return nodeLabel;
+	}
+
+	public void setLabelText(String label) {
+		this.nodeLabel.setText(label);
+	}
+	
+	
+	
+
+}

@@ -1,0 +1,40 @@
+package q8388415.brero_massimiliano.PTNetEditor.tests;
+
+import java.awt.FlowLayout;
+
+import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+import snippet.ButtListener;
+
+public class PlaceView extends NodeView {
+	
+	ButtListener listener;
+	final ImageIcon icon = new ImageIcon("circle.png");
+	private JLabel nodeLabel;
+	
+	public JLabel getLabel() {
+		return nodeLabel;
+	}
+
+	public void setLabelText(String label) {
+		this.nodeLabel.setText(label);
+	}
+
+	public PlaceView(String tokenNumber) {
+		
+		super.init();
+		
+		
+	}
+	
+	private void init() {
+		
+		setBounds(10, 10, 70, 70);
+		nodeLabel.setBounds(+50, -5, 10,20);
+
+		
+	}
+
+}
