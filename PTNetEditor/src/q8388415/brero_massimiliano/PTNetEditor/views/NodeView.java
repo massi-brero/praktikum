@@ -21,6 +21,7 @@ public abstract class NodeView extends JLabel {
 		setLayout(new FlowLayout());
 		this.nodeLabel = new JLabel("");
 		add(nodeLabel);
+		this.setFocusable(true);
 		
 	}
 	

@@ -9,14 +9,16 @@ public class TransitionView extends NodeView {
 	ButtListener listener;
 	
 	public TransitionView() {
-		super("square.png");
+
+		super("rectangle.png");
 		this.init();
+
 	}
 	
-	private void init() {		
-		this.setSize(32,32);
-		this.nodeLabel.setBounds(+50, -5, 10,20);
-		this.setIconTextGap((int)Math.floor(-getWidth()/3.2));
+	private void init() {
+		setSize(new Dimension(70, 70));
+		nodeLabel.setBounds(+50, -5, 10, 20);
+		setIconTextGap((int)Math.floor(-getWidth()/3.2));
 	}
 
 }
