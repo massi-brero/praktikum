@@ -16,8 +16,6 @@ public abstract class NodeView extends JLabel {
 		//this.setContentAreaFilled(false);
 		icon = new ImageIcon(iconSource);
 		setIcon(icon);
-		setBorder(null);
-		
 		setLayout(new FlowLayout());
 		this.nodeLabel = new JLabel("");
 		add(nodeLabel);

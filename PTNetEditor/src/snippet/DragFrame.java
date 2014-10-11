@@ -1,21 +1,20 @@
 package snippet;
 
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.RenderingHints;
-import java.awt.Stroke;
-import java.awt.event.KeyListener;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import q8388415.brero_massimiliano.PTNetEditor.controllers.AppController;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 
@@ -39,25 +38,27 @@ class DragFrame extends JFrame {
 		desktop.setPreferredSize(new Dimension(400, 400));
 		ButtListener mListernerButt1 = new ButtListener(this);
 		ButtListener mListernerButt2 = new ButtListener(this);
-
-		butt1.setLocation(0, 0);
+		
+		butt1.setLocation(120, 0);
 		butt1.addMouseMotionListener(mListernerButt1);
 		butt1.addMouseListener(mListernerButt1);
-		butt1.addKeyListener(mListernerButt1);
+		
 		butt1.setLabelText("testtext");
-
-		desktop.add(butt1);
-
-		butt2.setLocation(120, 10);
+		
+		butt2.setLocation(100, 100);
 		butt2.addMouseMotionListener(mListernerButt2);
 		butt2.addMouseListener(mListernerButt2);
-		butt2.addKeyListener(mListernerButt2);
-
+		butt2.setLabelText("Hallooo");
+				
 		desktop.add(butt2);
-
+		desktop.add(butt1);
+		butt1.addKeyListener(new AppController());
+		butt1.addKeyListener(new AppController());
+		
 		getContentPane().add(desktop, BorderLayout.SOUTH);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.pack();
+
 		this.setVisible(true);
 	}
 
@@ -75,26 +76,54 @@ class DragFrame extends JFrame {
 			edges.get(id).setStart(start);
 			edges.get(id).setEnd(end);
 		}
+		
+		repaint();
 
+	}
+	
+	@Override
+	public void paint(Graphics g) {
+		
+		super.paint(g);
+		
 		Graphics2D g2 = (Graphics2D) desktop.getGraphics();
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		Set<String> keys = edges.keySet();
 		Iterator<String> it = keys.iterator();
 
 		while (it.hasNext()) {
-			System.out.println("draw!");
+			
 			Edge edge = edges.get(it.next());
-			g2.drawLine(edge.getStart().x, edge.getStart().y, edge.getEnd().x,
-					edge.getEnd().y);
+			drawArrow(g2, edge);
 
 		}
+		
+	}
 
+	private void drawArrow(Graphics2D g2, Edge edge) {
+		Polygon p = new Polygon();
+		Point end = edge.getEnd();
+		
+		g2.drawLine(edge.getStart().x, edge.getStart().y, end.x,
+				end.y);
+		
+		p.addPoint(end.x, end.y);
+		p.addPoint(end.x - 5, end.y - 2);
+		p.addPoint(end.x - 5, end.y + 2);
+		
+		g2.drawPolygon(p);
 	}
 
 	public JPanel getDesktop() {
 		return this.desktop;
+	}
+
+	public void deleteLineFromDeskTop(String name) {
+		
+		edges.remove(name);
+		repaint();
+		
 	}
 
 }
