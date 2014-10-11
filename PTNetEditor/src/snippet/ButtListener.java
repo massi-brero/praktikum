@@ -2,6 +2,8 @@ package snippet;
 
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -10,19 +12,21 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.AppController;
+import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
+import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
 
-public class ButtListener implements MouseMotionListener, MouseListener {
+public class ButtListener implements MouseMotionListener, MouseListener, ActionListener {
 
-	private DragFrame board;
+	private PTNDesktop board;
 	private volatile Point oldLocation;
 	static boolean isDragged = false;
 
-	public ButtListener(DragFrame dragFrame) {
+	public ButtListener(PTNDesktop dt) {
 
-		this.board = dragFrame;
+		this.board = dt;
 		oldLocation = new Point(-1, -1);
 
 	}
@@ -67,7 +71,7 @@ public class ButtListener implements MouseMotionListener, MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		
-		JLabel source = (JLabel) e.getComponent();
+		NodeView source = (NodeView) e.getComponent();
 
 //		if (source instanceof JLabel && 3 == e.getButton()) {
 //
@@ -78,9 +82,10 @@ public class ButtListener implements MouseMotionListener, MouseListener {
 		
 		if (source instanceof JLabel && 3 == e.getButton()) {
 
-			EditNodeWindow popUp = new EditNodeWindow();
-			popUp.show(e.getComponent(), e.getX(), e.getY());
-
+			EditNodeWindow popUp = new EditNodeWindow(source);
+			popUp.setVisible(true);
+			board.repaint();
+			
 		}
 		
 		board.repaint();
@@ -109,12 +114,11 @@ public class ButtListener implements MouseMotionListener, MouseListener {
 		
 		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
 		JComponent source = (JComponent) e.getComponent();
-		JComponent target = (JComponent) board.getDesktop().findComponentAt(mouseLocation);
+		JComponent target = (JComponent) board.findComponentAt(mouseLocation);
 
 		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) || 
 									(source instanceof TransitionView && target instanceof PlaceView);
-
-
+		
 		if (isDragged) {
 			
 			isDragged = false;
@@ -133,6 +137,13 @@ public class ButtListener implements MouseMotionListener, MouseListener {
 			board.deleteLineFromDeskTop(source.getName());
 		}
 		
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		System.out.println("action");
 		
 	}
 
