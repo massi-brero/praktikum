@@ -72,19 +72,10 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 	public void mouseClicked(MouseEvent e) {
 		
 		NodeView source = (NodeView) e.getComponent();
-
-//		if (source instanceof JLabel && 3 == e.getButton()) {
-//
-//			int newTokenCount = Integer.parseInt(source.getText()) + 1;
-//			source.setText(String.valueOf(newTokenCount));
-//
-//		}
 		
 		if (source instanceof JLabel && 3 == e.getButton()) {
 
-			EditNodeWindow popUp = new EditNodeWindow(source);
-			popUp.setVisible(true);
-			board.repaint();
+			board.callDialog(source);
 			
 		}
 		

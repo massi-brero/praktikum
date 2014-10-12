@@ -19,10 +19,10 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	
 	JMenuItem item;
 	private JPanel panel;
+	private JTextField nodeLabel;
+	private JTextField token;
 	private ActionListener listener;
 	private NodeView node;
-	private String labelText;
-	private String token;
 	
 	public EditNodeWindow(NodeView node) {
 
@@ -31,8 +31,6 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 		panel.setLayout(new GridLayout(0,2));
 		
 		this.node = node;
-		this.setLabelText(node.getLabel().getText());
-		this.setToken(node.getText());
 		
 		initializeDialog(node);
 		add(panel);
@@ -40,16 +38,20 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 
 	}
 	
-
+	/**
+	 * @ToDo sanitize token input!
+	 * @param node
+	 */
 	private void initializeDialog(NodeView node) {
 		
-		JTextField labelField = new JTextField(this.getLabelText(), 20);
+		nodeLabel = new JTextField(this.getNode().getLabel().getText(), 20);
 		this.addToPanel(new JLabel("Knoten-Label"));
-		this.addToPanel(labelField);
+		this.addToPanel(nodeLabel);
 		
 		if (node instanceof PlaceView) {
+			token = new JTextField(this.getNode().getText(), 20);
 			this.addToPanel(new JLabel("Tokens"));
-			this.addToPanel(new JTextField(token, 20));
+			this.addToPanel(token);
 		}
 		
 		JButton okButton = new JButton("OK");
@@ -73,34 +75,22 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-
-		this.getNode().getLabel().setText(labelText);
 		
-		if ("" != this.getToken())
-			this.getNode().setText(this.getToken());
+		this.getNode().getLabel().setText(this.nodeLabel.getText());
 		
-		node.getParent().repaint();
+		if (this.getNode() instanceof PlaceView)
+			this.getNode().setText(this.token.getText());
+		
+		this.sendUpdatedNode();
+		
+		dispose();
 		
 		
 	}
-	
-	public String getLabelText() {
-		return labelText;
-	}
 
 
-	public void setLabelText(String labelText) {
-		this.labelText = labelText;
-	}
-
-
-	public String getToken() {
-		return token;
-	}
-
-
-	public void setToken(String token) {
-		this.token = token;
+	public NodeView sendUpdatedNode() {
+		return this.getNode();
 	}
 
 	

@@ -1,7 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.desktop;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -12,10 +11,13 @@ import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.JPanel;
+import javax.swing.plaf.PopupMenuUI;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.AppController;
+import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
+import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
 import snippet.ButtListener;
 import snippet.Edge;
 
@@ -110,6 +112,29 @@ public class PTNDesktop extends JPanel {
 		repaint();
 		
 	}
+
+	public void callDialog(NodeView source) {
+		
+		EditNodeWindow popUp = new EditNodeWindow(source);
+		popUp.setModal(true);
+		popUp.setVisible(true);
+		
+		NodeView newNode = popUp.sendUpdatedNode();
+		
+		this.updateNode(source, newNode);
+			
+	}
+	
+	private void updateNode(NodeView oldNode, NodeView newNode) {
+		
+		System.out.println(newNode.getText());
+		oldNode.setText(newNode.getText());
+		oldNode.setLabelText(newNode.getLabel().getText());
+		repaint();
+		
+	}
+	
+	
 
 	
 }
