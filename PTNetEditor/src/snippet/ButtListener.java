@@ -1,5 +1,6 @@
 package snippet;
 
+import java.awt.Color;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -7,7 +8,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.Iterator;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
@@ -47,11 +51,29 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 			
 		} else {
 			
-			if (!isDragged)
+			if (!isDragged) {
 				isDragged = true;
-			else
-				source.setLocation(source.getX() + e.getX() - (int) oldLocation.getX(), source.getY() + e.getY() - (int) oldLocation.getY());
-			
+			} else {
+				
+				int diffX = e.getX() - (int) oldLocation.getX();
+				int diffY = e.getY() - (int) oldLocation.getY();
+				
+				if (AppController.moveSelection) {
+					
+					ArrayList<NodeView> nodes = board.getNodes();
+					Iterator<NodeView> it = nodes.iterator();
+					
+					while (it.hasNext()) {
+						NodeView node = (NodeView) it.next();
+						if(node.isSelected())
+							node.setLocation(node.getX() + diffX, node.getY() + diffY);			
+					}
+					
+				} else {
+					source.setLocation(source.getX() + diffX, source.getY() + diffY);
+				}
+				
+			}
 			board.repaint();
 			
 		}
@@ -75,6 +97,10 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 		if (source instanceof JLabel && 3 == e.getButton()) {
 
 			board.callDialog(source);
+			
+		} else if (AppController.selectMode) {
+			
+			source.setSelected(!source.isSelected());
 			
 		}
 		
@@ -109,7 +135,6 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) || 
 									(source instanceof TransitionView && target instanceof PlaceView);
 		
-		System.out.println(source+" "+target);
 		
 		if (isDragged) {
 			
@@ -129,6 +154,20 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 			board.deleteLineFromDeskTop(source.getName());
 		}
 		
+		// set global variables to default and deselect buttons
+		AppController.moveSelection = false;
+
+	}
+
+	private void deselectNodes() {
+		
+		ArrayList<NodeView> nodes = board.getNodes();
+		Iterator<NodeView> it = nodes.iterator();
+		
+		while (it.hasNext()) {
+			NodeView node = (NodeView) it.next();
+			node.setSelected(false);
+		}
 		
 	}
 
@@ -149,8 +188,8 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 				// continue waitung even if interruoted
 			}
 			if (AppController.moveSelection) {
-				System.out.println("move1");
-				AppController.moveSelection = false;
+				//System.out.println("move1");
+				//AppController.moveSelection = false;
 			} else if (AppController.deleteSelection) {
 				System.out.println("delete");
 				AppController.deleteSelection = false;

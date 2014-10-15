@@ -10,6 +10,7 @@ public class AppController implements KeyListener, ActionListener {
 	public static boolean isDrawing = false;
 	public static boolean moveSelection = false;
 	public static boolean deleteSelection = false;
+	public static boolean selectMode = false;
 	
 	public AppController() {
 
@@ -22,7 +23,10 @@ public class AppController implements KeyListener, ActionListener {
 		case KeyEvent.VK_CONTROL:
 			setDrawLine(true);
 			break;
-
+		case KeyEvent.VK_SHIFT:
+			System.out.println("hit");
+			setSelectMode(true);
+			break;	
 		default:
 			break;
 		}
@@ -35,7 +39,10 @@ public class AppController implements KeyListener, ActionListener {
 		case KeyEvent.VK_CONTROL:
 			setDrawLine(false);
 			break;
-			
+		case KeyEvent.VK_SHIFT:
+			System.out.println("release");
+			setSelectMode(false);
+			break;	
 		default:
 			break;
 		}
@@ -71,9 +78,12 @@ public class AppController implements KeyListener, ActionListener {
 		
 	}
 
-	
-	
-	
-	
+	public static boolean isSelectMode() {
+		return selectMode;
+	}
 
+	public static void setSelectMode(boolean selectMode) {
+		AppController.selectMode = selectMode;
+	}
+	
 }

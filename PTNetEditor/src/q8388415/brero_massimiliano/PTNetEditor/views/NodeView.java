@@ -3,6 +3,7 @@ package q8388415.brero_massimiliano.PTNetEditor.views;
 import java.awt.Color;
 import java.awt.FlowLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -10,7 +11,7 @@ public abstract class NodeView extends JLabel {
 	
 	protected ImageIcon icon;
 	protected JLabel nodeLabel;
-	protected boolean activated;
+	private boolean selected = false;
 
 	public NodeView(String iconSource) {
 		
@@ -42,13 +43,17 @@ public abstract class NodeView extends JLabel {
 		this.nodeLabel.setText(label);
 	}
 
-	public boolean isActivated() {
-		return activated;
+	public boolean isSelected() {
+		return selected;
 	}
 
 
-	public void setActivated(boolean activated) {
-		this.activated = activated;
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+		if (selected)
+			setBorder(BorderFactory.createLineBorder(Color.black));
+		else
+			setBorder(null);
 	}
 
 	

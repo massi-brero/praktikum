@@ -13,15 +13,15 @@ class DragFrame extends JFrame {
 
 	private PTNDesktop desktop;
 	private PTNControlPanel controlPanel;
-	//@todo this shoul be given by bootstrap class
+	//@todo this should be given by bootstrap class
 	AppController appControl = new AppController();
 
 	public DragFrame() {
 		
 		controlPanel = new PTNControlPanel(appControl);
 		desktop = new PTNDesktop(appControl);
-		getContentPane().add(controlPanel, BorderLayout.EAST);
-		getContentPane().add(desktop, BorderLayout.WEST);
+		getContentPane().add(controlPanel, BorderLayout.SOUTH);
+		getContentPane().add(desktop, BorderLayout.NORTH);
 
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);

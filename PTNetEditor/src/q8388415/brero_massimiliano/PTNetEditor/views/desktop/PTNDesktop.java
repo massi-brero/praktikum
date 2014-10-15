@@ -141,6 +141,10 @@ public class PTNDesktop extends JPanel {
 		
 	}
 	
+	public ArrayList<NodeView> 	getNodes() {
+		return this.nodes;
+	}
+	
 //	private void transformGraphicsToUserCoordinateSystem(Graphics2D g2D) {
 //		scale = Math.min(getParent().getWidth()*2, getParent().getHeight());
 //		AffineTransform at = AffineTransform.getScaleInstance(scale, scale);
