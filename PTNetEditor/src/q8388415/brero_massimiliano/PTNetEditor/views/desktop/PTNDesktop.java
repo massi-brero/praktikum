@@ -6,12 +6,12 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.JPanel;
-import javax.swing.plaf.PopupMenuUI;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.AppController;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
@@ -25,34 +25,40 @@ public class PTNDesktop extends JPanel {
 	
 	public PlaceView butt1;
 	public TransitionView butt2;
+	private ArrayList<NodeView> nodes;
 	private Hashtable<String, Edge> edges;
+	private double scale;
 	
-	public PTNDesktop() {
+	public PTNDesktop(AppController appControl) {
 
 		edges = new Hashtable<String, Edge>();
+		nodes = new ArrayList<NodeView>();
 		butt1 = new PlaceView("1");
 		butt1.setName("butt1");
+		butt1.setLocation(120, 200);
 		butt2 = new TransitionView();
 		butt2.setName("butt2");
+		butt2.setLocation(100, 100);
+		nodes.add(butt1);
+		nodes.add(butt2);
+		setFocusable(true);
+		addKeyListener(appControl);
 		
 		this.setLayout(null);
 		this.setPreferredSize(new Dimension(700, 550));
 		ButtListener mListernerButt1 = new ButtListener(this);
-		ButtListener mListernerButt2 = new ButtListener(this);
+		Thread t = new Thread(mListernerButt1);
+		t.start();
 		
-		butt1.setLocation(120, 0);
-		butt1.addMouseMotionListener(mListernerButt1);
-		butt1.addMouseListener(mListernerButt1);
+		Iterator<NodeView> it = nodes.iterator();
 		
-		butt1.setLabelText("testtext");
-		
-		butt2.setLocation(100, 100);
-		butt2.addMouseMotionListener(mListernerButt2);
-		butt2.addMouseListener(mListernerButt2);
-		butt2.setLabelText("Hallooo");
-		butt1.addKeyListener(new AppController());
-		butt1.addKeyListener(new AppController());
-				
+		while (it.hasNext()) {
+			NodeView node = it.next();
+			node.addMouseMotionListener(mListernerButt1);
+			node.addMouseListener(mListernerButt1);		
+			node.setLabelText("testtext");
+		}
+
 		this.add(butt2);
 		this.add(butt1);
 		setDoubleBuffered(true);
@@ -82,7 +88,8 @@ public class PTNDesktop extends JPanel {
 
 		Set<String> keys = edges.keySet();
 		Iterator<String> it = keys.iterator();
-
+		//transformGraphicsToUserCoordinateSystem(g2);
+		
 		while (it.hasNext()) {
 			
 			Edge edge = edges.get(it.next());
@@ -133,6 +140,12 @@ public class PTNDesktop extends JPanel {
 		repaint();
 		
 	}
+	
+//	private void transformGraphicsToUserCoordinateSystem(Graphics2D g2D) {
+//		scale = Math.min(getParent().getWidth()*2, getParent().getHeight());
+//		AffineTransform at = AffineTransform.getScaleInstance(scale, scale);
+//		g2D.transform(at);
+//	}
 	
 	
 

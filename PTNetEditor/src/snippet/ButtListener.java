@@ -16,9 +16,8 @@ import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
-import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
 
-public class ButtListener implements MouseMotionListener, MouseListener, ActionListener {
+public class ButtListener implements MouseMotionListener, MouseListener, ActionListener, Runnable {
 
 	private PTNDesktop board;
 	private volatile Point oldLocation;
@@ -110,6 +109,8 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) || 
 									(source instanceof TransitionView && target instanceof PlaceView);
 		
+		System.out.println(source+" "+target);
+		
 		if (isDragged) {
 			
 			isDragged = false;
@@ -135,6 +136,29 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 	public void actionPerformed(ActionEvent e) {
 		
 		System.out.println("action");
+		
+	}
+
+	@Override
+	public void run() {
+		
+		while (true) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// continue waitung even if interruoted
+			}
+			if (AppController.moveSelection) {
+				System.out.println("move1");
+				AppController.moveSelection = false;
+			} else if (AppController.deleteSelection) {
+				System.out.println("delete");
+				AppController.deleteSelection = false;
+			}
+			
+			
+		}
+		
 		
 	}
 

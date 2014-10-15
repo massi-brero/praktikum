@@ -1,11 +1,15 @@
 package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class AppController implements KeyListener {
+public class AppController implements KeyListener, ActionListener {
 	
 	public static boolean isDrawing = false;
+	public static boolean moveSelection = false;
+	public static boolean deleteSelection = false;
 	
 	public AppController() {
 
@@ -48,6 +52,27 @@ public class AppController implements KeyListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		String cmd = e.getActionCommand();
+
+		switch (cmd) {
+		case "move":
+			AppController.moveSelection = true;
+			break;
+		case "erase":
+			AppController.deleteSelection = true;
+			break;
+		default:
+			break;
+		}
+		
+	}
+
+	
+	
 	
 	
 

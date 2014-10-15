@@ -1,5 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.views;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 
 import javax.swing.ImageIcon;
@@ -9,8 +10,8 @@ public abstract class NodeView extends JLabel {
 	
 	protected ImageIcon icon;
 	protected JLabel nodeLabel;
+	protected boolean activated;
 
-	
 	public NodeView(String iconSource) {
 		
 		//this.setContentAreaFilled(false);
@@ -40,8 +41,15 @@ public abstract class NodeView extends JLabel {
 	public void setLabelText(String label) {
 		this.nodeLabel.setText(label);
 	}
-	
-	
-	
 
+	public boolean isActivated() {
+		return activated;
+	}
+
+
+	public void setActivated(boolean activated) {
+		this.activated = activated;
+	}
+
+	
 }
