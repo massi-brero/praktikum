@@ -36,7 +36,7 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 	public void mouseDragged(MouseEvent e) {
 
 		JComponent source = (JComponent) e.getComponent();
-		e.translatePoint(source.getX(), source.getY());
+		e.translatePoint((int)(source.getX()*1.15), (int)(source.getY()*1.15));
 
 		if (PTNAppController.isDrawing) {
 			

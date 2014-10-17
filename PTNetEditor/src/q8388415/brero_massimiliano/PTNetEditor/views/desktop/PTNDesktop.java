@@ -1,6 +1,7 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.desktop;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -82,10 +83,11 @@ public class PTNDesktop extends JPanel {
 	
 	@Override
 	public void paintImmediately(Rectangle bounds) {
+		
 		super.paint(this.getGraphics());
 		Graphics2D g2 = (Graphics2D) this.getGraphics();
 		
-		transformGraphicsToUserCoordinateSystem(g2);
+		
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		Set<String> keys = edges.keySet();
@@ -97,6 +99,15 @@ public class PTNDesktop extends JPanel {
 			drawArrow(g2, edge);
 
 		}
+		
+	}
+	
+	@Override
+	public void paint(Graphics g) {
+		System.out.println("hallo");
+		Graphics2D g2 = (Graphics2D) g;
+		transformGraphicsToUserCoordinateSystem(g2);
+		super.paint(g2);
 		
 	}
 	
@@ -207,9 +218,12 @@ public class PTNDesktop extends JPanel {
 
 	
 	private void transformGraphicsToUserCoordinateSystem(Graphics2D g2D) {
-		scale = Math.min(getParent().getWidth()*2, getParent().getHeight());
-		AffineTransform at = AffineTransform.getScaleInstance(scale, scale);
-		g2D.transform(at);
+		scale = 0.5;
+		AffineTransform old= g2D.getTransform();
+		AffineTransform at = new AffineTransform(old);
+		at.scale(1.15, 1.15);
+		at.translate(1.5, 1.5);
+		g2D.setTransform(at);
 	}
 	
 	
