@@ -11,9 +11,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import q8388415.brero_massimiliano.PTNetEditor.controllers.AppController;
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
@@ -29,7 +30,7 @@ public class PTNDesktop extends JPanel {
 	private Hashtable<String, Edge> edges;
 	private double scale;
 	
-	public PTNDesktop(AppController appControl) {
+	public PTNDesktop(PTNAppController appControl) {
 
 		edges = new Hashtable<String, Edge>();
 		nodes = new ArrayList<NodeView>();
@@ -106,6 +107,9 @@ public class PTNDesktop extends JPanel {
 		g2.drawLine(edge.getStart().x, edge.getStart().y, end.x,
 				end.y);
 		
+		g2.drawImage(new ImageIcon("rectangle.png").getImage(), edge.getStart().x, edge.getStart().y, end.x,
+				end.y, this);
+		
 		p.addPoint(end.x, end.y);
 		p.addPoint(end.x - 5, end.y - 2);
 		p.addPoint(end.x - 5, end.y + 2);
@@ -144,6 +148,66 @@ public class PTNDesktop extends JPanel {
 	public ArrayList<NodeView> 	getNodes() {
 		return this.nodes;
 	}
+	
+	/**
+	 * returns wether we have some selected nodes or none. So we may move
+	 * or delete them at once.
+	 * @return boolean
+	 */
+	public boolean hasSelected() {
+		
+		Iterator<NodeView> it = getNodes().iterator();
+		
+		while (it.hasNext()) {
+			
+			if (it.next().isSelected())
+				return true;
+			
+		}
+		
+		return false;
+		
+	}
+	
+	public void deselectNodes() {
+		
+		Iterator<NodeView> it = getNodes().iterator();
+		
+		while (it.hasNext()) {
+			NodeView node = (NodeView) it.next();
+			node.setSelected(false);
+		}
+		
+	}
+	
+	public void deleteSelected() {
+		
+		Iterator<NodeView> it = getNodes().iterator();
+		// we store the nodes we want to delete so we don't manipulate the iterator and remove
+		// stuff while it's still going through our list
+		ArrayList<NodeView> nodesToRemove = new ArrayList<NodeView>();
+		
+		if (!nodes.isEmpty()) {
+			while (it.hasNext()) {
+				NodeView node = (NodeView) it.next();
+				if (node.isSelected()) {
+					nodesToRemove.add(node);
+					//TODO richtig löschen!?
+					node.setVisible(false);					
+				}
+			}	
+			
+			//now we remove them nodes from our precious list
+			it = getNodes().iterator();
+			while (it.hasNext()) {
+				nodes.remove(it.next());
+			}
+			
+			
+		}
+		
+	}
+
 	
 //	private void transformGraphicsToUserCoordinateSystem(Graphics2D g2D) {
 //		scale = Math.min(getParent().getWidth()*2, getParent().getHeight());

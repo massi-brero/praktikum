@@ -9,16 +9,17 @@ import javax.swing.JLabel;
 
 public abstract class NodeView extends JLabel {
 	
-	protected ImageIcon icon;
+	protected ImageIcon iconStandard;
+	protected ImageIcon iconSelected;
 	protected JLabel nodeLabel;
 	private boolean selected = false;
 
-	public NodeView(String iconSource) {
+	public NodeView(String sourceStandardIcon, String sourceSelectedIcon) {
 		
-		//this.setContentAreaFilled(false);
-		icon = new ImageIcon(iconSource);
-		setIcon(icon);
 		setLayout(new FlowLayout());
+		iconStandard = new ImageIcon(sourceStandardIcon);
+		iconSelected = new ImageIcon(sourceSelectedIcon);
+		setIcon(iconStandard);
 		this.nodeLabel = new JLabel("");
 		add(nodeLabel);
 		this.setFocusable(true);
@@ -30,9 +31,9 @@ public abstract class NodeView extends JLabel {
 	 * Sets image source path for icon representing this node type
 	 * @param $s String
 	 */
-	public void setIconSource(String $s) {
+	public void setIconSource(ImageIcon ic) {
 		//@Todo check if path exists
-		this.icon = new ImageIcon($s);
+		this.setIcon(ic);
 	}
 	
 	public JLabel getLabel() {
@@ -51,9 +52,9 @@ public abstract class NodeView extends JLabel {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 		if (selected)
-			setBorder(BorderFactory.createLineBorder(Color.black));
+			setIcon(iconSelected);			
 		else
-			setBorder(null);
+			setIcon(iconStandard);
 	}
 
 	

@@ -8,20 +8,20 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import q8388415.brero_massimiliano.PTNetEditor.controllers.AppController;
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 
 public class PTNControlPanel extends JPanel {
 	
-	public PTNControlPanel(AppController appControl) {
+	public PTNControlPanel(PTNAppController appControl) {
 		
-		JButton moveSelection = new JButton("move");
+		JButton unselect = new JButton("unselect");
 		JButton delSelection = new JButton("erase");
-		moveSelection.setPreferredSize(new Dimension(80,50));
+		unselect.setPreferredSize(new Dimension(80,50));
 		delSelection.setPreferredSize(new Dimension(80,50));
-		moveSelection.addActionListener(appControl);
+		unselect.addActionListener(appControl);
 		delSelection.addActionListener(appControl);
 		
-		this.add(moveSelection);
+		this.add(unselect);
 		this.add(delSelection);
 		setDoubleBuffered(true);
 		

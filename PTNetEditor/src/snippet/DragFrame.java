@@ -5,7 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 
-import q8388415.brero_massimiliano.PTNetEditor.controllers.AppController;
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNControlPanel;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
@@ -13,8 +13,8 @@ class DragFrame extends JFrame {
 
 	private PTNDesktop desktop;
 	private PTNControlPanel controlPanel;
-	//@todo this should be given by bootstrap class
-	AppController appControl = new AppController();
+	//TODO this should be given by bootstrap class
+	PTNAppController appControl = new PTNAppController();
 
 	public DragFrame() {
 		

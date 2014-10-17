@@ -6,10 +6,11 @@ import snippet.ButtListener;
 
 public class PlaceView extends NodeView {
 	
-	ButtListener listener;
+	final static String sourceIconStandard = "circle.png";
+	final static String sourceIconSelected = "circle_selected.png";
 	
 	public PlaceView(String tokenNumber) {
-		super("circle.png");
+		super(sourceIconStandard, sourceIconSelected);
 		this.init();
 		this.setText(tokenNumber);
 	}

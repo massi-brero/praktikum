@@ -1,6 +1,5 @@
 package snippet;
 
-import java.awt.Color;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -11,11 +10,10 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import q8388415.brero_massimiliano.PTNetEditor.controllers.AppController;
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
@@ -40,7 +38,7 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 		JComponent source = (JComponent) e.getComponent();
 		e.translatePoint(source.getX(), source.getY());
 
-		if (AppController.isDrawing) {
+		if (PTNAppController.isDrawing) {
 			
 			int widthFactor = (source instanceof PlaceView) ? 4 : 8;
 
@@ -58,7 +56,7 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 				int diffX = e.getX() - (int) oldLocation.getX();
 				int diffY = e.getY() - (int) oldLocation.getY();
 				
-				if (AppController.moveSelection) {
+				if (board.hasSelected()) {
 					
 					ArrayList<NodeView> nodes = board.getNodes();
 					Iterator<NodeView> it = nodes.iterator();
@@ -98,7 +96,7 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 
 			board.callDialog(source);
 			
-		} else if (AppController.selectMode) {
+		} else if (PTNAppController.selectMode) {
 			
 			source.setSelected(!source.isSelected());
 			
@@ -141,34 +139,27 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 			isDragged = false;
 			oldLocation.setLocation(-1, -1);
 			
-		} else if (AppController.isDrawing && isAllowedTarget) {
+		} else if (PTNAppController.isDrawing && isAllowedTarget) {
 			
-			int sourceWidthFactor = (source instanceof PlaceView) ? 4 : 8;
-			int targetWidthFactor = (target instanceof PlaceView) ? 4 : 8;
-			
-			Point start = new Point(source.getLocation().x + source.getWidth()/sourceWidthFactor, source.getLocation().y + source.getHeight()/2);
-			Point end = new Point(target.getLocation().x + target.getWidth()/targetWidthFactor, target.getLocation().y + target.getHeight()/2);;
-			board.drawEdge(source.getName(), start, end);
+			drawEdge(source, target);
 
 		} else {
 			board.deleteLineFromDeskTop(source.getName());
 		}
 		
 		// set global variables to default and deselect buttons
-		AppController.moveSelection = false;
+		board.requestFocus();
 
 	}
 
-	private void deselectNodes() {
+	private void drawEdge(JComponent source, JComponent target) {
+		//TODO dynamic factors!!
+		int sourceWidthFactor = (source instanceof PlaceView) ? 4 : 8;
+		int targetWidthFactor = (target instanceof PlaceView) ? 4 : 8;
 		
-		ArrayList<NodeView> nodes = board.getNodes();
-		Iterator<NodeView> it = nodes.iterator();
-		
-		while (it.hasNext()) {
-			NodeView node = (NodeView) it.next();
-			node.setSelected(false);
-		}
-		
+		Point start = new Point(source.getLocation().x + source.getWidth()/sourceWidthFactor, source.getLocation().y + source.getHeight()/2);
+		Point end = new Point(target.getLocation().x + target.getWidth()/targetWidthFactor, target.getLocation().y + target.getHeight()/2);;
+		board.drawEdge(source.getName(), start, end);
 	}
 
 	@Override
@@ -187,12 +178,12 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 			} catch (InterruptedException e) {
 				// continue waitung even if interruoted
 			}
-			if (AppController.moveSelection) {
-				//System.out.println("move1");
-				//AppController.moveSelection = false;
-			} else if (AppController.deleteSelection) {
-				System.out.println("delete");
-				AppController.deleteSelection = false;
+			if (PTNAppController.deselectAll) {
+				board.deselectNodes();
+				PTNAppController.deselectAll = false;
+			} else if (PTNAppController.deleteSelection) {
+				board.deleteSelected();
+				PTNAppController.deleteSelection = false;
 			}
 			
 			
