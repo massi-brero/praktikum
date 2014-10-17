@@ -6,12 +6,12 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
@@ -82,14 +82,14 @@ public class PTNDesktop extends JPanel {
 	
 	@Override
 	public void paintImmediately(Rectangle bounds) {
-		
-		super.paintImmediately(bounds);
+		super.paint(this.getGraphics());
 		Graphics2D g2 = (Graphics2D) this.getGraphics();
+		
+		transformGraphicsToUserCoordinateSystem(g2);
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		Set<String> keys = edges.keySet();
 		Iterator<String> it = keys.iterator();
-		//transformGraphicsToUserCoordinateSystem(g2);
 		
 		while (it.hasNext()) {
 			
@@ -206,11 +206,11 @@ public class PTNDesktop extends JPanel {
 	}
 
 	
-//	private void transformGraphicsToUserCoordinateSystem(Graphics2D g2D) {
-//		scale = Math.min(getParent().getWidth()*2, getParent().getHeight());
-//		AffineTransform at = AffineTransform.getScaleInstance(scale, scale);
-//		g2D.transform(at);
-//	}
+	private void transformGraphicsToUserCoordinateSystem(Graphics2D g2D) {
+		scale = Math.min(getParent().getWidth()*2, getParent().getHeight());
+		AffineTransform at = AffineTransform.getScaleInstance(scale, scale);
+		g2D.transform(at);
+	}
 	
 	
 
