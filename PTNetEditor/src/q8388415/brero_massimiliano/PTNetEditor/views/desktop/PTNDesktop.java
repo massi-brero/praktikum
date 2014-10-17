@@ -107,9 +107,6 @@ public class PTNDesktop extends JPanel {
 		g2.drawLine(edge.getStart().x, edge.getStart().y, end.x,
 				end.y);
 		
-		g2.drawImage(new ImageIcon("rectangle.png").getImage(), edge.getStart().x, edge.getStart().y, end.x,
-				end.y, this);
-		
 		p.addPoint(end.x, end.y);
 		p.addPoint(end.x - 5, end.y - 2);
 		p.addPoint(end.x - 5, end.y + 2);
