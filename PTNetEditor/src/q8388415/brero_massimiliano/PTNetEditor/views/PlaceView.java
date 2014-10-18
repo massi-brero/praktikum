@@ -1,8 +1,7 @@
 package q8388415.brero_massimiliano.PTNetEditor.views;
 
 import java.awt.Dimension;
-
-import snippet.ButtListener;
+import java.awt.Point;
 
 public class PlaceView extends NodeView {
 	

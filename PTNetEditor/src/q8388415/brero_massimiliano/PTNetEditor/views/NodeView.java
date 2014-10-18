@@ -2,6 +2,7 @@ package q8388415.brero_massimiliano.PTNetEditor.views;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Point;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -13,6 +14,7 @@ public abstract class NodeView extends JLabel {
 	protected ImageIcon iconSelected;
 	protected JLabel nodeLabel;
 	private boolean selected = false;
+	private Point basePosition;
 
 	public NodeView(String sourceStandardIcon, String sourceSelectedIcon) {
 		
@@ -22,6 +24,10 @@ public abstract class NodeView extends JLabel {
 		setIcon(iconStandard);
 		this.nodeLabel = new JLabel("");
 		add(nodeLabel);
+		setBasePosition(new Point(0,0));
+		
+		
+		this.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.setFocusable(true);
 		
 	}
@@ -56,6 +62,14 @@ public abstract class NodeView extends JLabel {
 		else
 			setIcon(iconStandard);
 	}
+	
+	public Point getBasePosition() {
+		return basePosition;
+	}
 
+	public void setBasePosition(Point basePosition) {
+		this.basePosition = basePosition;
+	}
+	
 	
 }

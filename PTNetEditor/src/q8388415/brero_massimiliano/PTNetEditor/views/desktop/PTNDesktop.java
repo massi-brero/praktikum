@@ -29,7 +29,9 @@ public class PTNDesktop extends JPanel {
 	public TransitionView butt2;
 	private ArrayList<NodeView> nodes;
 	private Hashtable<String, Edge> edges;
-	private double scale;
+	private double scale = 1.3;
+	public int adjustX = 0;
+	public int adjustY = 0;
 	
 	public PTNDesktop(PTNAppController appControl) {
 
@@ -37,10 +39,10 @@ public class PTNDesktop extends JPanel {
 		nodes = new ArrayList<NodeView>();
 		butt1 = new PlaceView("1");
 		butt1.setName("butt1");
-		butt1.setLocation(120, 200);
+		butt1.setLocation(new Point(120, 200));
 		butt2 = new TransitionView();
 		butt2.setName("butt2");
-		butt2.setLocation(100, 100);
+		butt2.setLocation(new Point(100, 100));
 		nodes.add(butt1);
 		nodes.add(butt2);
 		setFocusable(true);
@@ -49,8 +51,6 @@ public class PTNDesktop extends JPanel {
 		this.setLayout(null);
 		this.setPreferredSize(new Dimension(700, 550));
 		ButtListener mListernerButt1 = new ButtListener(this);
-		Thread t = new Thread(mListernerButt1);
-		t.start();
 		
 		Iterator<NodeView> it = nodes.iterator();
 		
@@ -59,10 +59,12 @@ public class PTNDesktop extends JPanel {
 			node.addMouseMotionListener(mListernerButt1);
 			node.addMouseListener(mListernerButt1);		
 			node.setLabelText("testtext");
+			Thread t = new Thread(mListernerButt1);
+			t.start();
 		}
 
-		this.add(butt2);
 		this.add(butt1);
+		this.add(butt2);
 		setDoubleBuffered(true);
 		
 
@@ -104,7 +106,7 @@ public class PTNDesktop extends JPanel {
 	
 	@Override
 	public void paint(Graphics g) {
-		System.out.println("hallo");
+		
 		Graphics2D g2 = (Graphics2D) g;
 		transformGraphicsToUserCoordinateSystem(g2);
 		super.paint(g2);
@@ -218,14 +220,25 @@ public class PTNDesktop extends JPanel {
 
 	
 	private void transformGraphicsToUserCoordinateSystem(Graphics2D g2D) {
-		scale = 0.5;
-		AffineTransform old= g2D.getTransform();
-		AffineTransform at = new AffineTransform(old);
-		at.scale(1.15, 1.15);
-		at.translate(1.5, 1.5);
+		
+		Iterator<NodeView> it = nodes.iterator();
+		
+		while(it.hasNext()) {
+			NodeView node = (NodeView) it.next();
+			System.out.println(node.getBasePosition());
+			int newX = (int)(node.getBasePosition().getX() - node.getBasePosition().getX() * (scale-1));
+			int newY = (int)(node.getBasePosition().getY() - node.getBasePosition().getY() * (scale-1));
+			
+			node.setLocation(newX, newY);
+			node.setBasePosition(new Point(newX, newY));
+			
+		}
+		
+		AffineTransform at = new AffineTransform();
+		at.translate(0, 0);
+		at.scale(scale, scale);
 		g2D.setTransform(at);
 	}
-	
 	
 
 	

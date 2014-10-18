@@ -2,11 +2,8 @@ package q8388415.brero_massimiliano.PTNetEditor.views;
 
 import java.awt.Dimension;
 
-import snippet.ButtListener;
-
 public class TransitionView extends NodeView {
 	
-	ButtListener listener;
 	final static String sourceIconStandard = "rectangle.png";
 	final static String sourceIconSelected = "rectangle_selected.png";
 	

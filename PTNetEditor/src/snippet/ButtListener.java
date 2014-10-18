@@ -36,7 +36,8 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 	public void mouseDragged(MouseEvent e) {
 
 		JComponent source = (JComponent) e.getComponent();
-		e.translatePoint((int)(source.getX()*1.15), (int)(source.getY()*1.15));
+		// transalating the point makes it much easier to adjust mouse movement to the actual scale
+		e.translatePoint((int)(source.getX()/1.3), (int)(source.getY()/1.3));
 
 		if (PTNAppController.isDrawing) {
 			
@@ -53,8 +54,8 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 				isDragged = true;
 			} else {
 				
-				int diffX = e.getX() - (int) oldLocation.getX();
-				int diffY = e.getY() - (int) oldLocation.getY();
+				int diffX = (int)((e.getX() - (int) oldLocation.getX()));
+				int diffY = (int)((e.getY() - (int) oldLocation.getY()));
 				
 				if (board.hasSelected()) {
 					
@@ -70,6 +71,8 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 				} else {
 					source.setLocation(source.getX() + diffX, source.getY() + diffY);
 				}
+				board.adjustX += diffX;
+				board.adjustY += diffY;
 				
 			}
 			board.repaint();
