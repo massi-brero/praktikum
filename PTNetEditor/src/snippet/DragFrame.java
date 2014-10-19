@@ -1,7 +1,8 @@
 package snippet;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.Dimension;
+import java.awt.ScrollPane;
 
 import javax.swing.JFrame;
 
@@ -13,18 +14,20 @@ class DragFrame extends JFrame {
 
 	private PTNDesktop desktop;
 	private PTNControlPanel controlPanel;
+	private ScrollPane scPane;
 	//TODO this should be given by bootstrap class
 	PTNAppController appControl = new PTNAppController();
 
 	public DragFrame() {
 		
+		super("PTN Editor");
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setupScrollPane();
 		controlPanel = new PTNControlPanel(appControl);
-		desktop = new PTNDesktop(appControl);
-		getContentPane().add(controlPanel, BorderLayout.SOUTH);
-		getContentPane().add(desktop, BorderLayout.NORTH);
+		this.getContentPane().add(controlPanel, BorderLayout.PAGE_END);
+		this.getContentPane().add(scPane, BorderLayout.CENTER);
 
 		
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.pack();
 		this.setVisible(true);
 	}
@@ -33,6 +36,15 @@ class DragFrame extends JFrame {
 
 		JFrame frame = new DragFrame();
 
+	}
+	
+	private void setupScrollPane() {
+		
+		scPane = new ScrollPane(ScrollPane.SCROLLBARS_ALWAYS);
+		desktop = new PTNDesktop(appControl);
+		scPane.setPreferredSize(new Dimension(500, 300));
+		scPane.add(desktop);
+		
 	}
 
 	public PTNDesktop getPTNDesktop() {

@@ -1,6 +1,7 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.desktop;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -22,6 +23,11 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
 import snippet.ButtListener;
 import snippet.Edge;
 
+/**
+ * 
+ * @author q8388415
+ *
+ */
 public class PTNDesktop extends JPanel {
 	
 	public PlaceView butt1;
@@ -29,6 +35,8 @@ public class PTNDesktop extends JPanel {
 	private ArrayList<NodeView> nodes;
 	private Hashtable<String, Edge> edges;
 	private double scale;
+	// biggest size of desktop so far; we need this to adapt the scroll pane's bars 
+	private Dimension maxSize;
 	
 	public PTNDesktop(PTNAppController appControl) {
 
@@ -46,10 +54,8 @@ public class PTNDesktop extends JPanel {
 		addKeyListener(appControl);
 		
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension(700, 550));
+		this.setPreferredSize(new Dimension(500, 300));
 		ButtListener mListernerButt1 = new ButtListener(this);
-		Thread t = new Thread(mListernerButt1);
-		t.start();
 		
 		Iterator<NodeView> it = nodes.iterator();
 		
@@ -58,13 +64,33 @@ public class PTNDesktop extends JPanel {
 			node.addMouseMotionListener(mListernerButt1);
 			node.addMouseListener(mListernerButt1);		
 			node.setLabelText("testtext");
+			Thread t = new Thread(mListernerButt1);
+			t.start();
 		}
 
 		this.add(butt2);
 		this.add(butt1);
+		maxSize = getSize();
 		setDoubleBuffered(true);
-		
 
+	}
+	
+	public void paint(Graphics g) {
+		
+		super.paint(g);
+		if (getSize().width > maxSize.width || getSize().height > maxSize.height) {
+			
+			if (getSize().width > maxSize.width) 
+				maxSize.width = getSize().width;				
+			if (getSize().height > maxSize.height)
+				maxSize.height = getSize().height;
+	
+			this.setPreferredSize(maxSize);
+			this.revalidate();
+			
+		}
+			
+		
 	}
 	
 	public void drawEdge(String id, Point start, Point end) {
@@ -89,7 +115,6 @@ public class PTNDesktop extends JPanel {
 
 		Set<String> keys = edges.keySet();
 		Iterator<String> it = keys.iterator();
-		//transformGraphicsToUserCoordinateSystem(g2);
 		
 		while (it.hasNext()) {
 			
@@ -195,11 +220,9 @@ public class PTNDesktop extends JPanel {
 			}	
 			
 			//now we remove them nodes from our precious list
-			it = getNodes().iterator();
 			while (it.hasNext()) {
 				nodes.remove(it.next());
 			}
-			
 			
 		}
 		

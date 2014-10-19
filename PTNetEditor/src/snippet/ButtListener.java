@@ -72,10 +72,10 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 				}
 				
 			}
+			
 			board.repaint();
 			
 		}
-
 
 		oldLocation = e.getPoint();
 
