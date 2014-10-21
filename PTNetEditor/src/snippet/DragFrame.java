@@ -22,8 +22,9 @@ class DragFrame extends JFrame {
 		
 		super("PTN Editor");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		desktop = new PTNDesktop(appControl);
 		this.setupScrollPane();
-		controlPanel = new PTNControlPanel(appControl);
+		controlPanel = new PTNControlPanel(appControl, desktop);
 		this.getContentPane().add(controlPanel, BorderLayout.PAGE_END);
 		this.getContentPane().add(scPane, BorderLayout.CENTER);
 
@@ -41,7 +42,6 @@ class DragFrame extends JFrame {
 	private void setupScrollPane() {
 		
 		scPane = new ScrollPane(ScrollPane.SCROLLBARS_ALWAYS);
-		desktop = new PTNDesktop(appControl);
 		scPane.setPreferredSize(new Dimension(500, 300));
 		scPane.add(desktop);
 		

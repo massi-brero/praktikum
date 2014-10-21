@@ -13,6 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
+
 public class PTNEnlargementPanel extends JPanel {
 	
 	private JLabel label;
@@ -70,6 +72,18 @@ public class PTNEnlargementPanel extends JPanel {
 		plusButton.addActionListener(l);
 		minusButton.addActionListener(l);
 		
+	}
+	
+	/**
+	 * This method ensures that our objects really have the methods for 
+	 * increasing an decreasing their size.
+	 * @param PTNIScaleListener l
+	 */
+	public void addScaleListener(PTNIScaleListener l) {
+		
+		plusButton.addActionListener(l);
+		minusButton.addActionListener(l);
+				
 	}
 
 	

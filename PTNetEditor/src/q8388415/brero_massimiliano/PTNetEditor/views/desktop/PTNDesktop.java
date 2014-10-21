@@ -12,7 +12,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
@@ -167,7 +166,7 @@ public class PTNDesktop extends JPanel {
 		
 	}
 	
-	public ArrayList<NodeView> 	getNodes() {
+	public ArrayList<NodeView> getNodes() {
 		return this.nodes;
 	}
 	

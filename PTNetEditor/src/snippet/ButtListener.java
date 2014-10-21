@@ -39,10 +39,8 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 		e.translatePoint(source.getX(), source.getY());
 
 		if (PTNAppController.isDrawing) {
-			
-			int widthFactor = (source instanceof PlaceView) ? 4 : 8;
 
-			Point start = new Point(source.getLocation().x + source.getWidth()/widthFactor, source.getLocation().y + source.getHeight()/2);
+			Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
 			Point end = new Point(e.getX(), e.getY());
 			
 			board.drawEdge(source.getName(), start, end);
@@ -153,12 +151,9 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 	}
 
 	private void drawEdge(JComponent source, JComponent target) {
-		//TODO dynamic factors!!
-		int sourceWidthFactor = (source instanceof PlaceView) ? 4 : 8;
-		int targetWidthFactor = (target instanceof PlaceView) ? 4 : 8;
 		
-		Point start = new Point(source.getLocation().x + source.getWidth()/sourceWidthFactor, source.getLocation().y + source.getHeight()/2);
-		Point end = new Point(target.getLocation().x + target.getWidth()/targetWidthFactor, target.getLocation().y + target.getHeight()/2);;
+		Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
+		Point end = new Point(target.getLocation().x + target.getWidth()/2, target.getLocation().y + target.getHeight()/2);;
 		board.drawEdge(source.getName(), start, end);
 	}
 

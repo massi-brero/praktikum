@@ -1,15 +1,16 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.desktop;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.peer.ButtonPeer;
+import java.util.Iterator;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
+import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
+import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.partials.PTNEnlargementPanel;
 
 public class PTNControlPanel extends JPanel {
@@ -18,9 +19,14 @@ public class PTNControlPanel extends JPanel {
 	private JButton delSelection;
 	private JPanel buttonPanel;
 	private JPanel controllerPanel;
+	private PTNDesktop desktop;
+	private PTNEnlargementPanel placeSizePanel;
+	private PTNEnlargementPanel transitionSizePanel;
+	private PTNEnlargementPanel arrowHeadSizePanel;
 	
-	public PTNControlPanel(PTNAppController appControl) {
+	public PTNControlPanel(PTNAppController appControl, PTNDesktop desktop) {
 		
+		this.desktop = desktop;
 		deselect = new JButton("unselect");
 		delSelection = new JButton("erase");
 		deselect.addActionListener(appControl);
@@ -38,9 +44,9 @@ public class PTNControlPanel extends JPanel {
 		controllerPanel.setLayout(new GridLayout(0,1));
 		
 		// add enlargement Panels
-		PTNEnlargementPanel placeSizePanel = new PTNEnlargementPanel("Place Size");
-		PTNEnlargementPanel transitionSizePanel = new PTNEnlargementPanel("Transition Size");
-		PTNEnlargementPanel arrowHeadSizePanel = new PTNEnlargementPanel("Arrowhead Size");
+		placeSizePanel = new PTNEnlargementPanel("Place Size");
+		transitionSizePanel = new PTNEnlargementPanel("Transition Size");
+		arrowHeadSizePanel = new PTNEnlargementPanel("Arrowhead Size");
 		
 		controllerPanel.add(placeSizePanel);
 		controllerPanel.add(transitionSizePanel);
@@ -53,9 +59,35 @@ public class PTNControlPanel extends JPanel {
 		
 		this.setSize(new Dimension(700, 30));
 		this.setLayout(new GridLayout(0, 2));
+		this.setUpListeners();
 		this.add(buttonPanel);
 		this.add(controllerPanel);
 		setDoubleBuffered(true);
+	}
+	
+	private void setUpListeners() {
+		
+		Iterator<NodeView> it = desktop.getNodes().iterator();
+		
+		while (it.hasNext()) {
+
+			NodeView node = it.next();
+			
+			switch (node.getType()) {
+			case place:
+				placeSizePanel.addScaleListener(node);
+				break;
+			case transition:
+				transitionSizePanel.addScaleListener(node);
+				break;
+			default:
+				break;
+			}
+			
+			
+		}
+		
+		
 	}
 
 }
