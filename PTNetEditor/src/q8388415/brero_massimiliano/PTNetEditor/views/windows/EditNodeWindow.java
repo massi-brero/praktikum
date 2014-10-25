@@ -12,6 +12,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 
@@ -22,7 +23,7 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	private JTextField nodeLabel;
 	private JTextField token;
 	private ActionListener listener;
-	private NodeView node;
+	private NodeView sourceNode;
 	
 	public EditNodeWindow(NodeView node) {
 
@@ -30,7 +31,7 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 		panel.setSize(100, 200);
 		panel.setLayout(new GridLayout(0,2));
 		
-		this.node = node;
+		this.sourceNode = node;
 		
 		initializeDialog(node);
 		add(panel);
@@ -44,12 +45,15 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	 */
 	private void initializeDialog(NodeView node) {
 		
-		nodeLabel = new JTextField(this.getNode().getNodeLabel().getText(), 20);
+		nodeLabel = new JTextField(this.getSourceNode().getNodeLabel().getText(), 20);
 		this.addToPanel(new JLabel("Knoten-Label"));
 		this.addToPanel(nodeLabel);
 		
 		if (node instanceof PlaceView) {
-			token = new JTextField(this.getNode().getText(), 20);
+			String tokenNumber = this.getSourceNode().getText();
+			tokenNumber = tokenNumber == PlaceView.DOT_SIGN ? "1" : 
+							(tokenNumber == "" ? "0" : this.getSourceNode().getText());
+			token = new JTextField(tokenNumber, 20);
 			this.addToPanel(new JLabel("Tokens"));
 			this.addToPanel(token);
 		}
@@ -68,30 +72,33 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 		this.getPanel().add(c);
 	}
 
-	public NodeView getNode() {
-		return this.node;
+	public NodeView getSourceNode() {
+		return this.sourceNode;
 	}
+
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-		this.getNode().getNodeLabel().setText(this.nodeLabel.getText());
-		
-		if (this.getNode() instanceof PlaceView)
-			this.getNode().setText(this.token.getText());
-		
 		this.sendUpdatedNode();
-		
 		dispose();
-		
-		
 	}
 
+	/**
+	 * Updates node information from text fields and returns a DTO containing
+	 * new label text and token number;
+	 */
+	public PTNNodeDTO sendUpdatedNode() {
 
-	public NodeView sendUpdatedNode() {
-		return this.getNode();
+		return new PTNNodeDTO() {
+			@Override
+			public String getTokenNumber() {
+				return token.getText();
+			}
+			
+			@Override
+			public String getNodeLabelText() {
+				return nodeLabel.getText();
+			}
+		};
 	}
-
-	
 }

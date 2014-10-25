@@ -44,8 +44,9 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 		//this.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.setFocusable(true);
 		this.setHorizontalAlignment(JLabel.CENTER);
+		this.setVerticalAlignment(JLabel.CENTER);
 		this.setHorizontalTextPosition(JLabel.CENTER);
-		
+		this.setVerticalTextPosition(JLabel.CENTER);
 	}
 	
 	/**
@@ -163,12 +164,20 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 	}
 	
 	protected void updateLabelTextSize(int factor) {
-//		JLabel nodeLabel = this.getNodeLabel();
-//		// keep distance from node icon
-//		nodeLabel.setPreferredSize(new Dimension(nodeLabel.getWidth(), nodeLabel.getHeight() + factor* 10));
 		int changeSize = factor;
 		Font nodeLabelFont = nodeLabel.getFont();
 		this.nodeLabel.setFont(new Font(nodeLabelFont.getFontName(), Font.PLAIN, (int)(nodeLabelFont.getSize() + changeSize)));
+	}
+
+	/**
+	 * Sets String for the label related to this node. The label is apart of the container
+	 * and not the text of the parent label which represents the whole node including icon etc. 
+	 * @param text
+	 */
+	public void setNodeLabelText(String text) {
+		
+		this.getNodeLabel().setText(text);
+		
 	}
 		
 

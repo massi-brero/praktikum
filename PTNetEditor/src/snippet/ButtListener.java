@@ -181,9 +181,7 @@ public class ButtListener implements MouseMotionListener, MouseListener, ActionL
 				PTNAppController.deleteSelection = false;
 			}
 			
-			
 		}
-		
 		
 	}
 

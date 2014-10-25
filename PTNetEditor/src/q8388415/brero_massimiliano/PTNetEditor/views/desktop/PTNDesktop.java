@@ -15,6 +15,7 @@ import java.util.Set;
 import javax.swing.JPanel;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
@@ -62,7 +63,7 @@ public class PTNDesktop extends JPanel {
 			NodeView node = it.next();
 			node.addMouseMotionListener(mListernerButt1);
 			node.addMouseListener(mListernerButt1);		
-			node.setLabelText("testtext");
+			node.setNodeLabelText("testtext");
 			Thread t = new Thread(mListernerButt1);
 			t.start();
 		}
@@ -151,17 +152,19 @@ public class PTNDesktop extends JPanel {
 		popUp.setModal(true);
 		popUp.setVisible(true);
 		
-		NodeView newNode = popUp.sendUpdatedNode();
+		PTNNodeDTO nodeUpdate = popUp.sendUpdatedNode();
 		
-		this.updateNode(source, newNode);
+		this.updateNode(source, nodeUpdate);
 			
 	}
 	
-	private void updateNode(NodeView oldNode, NodeView newNode) {
+	
+	private void updateNode(NodeView paintedNode, PTNNodeDTO nodeUpdate) {
+
+		if (paintedNode instanceof PlaceView)
+			((PlaceView)paintedNode).updateTokenLabel(nodeUpdate.getTokenNumber());
 		
-		System.out.println(newNode.getText());
-		oldNode.setText(newNode.getText());
-		oldNode.setLabelText(newNode.getNodeLabel().getText());
+		paintedNode.setNodeLabelText(nodeUpdate.getNodeLabelText());
 		repaint();
 		
 	}
