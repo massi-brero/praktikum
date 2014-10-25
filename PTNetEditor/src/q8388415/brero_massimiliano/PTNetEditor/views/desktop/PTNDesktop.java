@@ -161,7 +161,7 @@ public class PTNDesktop extends JPanel {
 		
 		System.out.println(newNode.getText());
 		oldNode.setText(newNode.getText());
-		oldNode.setLabelText(newNode.getLabel().getText());
+		oldNode.setLabelText(newNode.getNodeLabel().getText());
 		repaint();
 		
 	}

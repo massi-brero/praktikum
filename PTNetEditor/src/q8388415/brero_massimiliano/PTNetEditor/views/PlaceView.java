@@ -2,12 +2,10 @@ package q8388415.brero_massimiliano.PTNetEditor.views;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
 
 import javax.swing.JLabel;
 
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
-import snippet.ButtListener;
 
 public class PlaceView extends NodeView {
 
@@ -22,6 +20,10 @@ public class PlaceView extends NodeView {
 		this.setText(tokenNumber);
 	}
 
+	/**
+	 * Initializes this component's size and elements.
+	 * @return void
+	 */
 	private void init() {
 
 		setSize(DEFAULT_SIZE);
@@ -29,13 +31,20 @@ public class PlaceView extends NodeView {
 		nodeLabel.setVerticalTextPosition(JLabel.NORTH);
 		// setIconTextGap((int)Math.floor(-DEFAULT_SIZE.getWidth()/3.2));
 	}
+	
+	/**
+	 * Adopts token label to scale.
+	 */
+	@Override
+	public void updateSize(int factor) {
 
-	public void updateSize(float factor) {
-
-		int addSize = (int) Math.signum(factor)*2;
+		int addSize = factor*2;
 		Font tokenFont = this.getFont();
 		this.setFont(new Font(tokenFont.getFontName(), Font.PLAIN, (int) (tokenFont.getSize() + addSize)));
 		super.updateSize(factor);
+		
 	}
+	
+
 
 }

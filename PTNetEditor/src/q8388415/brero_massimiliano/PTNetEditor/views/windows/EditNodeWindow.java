@@ -44,7 +44,7 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	 */
 	private void initializeDialog(NodeView node) {
 		
-		nodeLabel = new JTextField(this.getNode().getLabel().getText(), 20);
+		nodeLabel = new JTextField(this.getNode().getNodeLabel().getText(), 20);
 		this.addToPanel(new JLabel("Knoten-Label"));
 		this.addToPanel(nodeLabel);
 		
@@ -76,7 +76,7 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
-		this.getNode().getLabel().setText(this.nodeLabel.getText());
+		this.getNode().getNodeLabel().setText(this.nodeLabel.getText());
 		
 		if (this.getNode() instanceof PlaceView)
 			this.getNode().setText(this.token.getText());
