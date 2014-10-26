@@ -12,7 +12,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeDTO;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 
@@ -87,9 +87,9 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	 * Updates node information from text fields and returns a DTO containing
 	 * new label text and token number;
 	 */
-	public PTNNodeDTO sendUpdatedNode() {
+	public PTNINodeDTO sendUpdatedNode() {
 
-		return new PTNNodeDTO() {
+		return new PTNINodeDTO() {
 			@Override
 			public String getTokenNumber() {
 				return token.getText();

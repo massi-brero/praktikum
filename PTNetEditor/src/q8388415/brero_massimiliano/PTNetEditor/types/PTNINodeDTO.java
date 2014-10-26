@@ -6,7 +6,7 @@ package q8388415.brero_massimiliano.PTNetEditor.types;
  * @author 8388415
  *
  */
-public interface PTNNodeDTO {
+public interface PTNINodeDTO {
 	
 	String getNodeLabelText();
 	String getTokenNumber();

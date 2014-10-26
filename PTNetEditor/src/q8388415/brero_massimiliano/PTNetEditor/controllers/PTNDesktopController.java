@@ -1,4 +1,4 @@
-package snippet;
+package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
 import java.awt.MouseInfo;
 import java.awt.Point;
@@ -19,13 +19,13 @@ import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
-public class ButtListener implements MouseMotionListener, MouseListener, ActionListener, Runnable {
+public class PTNDesktopController implements MouseMotionListener, MouseListener, ActionListener, Runnable {
 
 	private PTNDesktop board;
 	private volatile Point oldLocation;
 	static boolean isDragged = false;
 
-	public ButtListener(PTNDesktop dt) {
+	public PTNDesktopController(PTNDesktop dt) {
 
 		this.board = dt;
 		oldLocation = new Point(-1, -1);

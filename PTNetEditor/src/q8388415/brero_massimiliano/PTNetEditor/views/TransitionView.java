@@ -2,12 +2,12 @@ package q8388415.brero_massimiliano.PTNetEditor.views;
 
 import java.awt.Dimension;
 
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
-import snippet.ButtListener;
 
 public class TransitionView extends NodeView {
 	
-	ButtListener listener;
+	PTNDesktopController listener;
 	final static String sourceIconStandard = "rectangle.png";
 	final static String sourceIconSelected = "rectangle_selected.png";
 	final Dimension DEFAULT_SIZE;

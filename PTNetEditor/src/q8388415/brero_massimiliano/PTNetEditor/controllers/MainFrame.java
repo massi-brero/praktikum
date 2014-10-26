@@ -1,4 +1,4 @@
-package snippet;
+package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -10,7 +10,7 @@ import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNControlPanel;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
-class DragFrame extends JFrame {
+public class MainFrame extends JFrame {
 
 	private PTNDesktop desktop;
 	private PTNControlPanel controlPanel;
@@ -18,9 +18,9 @@ class DragFrame extends JFrame {
 	//TODO this should be given by bootstrap class
 	PTNAppController appControl = new PTNAppController();
 
-	public DragFrame() {
+	public MainFrame() {
 		
-		super("PTN Editor");
+		//super("PTN Editor");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		desktop = new PTNDesktop(appControl);
 		this.setupScrollPane();
@@ -33,11 +33,7 @@ class DragFrame extends JFrame {
 		this.setVisible(true);
 	}
 
-	public static void main(String[] args) {
 
-		JFrame frame = new DragFrame();
-
-	}
 	
 	private void setupScrollPane() {
 		

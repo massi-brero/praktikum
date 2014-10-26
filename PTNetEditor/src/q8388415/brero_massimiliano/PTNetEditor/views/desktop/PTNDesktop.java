@@ -15,12 +15,12 @@ import java.util.Set;
 import javax.swing.JPanel;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
-import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeDTO;
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
-import snippet.ButtListener;
 import snippet.Edge;
 
 /**
@@ -55,7 +55,7 @@ public class PTNDesktop extends JPanel {
 		
 		this.setLayout(null);
 		this.setPreferredSize(new Dimension(500, 300));
-		ButtListener mListernerButt1 = new ButtListener(this);
+		PTNDesktopController mListernerButt1 = new PTNDesktopController(this);
 		
 		Iterator<NodeView> it = nodes.iterator();
 		
@@ -152,14 +152,14 @@ public class PTNDesktop extends JPanel {
 		popUp.setModal(true);
 		popUp.setVisible(true);
 		
-		PTNNodeDTO nodeUpdate = popUp.sendUpdatedNode();
+		PTNINodeDTO nodeUpdate = popUp.sendUpdatedNode();
 		
 		this.updateNode(source, nodeUpdate);
 			
 	}
 	
 	
-	private void updateNode(NodeView paintedNode, PTNNodeDTO nodeUpdate) {
+	private void updateNode(NodeView paintedNode, PTNINodeDTO nodeUpdate) {
 
 		if (paintedNode instanceof PlaceView)
 			((PlaceView)paintedNode).updateTokenLabel(nodeUpdate.getTokenNumber());
