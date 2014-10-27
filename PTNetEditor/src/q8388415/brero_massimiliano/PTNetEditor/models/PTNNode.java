@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeContructionException;
+import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
 public abstract class PTNNode {
@@ -15,11 +15,11 @@ public abstract class PTNNode {
 	private Dimension position;
 	private PTNNodeTypes type;
 	
-	public PTNNode(String name, String id, Dimension pos) throws PTNNodeContructionException{
+	public PTNNode(String name, String id, Dimension pos) throws PTNNodeConstructionException{
 		System.out.println(id);
 			if ("" == id) {
 				
-				throw new PTNNodeContructionException("Vital information for this node is missing (id)!");
+				throw new PTNNodeConstructionException("Vital information for this node is missing (id)!");
 			} else {
 				this.setName(name);
 				this.setId(id);

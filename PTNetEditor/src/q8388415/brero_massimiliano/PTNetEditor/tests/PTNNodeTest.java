@@ -8,9 +8,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeContructionException;
+import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
-import q8388415.brero_massimiliano.PTNetEditor.models.Place;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNPlace;
 
 public class PTNNodeTest {
 	
@@ -21,7 +21,6 @@ public class PTNNodeTest {
 
 	@Before
 	public void setUp() throws Exception {
-		
 	}
 
 	@After
@@ -29,10 +28,10 @@ public class PTNNodeTest {
 	}
 	
 	@Test
-	public void testConstructionError() throws PTNNodeContructionException {
+	public void testConstructionError() throws PTNNodeConstructionException {
 		
-		thrown.expect(PTNNodeContructionException.class);
-		PTNNode nodeModel = new Place("test", "", new Dimension(0, 0));
+		thrown.expect(PTNNodeConstructionException.class);
+		PTNNode nodeModel = new PTNPlace("test", "", new Dimension(0, 0));
 		
 	}
 

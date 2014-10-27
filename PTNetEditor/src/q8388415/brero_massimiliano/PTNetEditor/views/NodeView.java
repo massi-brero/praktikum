@@ -1,5 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.views;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -30,6 +31,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 	public NodeView(String sourceStandardIcon, String sourceSelectedIcon) {
 		
 		this.nodeLabel = new JLabel("");
+		//this.setOpaque(true);
 		iconStandard = new ImageIcon(sourceStandardIcon);
 		iconSelected = new ImageIcon(sourceSelectedIcon);
 		this.init();
