@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
@@ -24,6 +25,13 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
 import snippet.Edge;
 
 /**
+ * When we set up the desktop we'll translate our net structure into node views.
+ * 1. We will draw our arcs direct from our net arcs.
+ * 
+ * 2. But every node model type will have its own view representation in an own list for our node views. 
+ * This way we may have to update nodes in the view list and in our net model, but we'll gain on
+ * performance since we don't have to iterate the complete net and re-add all buttons when some update action
+ * on the nodes is due.
  * 
  * @author q8388415
  *
@@ -33,12 +41,13 @@ public class PTNDesktop extends JPanel {
 	public PlaceView butt1;
 	public TransitionView butt2;
 	private ArrayList<NodeView> nodes;
+	private PTNNet net;
 	private Hashtable<String, Edge> edges;
 	private double scale;
 	// biggest size of desktop so far; we need this to adapt the scroll pane's bars 
 	private Dimension maxSize;
 	
-	public PTNDesktop(PTNAppController appControl) {
+	public PTNDesktop(PTNAppController appControl, PTNNet net) {
 
 		edges = new Hashtable<String, Edge>();
 		nodes = new ArrayList<NodeView>();
@@ -50,6 +59,7 @@ public class PTNDesktop extends JPanel {
 		butt2.setLocation(100, 100);
 		nodes.add(butt1);
 		nodes.add(butt2);
+		this.net = net;
 		setFocusable(true);
 		addKeyListener(appControl);
 		
@@ -57,7 +67,8 @@ public class PTNDesktop extends JPanel {
 		this.setPreferredSize(new Dimension(500, 300));
 		PTNDesktopController mListernerButt1 = new PTNDesktopController(this);
 		
-		Iterator<NodeView> it = nodes.iterator();
+		
+		Iterator<NodeView> it = getNodes().iterator();
 		
 		while (it.hasNext()) {
 			NodeView node = it.next();
@@ -211,7 +222,7 @@ public class PTNDesktop extends JPanel {
 		// stuff while it's still going through our list
 		ArrayList<NodeView> nodesToRemove = new ArrayList<NodeView>();
 		
-		if (!nodes.isEmpty()) {
+		if (!getNodes().isEmpty()) {
 			while (it.hasNext()) {
 				NodeView node = (NodeView) it.next();
 				if (node.isSelected()) {
@@ -223,7 +234,7 @@ public class PTNDesktop extends JPanel {
 			
 			//now we remove them nodes from our precious list
 			while (it.hasNext()) {
-				nodes.remove(it.next());
+				getNodes().remove(it.next());
 			}
 			
 		}

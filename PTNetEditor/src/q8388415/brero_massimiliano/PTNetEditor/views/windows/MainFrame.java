@@ -1,4 +1,4 @@
-package q8388415.brero_massimiliano.PTNetEditor.controllers;
+package q8388415.brero_massimiliano.PTNetEditor.views.windows;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -15,22 +15,19 @@ public class MainFrame extends JFrame {
 	private PTNDesktop desktop;
 	private PTNControlPanel controlPanel;
 	private ScrollPane scPane;
-	//TODO this should be given by bootstrap class
-	PTNAppController appControl = new PTNAppController();
 
-	public MainFrame() {
+	public MainFrame(PTNDesktop desktop, PTNControlPanel controlPanel) {
 		
 		//super("PTN Editor");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		desktop = new PTNDesktop(appControl);
+		this.desktop = desktop;
 		this.setupScrollPane();
-		controlPanel = new PTNControlPanel(appControl, desktop);
 		this.getContentPane().add(controlPanel, BorderLayout.PAGE_END);
 		this.getContentPane().add(scPane, BorderLayout.CENTER);
 
-		
 		this.pack();
 		this.setVisible(true);
+		
 	}
 
 
