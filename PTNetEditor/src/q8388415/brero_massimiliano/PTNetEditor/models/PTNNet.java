@@ -1,6 +1,7 @@
 package q8388415.brero_massimiliano.PTNetEditor.models;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class PTNNet {
@@ -23,10 +24,12 @@ public class PTNNet {
 		return arcs.get(id);
 	}
 	
-	public Map<String,PTNNode> getSuccessors(String id) {
-		
-		return this.getNodes();
-		
+	public int getNumberOfNodes() {
+		return nodes.size();
+	}
+	
+	public int getNumberOfArcs() {
+		return arcs.size();
 	}
 	
 	public int numberOfPlaces() {
@@ -39,8 +42,30 @@ public class PTNNet {
 		return 1;
 	}
 
-	public Map<String,PTNNode> getNodes() {
+	public HashMap<String,PTNNode> getNodes() {
 		return nodes;
+	}
+	
+	public HashMap<String,PTNArc> getArcs() {
+		return arcs;
+	}
+	
+	public HashMap<String,PTNNode> getSuccessors(String id) {
+		PTNArc arc;
+		HashMap<String, PTNNode> list = new HashMap<String, PTNNode>();
+		Iterator<Map.Entry<String, PTNArc>> it = arcs.entrySet().iterator();
+		
+		while(it.hasNext()) {
+			arc = (PTNArc) it.next().getValue();
+			System.out.println("***" + id);
+			if (id.equals(arc.getSource().getId()))
+				
+				list.put(arc.getTarget().getId(), arc.getTarget());
+			
+		}
+		
+		return list;
+		
 	}
 	
 	public int getNumberOfSuccessors(String id) {
@@ -106,7 +131,7 @@ public class PTNNet {
 	 * @param target
 	 * @return true if nodes are different types
 	 */
-	private boolean isCorrectPair(PTNNode source, PTNNode target) {
+	public boolean isCorrectPair(PTNNode source, PTNNode target) {
 		return source.getType() != target.getType();
 	}
 

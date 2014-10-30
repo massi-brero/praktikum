@@ -8,6 +8,7 @@ public class PTNArc {
 	
 	public PTNArc(String id, PTNNode s, PTNNode t) {
 		
+		this.id = id;
 		this.source = s;
 		this.target = t;
 		

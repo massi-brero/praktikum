@@ -16,7 +16,7 @@ public abstract class PTNNode {
 	private PTNNodeTypes type;
 	
 	public PTNNode(String name, String id, Dimension pos) throws PTNNodeConstructionException{
-		System.out.println(id);
+		
 			if ("" == id) {
 				
 				throw new PTNNodeConstructionException("Vital information for this node is missing (id)!");
@@ -24,10 +24,13 @@ public abstract class PTNNode {
 				this.setName(name);
 				this.setId(id);
 				this.setPosition(pos);
+				this.init();
 			}
 
 		
 	}
+
+	protected abstract void init();
 
 	public String getName() {
 		return name;
