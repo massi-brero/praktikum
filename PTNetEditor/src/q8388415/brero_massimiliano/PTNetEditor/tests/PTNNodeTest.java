@@ -1,6 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.tests;
 
-import java.awt.Dimension;
+import java.awt.Point;
 
 import org.junit.After;
 import org.junit.Before;
@@ -31,7 +31,7 @@ public class PTNNodeTest {
 	public void testConstructionError() throws PTNNodeConstructionException {
 		
 		thrown.expect(PTNNodeConstructionException.class);
-		PTNNode nodeModel = new PTNPlace("test", "", new Dimension(0, 0));
+		PTNNode nodeModel = new PTNPlace("test", "", new Point(0, 0));
 		
 	}
 

@@ -12,14 +12,14 @@ public class PlaceView extends NodeView {
 	final static String sourceIconStandard = "circle.png";
 	final static String sourceIconSelected = "circle_selected.png";
 	final Dimension DEFAULT_SIZE;
-	private int tokenNumber = 0;
+	private int token = 0;
 	public final static String DOT_SIGN = "\u2022";
 
-	public PlaceView(String tokenNumber) {
+	public PlaceView(int token) {
 		super(sourceIconStandard, sourceIconSelected);
 		DEFAULT_SIZE = new Dimension(70, 70);
 		this.init();
-		this.updateTokenLabel(tokenNumber);
+		this.updateTokenLabel(token);
 	}
 
 	/**
@@ -53,13 +53,11 @@ public class PlaceView extends NodeView {
 	 * @param text
 	 * @return void
 	 */
-	public void updateTokenLabel (String text) {
+	public void updateTokenLabel (int token) {
 		
 		try {
-			
-			tokenNumber = Integer.parseInt(text);
-			
-			switch (tokenNumber) {
+				
+			switch (token) {
 			case 0:
 				this.setText("");
 				break;
@@ -67,7 +65,7 @@ public class PlaceView extends NodeView {
 				this.setText(DOT_SIGN);
 				break;
 			default:
-				this.setText(text);
+				this.setText(String.valueOf(token));
 			}
 				
 		} catch (NumberFormatException e) {

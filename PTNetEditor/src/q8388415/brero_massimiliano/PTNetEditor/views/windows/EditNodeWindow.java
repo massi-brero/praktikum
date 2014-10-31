@@ -91,8 +91,8 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 
 		return new PTNINodeDTO() {
 			@Override
-			public String getTokenNumber() {
-				return token.getText();
+			public int getToken() {
+				return Integer.parseInt(token.getText());
 			}
 			
 			@Override

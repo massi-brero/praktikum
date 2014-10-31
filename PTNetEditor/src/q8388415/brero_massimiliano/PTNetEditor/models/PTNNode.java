@@ -1,9 +1,7 @@
 package q8388415.brero_massimiliano.PTNetEditor.models;
 
 import java.awt.Dimension;
-
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
+import java.awt.Point;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
@@ -12,10 +10,11 @@ public abstract class PTNNode {
 	
 	private String name;
 	private String id;
-	private Dimension position;
+	private Point location;
 	private PTNNodeTypes type;
+	private String label;
 	
-	public PTNNode(String name, String id, Dimension pos) throws PTNNodeConstructionException{
+	public PTNNode(String name, String id, Point pos) throws PTNNodeConstructionException{
 		
 			if ("" == id) {
 				
@@ -23,7 +22,7 @@ public abstract class PTNNode {
 			} else {
 				this.setName(name);
 				this.setId(id);
-				this.setPosition(pos);
+				this.setLocation(pos);
 				this.init();
 			}
 
@@ -48,12 +47,12 @@ public abstract class PTNNode {
 		this.id = id;
 	}
 
-	public Dimension getPosition() {
-		return position;
+	public Point getLocation() {
+		return location;
 	}
 
-	public void setPosition(Dimension position) {
-		this.position = position;
+	public void setLocation(Point position) {
+		this.location = position;
 	}
 
 	public PTNNodeTypes getType() {
@@ -63,7 +62,14 @@ public abstract class PTNNode {
 	public void setType(PTNNodeTypes type) {
 		this.type = type;
 	}
-	
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
 	
 	
 }

@@ -1,6 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.models;
 
-import java.awt.Dimension;
+import java.awt.Point;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
@@ -9,7 +9,7 @@ public class PTNPlace extends PTNNode {
 	
 	private int token;
 	
-	public PTNPlace(String name, String id, Dimension pos) throws PTNNodeConstructionException {
+	public PTNPlace(String name, String id, Point pos) throws PTNNodeConstructionException {
 		super(name, id, pos);
 	}
 	

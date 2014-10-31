@@ -1,5 +1,5 @@
 package q8388415.brero_massimiliano.PTNetEditor;
-import java.awt.Dimension;
+import java.awt.Point;
 
 import javax.swing.JFrame;
 
@@ -37,18 +37,18 @@ public class PTNBootstrap {
 		JFrame frame = new MainFrame(desktop, controlPanel);
 		
 	}
-	
-	
-	
 
 	private PTNNet setUpNet() {
 		
 		PTNNet net = new PTNNet();
 		
 		try {
-			PTNPlace node1 = new PTNPlace("node1", "n1", new Dimension(100, 100));
-			PTNTransition node2 = new PTNTransition("node2", "n2", new Dimension(10, 10));
-			PTNTransition node3 = new PTNTransition("node3", "n3", new Dimension(20, 20));
+			PTNPlace node1 = new PTNPlace("node1", "n1", new Point(100, 100));
+			node1.setLabel("testtext");
+			PTNTransition node2 = new PTNTransition("node2", "n2", new Point(10, 10));
+			PTNTransition node3 = new PTNTransition("node3", "n3", new Point(20, 20));
+			node2.setLabel("testtext");
+			node3.setLabel("testtext");
 			PTNArc arc1 = new PTNArc("a1", node1, node2);
 			PTNArc arc2 = new PTNArc("a2", node1, node3);
 			net.addNode(node1);

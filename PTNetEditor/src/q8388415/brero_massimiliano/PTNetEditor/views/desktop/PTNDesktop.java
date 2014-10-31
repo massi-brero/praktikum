@@ -51,18 +51,18 @@ public class PTNDesktop extends JPanel {
 	public PTNDesktop(PTNAppController appControl, PTNNet net) {
 
 		edges = new Hashtable<String, Edge>();
-		nodes = new ArrayList<NodeView>();
-		butt1 = new PlaceView("1");
-		butt1.setName("butt1");
-		butt1.setLocation(120, 200);
-		butt2 = new TransitionView();
-		butt2.setName("butt2");
-		butt2.setLocation(100, 100);
-		nodes.add(butt1);
-		nodes.add(butt2);
+//		nodes = new ArrayList<NodeView>();
+//		butt1 = new PlaceView(1);
+//		butt1.setName("butt1");
+//		butt1.setLocation(120, 200);
+//		butt2 = new TransitionView();
+//		butt2.setName("butt2");
+//		butt2.setLocation(100, 100);
+//		nodes.add(butt1);
+//		nodes.add(butt2);
 		this.net = net;
 		this.netHandler = new PTNNetViewHandler(net);
-		//nodes = netHandler.setUpNodes();
+		nodes = netHandler.setUpNodes();
 		setFocusable(true);
 		addKeyListener(appControl);
 		
@@ -74,16 +74,14 @@ public class PTNDesktop extends JPanel {
 		Iterator<NodeView> it = getNodes().iterator();
 		
 		while (it.hasNext()) {
-			NodeView node = it.next();
-			node.addMouseMotionListener(mListernerButt1);
-			node.addMouseListener(mListernerButt1);		
-			node.setNodeLabelText("testtext");
+			NodeView nodeView = it.next();
+			nodeView.addMouseMotionListener(mListernerButt1);
+			nodeView.addMouseListener(mListernerButt1);		
 			Thread t = new Thread(mListernerButt1);
 			t.start();
+			this.add(nodeView);
 		}
 
-		this.add(butt2);
-		this.add(butt1);
 		maxSize = getSize();
 		setDoubleBuffered(true);
 
@@ -176,7 +174,7 @@ public class PTNDesktop extends JPanel {
 	private void updateNode(NodeView paintedNode, PTNINodeDTO nodeUpdate) {
 
 		if (paintedNode instanceof PlaceView)
-			((PlaceView)paintedNode).updateTokenLabel(nodeUpdate.getTokenNumber());
+			((PlaceView)paintedNode).updateTokenLabel(nodeUpdate.getToken());
 		
 		paintedNode.setNodeLabelText(nodeUpdate.getNodeLabelText());
 		repaint();
