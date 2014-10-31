@@ -19,6 +19,7 @@ import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
+import q8388415.brero_massimiliano.PTNetEditor.views.PTNNetViewHandler;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
@@ -41,9 +42,9 @@ public class PTNDesktop extends JPanel {
 	public PlaceView butt1;
 	public TransitionView butt2;
 	private ArrayList<NodeView> nodes;
+	private PTNNetViewHandler netHandler;
 	private PTNNet net;
 	private Hashtable<String, Edge> edges;
-	private double scale;
 	// biggest size of desktop so far; we need this to adapt the scroll pane's bars 
 	private Dimension maxSize;
 	
@@ -60,6 +61,8 @@ public class PTNDesktop extends JPanel {
 		nodes.add(butt1);
 		nodes.add(butt2);
 		this.net = net;
+		this.netHandler = new PTNNetViewHandler(net);
+		//nodes = netHandler.setUpNodes();
 		setFocusable(true);
 		addKeyListener(appControl);
 		
