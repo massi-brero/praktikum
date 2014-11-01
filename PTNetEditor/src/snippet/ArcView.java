@@ -2,12 +2,12 @@ package snippet;
 
 import java.awt.Point;
 
-public class Edge {
+public class ArcView {
 	
 	private Point start;
 	private Point end;
 	
-	public Edge(Point s, Point e) {
+	public ArcView(Point s, Point e) {
 		
 		setStart(s);
 		setEnd(e);

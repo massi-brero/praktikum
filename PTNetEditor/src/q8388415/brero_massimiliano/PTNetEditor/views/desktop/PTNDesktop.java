@@ -10,6 +10,7 @@ import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JPanel;
@@ -18,12 +19,11 @@ import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
+import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PTNNetViewHandler;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
-import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
-import snippet.Edge;
 
 /**
  * When we set up the desktop we'll translate our net structure into node views.
@@ -39,57 +39,50 @@ import snippet.Edge;
  */
 public class PTNDesktop extends JPanel {
 	
-	public PlaceView butt1;
-	public TransitionView butt2;
 	private ArrayList<NodeView> nodes;
 	private PTNNetViewHandler netHandler;
 	private PTNNet net;
-	private Hashtable<String, Edge> edges;
+	// Using a Hashtable instead of an ArrayList like nodes makes it easier to identify arcs by id for our drawing operations.
+	private Hashtable<String, ArcView> arcs;
 	// biggest size of desktop so far; we need this to adapt the scroll pane's bars 
 	private Dimension maxSize;
 	
 	public PTNDesktop(PTNAppController appControl, PTNNet net) {
-
-		edges = new Hashtable<String, Edge>();
-//		nodes = new ArrayList<NodeView>();
-//		butt1 = new PlaceView(1);
-//		butt1.setName("butt1");
-//		butt1.setLocation(120, 200);
-//		butt2 = new TransitionView();
-//		butt2.setName("butt2");
-//		butt2.setLocation(100, 100);
-//		nodes.add(butt1);
-//		nodes.add(butt2);
+		
 		this.net = net;
 		this.netHandler = new PTNNetViewHandler(net);
-		nodes = netHandler.setUpNodes();
 		setFocusable(true);
 		addKeyListener(appControl);
+		setDoubleBuffered(true);
+		this.init();
+
+	}
+	
+	private void init() {
 		
 		this.setLayout(null);
 		this.setPreferredSize(new Dimension(500, 300));
-		PTNDesktopController mListernerButt1 = new PTNDesktopController(this);
-		
-		
+		maxSize = getSize();
+		nodes = netHandler.setUpNodes();
+		arcs = netHandler.setUpArcs();
 		Iterator<NodeView> it = getNodes().iterator();
-		
+		PTNDesktopController mListernerButt1 = new PTNDesktopController(this);
 		while (it.hasNext()) {
 			NodeView nodeView = it.next();
 			nodeView.addMouseMotionListener(mListernerButt1);
 			nodeView.addMouseListener(mListernerButt1);		
-			Thread t = new Thread(mListernerButt1);
-			t.start();
 			this.add(nodeView);
 		}
-
-		maxSize = getSize();
-		setDoubleBuffered(true);
-
-	}
-	
-	public void paint(Graphics g) {
 		
+		Thread t = new Thread(mListernerButt1);
+		t.start();
+		
+	}
+
+	public void paint(Graphics g) {
+
 		super.paint(g);
+		drawArcs();
 		if (getSize().width > maxSize.width || getSize().height > maxSize.height) {
 			
 			if (getSize().width > maxSize.width) 
@@ -101,17 +94,37 @@ public class PTNDesktop extends JPanel {
 			this.revalidate();
 			
 		}
-			
 		
 	}
 	
-	public void drawEdge(String id, Point start, Point end) {
+	/**
+	 * Draws all arcs currently in arcs hashTable.
+	 */
+	private void drawArcs() {
+		
+		Iterator<Map.Entry<String, ArcView>> it = arcs.entrySet().iterator();
+		ArcView arcView = null;
 
-		if (!edges.containsKey(id)) {
-			edges.put(id, new Edge(start, end));
+		while (it.hasNext()) {
+			arcView = (ArcView)it.next().getValue();
+			this.drawArrow(arcView);
+		}
+		
+	}
+	
+	/**
+	 * Draws an arc and adds it to arcs if it#s a new one that was just painted by the user.
+	 * @param id
+	 * @param start
+	 * @param end
+	 */
+	public void updateArcs(String id, Point start, Point end) {
+		
+		if (!arcs.containsKey(id)) {
+			arcs.put(id, new ArcView(id, start, end));
 		} else {
-			edges.get(id).setStart(start);
-			edges.get(id).setEnd(end);
+			arcs.get(id).setSource(start);
+			arcs.get(id).setTarget(end);
 		}
 		
 		setDoubleBuffered(true);
@@ -122,26 +135,26 @@ public class PTNDesktop extends JPanel {
 	public void paintImmediately(Rectangle bounds) {
 		
 		super.paintImmediately(bounds);
-		Graphics2D g2 = (Graphics2D) this.getGraphics();
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-		Set<String> keys = edges.keySet();
+		Set<String> keys = arcs.keySet();
 		Iterator<String> it = keys.iterator();
 		
 		while (it.hasNext()) {
 			
-			Edge edge = edges.get(it.next());
-			drawArrow(g2, edge);
+			ArcView edge = arcs.get(it.next());
+			drawArrow(edge);
 
 		}
 		
 	}
 	
-	private void drawArrow(Graphics2D g2, Edge edge) {
-		Polygon p = new Polygon();
-		Point end = edge.getEnd();
+	private void drawArrow(ArcView arc) {
 		
-		g2.drawLine(edge.getStart().x, edge.getStart().y, end.x,
+		Graphics2D g2 = (Graphics2D)this.getGraphics();
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		Polygon p = new Polygon();
+		Point end = arc.getTarget();
+		
+		g2.drawLine(arc.getSource().x, arc.getSource().y, end.x,
 				end.y);
 		
 		p.addPoint(end.x, end.y);
@@ -153,7 +166,7 @@ public class PTNDesktop extends JPanel {
 	
 	public void deleteLineFromDeskTop(String name) {
 		
-		edges.remove(name);
+		arcs.remove(name);
 		repaint();
 		
 	}
@@ -195,10 +208,8 @@ public class PTNDesktop extends JPanel {
 		Iterator<NodeView> it = getNodes().iterator();
 		
 		while (it.hasNext()) {
-			
 			if (it.next().isSelected())
 				return true;
-			
 		}
 		
 		return false;
@@ -241,15 +252,5 @@ public class PTNDesktop extends JPanel {
 		}
 		
 	}
-
-	
-//	private void transformGraphicsToUserCoordinateSystem(Graphics2D g2D) {
-//		scale = Math.min(getParent().getWidth()*2, getParent().getHeight());
-//		AffineTransform at = AffineTransform.getScaleInstance(scale, scale);
-//		g2D.transform(at);
-//	}
-	
-	
-
 	
 }

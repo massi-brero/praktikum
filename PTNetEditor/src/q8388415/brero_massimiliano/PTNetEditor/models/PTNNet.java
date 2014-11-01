@@ -57,11 +57,8 @@ public class PTNNet {
 		
 		while(it.hasNext()) {
 			arc = (PTNArc) it.next().getValue();
-			System.out.println("***" + id);
 			if (id.equals(arc.getSource().getId()))
-				
 				list.put(arc.getTarget().getId(), arc.getTarget());
-			
 		}
 		
 		return list;

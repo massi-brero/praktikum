@@ -21,13 +21,13 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 public class PTNDesktopController implements MouseMotionListener, MouseListener, ActionListener, Runnable {
 
-	private PTNDesktop board;
+	private PTNDesktop desktop;
 	private volatile Point oldLocation;
 	static boolean isDragged = false;
 
 	public PTNDesktopController(PTNDesktop dt) {
 
-		this.board = dt;
+		this.desktop = dt;
 		oldLocation = new Point(-1, -1);
 
 	}
@@ -43,7 +43,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
 			Point end = new Point(e.getX(), e.getY());
 			
-			board.drawEdge(source.getName(), start, end);
+			desktop.updateArcs(source.getName(), start, end);
 			
 		} else {
 			
@@ -54,9 +54,9 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 				int diffX = e.getX() - (int) oldLocation.getX();
 				int diffY = e.getY() - (int) oldLocation.getY();
 				
-				if (board.hasSelected()) {
+				if (desktop.hasSelected()) {
 					
-					ArrayList<NodeView> nodes = board.getNodes();
+					ArrayList<NodeView> nodes = desktop.getNodes();
 					Iterator<NodeView> it = nodes.iterator();
 					
 					while (it.hasNext()) {
@@ -71,7 +71,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 				
 			}
 			
-			board.repaint();
+			desktop.repaint();
 			
 		}
 
@@ -92,7 +92,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		
 		if (source instanceof JLabel && 3 == e.getButton()) {
 
-			board.callDialog(source);
+			desktop.callDialog(source);
 			
 		} else if (PTNAppController.selectMode) {
 			
@@ -100,7 +100,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			
 		}
 		
-		board.repaint();
+		desktop.repaint();
 
 	}
 
@@ -126,7 +126,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		
 		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
 		JComponent source = (JComponent) e.getComponent();
-		JComponent target = (JComponent) board.findComponentAt(mouseLocation);
+		JComponent target = (JComponent) desktop.findComponentAt(mouseLocation);
 
 		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) || 
 									(source instanceof TransitionView && target instanceof PlaceView);
@@ -142,11 +142,11 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			drawEdge(source, target);
 
 		} else {
-			board.deleteLineFromDeskTop(source.getName());
+			desktop.deleteLineFromDeskTop(source.getName());
 		}
 		
 		// set global variables to default and deselect buttons
-		board.requestFocus();
+		desktop.requestFocus();
 
 	}
 
@@ -154,7 +154,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		
 		Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
 		Point end = new Point(target.getLocation().x + target.getWidth()/2, target.getLocation().y + target.getHeight()/2);;
-		board.drawEdge(source.getName(), start, end);
+		desktop.updateArcs(source.getName(), start, end);
 	}
 
 	@Override
@@ -174,10 +174,10 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 				// continue waitung even if interruoted
 			}
 			if (PTNAppController.deselectAll) {
-				board.deselectNodes();
+				desktop.deselectNodes();
 				PTNAppController.deselectAll = false;
 			} else if (PTNAppController.deleteSelection) {
-				board.deleteSelected();
+				desktop.deleteSelected();
 				PTNAppController.deleteSelection = false;
 			}
 			

@@ -1,9 +1,9 @@
 package q8388415.brero_massimiliano.PTNetEditor.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.awt.Point;
+import java.util.Hashtable;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNPlace;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
 import q8388415.brero_massimiliano.PTNetEditor.views.PTNNetViewHandler;
 
-public class netHandlerTest {
+public class PTNNetHandlerTest {
 	
 	private PTNNet net;
 	private PTNNode node1, node2, node3;
@@ -41,6 +41,16 @@ public class netHandlerTest {
 	@Test 
 	public void setUpNodesTest() {
 		assertEquals(3, netHandler.setUpNodes().size());
+	}
+	
+	@Test 
+	public void setUpArcsTest1() {
+		assertEquals(2, netHandler.setUpArcs().size());
+	}
+	
+	@Test 
+	public void setUpArcsTest2() {
+		assertTrue(netHandler.setUpArcs() instanceof Hashtable);
 	}
 
 }
