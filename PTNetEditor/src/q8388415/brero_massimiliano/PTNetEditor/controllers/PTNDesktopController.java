@@ -1,5 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
+import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -71,7 +72,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 				
 			}
 			
-			desktop.repaint();
+			desktop.paintImmediately(desktop.getBounds());
 			
 		}
 
