@@ -1,5 +1,7 @@
 package q8388415.brero_massimiliano.PTNetEditor.views;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -88,12 +90,12 @@ public class PTNNetViewHandler {
 			while (it.hasNext()) {
 				arc = (PTNArc) it.next().getValue();
 				if (null == arc.getTarget().getLocation()
-						|| null == arc.getSource().getLocation()
-							|| null == arc.getTarget().getLocation()) {
-					throw new PTNArcConstructionException("Fehler: Allgemeiner Fehler beim Aufbau der Kanten");
-					
+						|| null == arc.getSource().getLocation()) {
+					throw new PTNArcConstructionException("Fehler: Allgemeiner Fehler beim Aufbau der Kanten");				
 				}
-				arcView = new ArcView(arc.getId(), arc.getSource().getLocation(), arc.getTarget().getLocation());
+				Point start = this.normalizeLocation(arc.getSource());
+				Point end = this.normalizeLocation(arc.getTarget());
+				arcView = new ArcView(arc.getId(), start, end);
 				arcViewList.put(arc.getId(), arcView);
 			}
 		} catch (PTNArcConstructionException e) {
@@ -106,6 +108,28 @@ public class PTNNetViewHandler {
 
 		return arcViewList;
 
+	}
+
+	/**
+	 * 
+	 * @param location
+	 * @return Dimension now in the center of our NodeView
+	 */
+	private Point normalizeLocation(PTNNode node) {
+		
+		PTNNodeTypes type = node.getType();
+		Dimension size = null;
+		Point normalizedLocation = null;
+		
+		if (type == PTNNodeTypes.place) {
+			size = (new PlaceView(0)).getSize();
+		} else if (type == PTNNodeTypes.transition) {
+			size = (new TransitionView()).getSize();
+		}
+		
+		normalizedLocation = new Point(node.getLocation().x + (int)size.getWidth()/2, node.getLocation().y + (int)size.getHeight()/2);
+		
+		return normalizedLocation;
 	}
 
 }

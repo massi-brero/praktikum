@@ -4,32 +4,32 @@ import java.awt.Point;
 
 public class ArcView {
 	
-	private Point source;
-	private Point target;
+	private Point start;
+	private Point end;
 	private String id;
 	
 	public ArcView(String id, Point s, Point e) {
 		
-		this.setSource(s);
-		this.setTarget(e);
+		this.setStart(s);
+		this.setEnd(e);
 		this.setId(id);
 		
 	}
 	
-	public Point getSource() {
-		return source;
+	public Point getStart() {
+		return start;
 	}
 	
-	public void setSource(Point start) {
-		this.source = start;
+	public void setStart(Point start) {
+		this.start = start;
 	}
 	
-	public Point getTarget() {
-		return target;
+	public Point getEnd() {
+		return end;
 	}
 	
-	public void setTarget(Point end) {
-		this.target = end;
+	public void setEnd(Point end) {
+		this.end = end;
 	}
 
 	public String getId() {

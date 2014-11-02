@@ -180,5 +180,4 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 		
 	}
 		
-
 }

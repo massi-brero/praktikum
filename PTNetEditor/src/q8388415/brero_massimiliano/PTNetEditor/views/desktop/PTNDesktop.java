@@ -123,8 +123,8 @@ public class PTNDesktop extends JPanel {
 		if (!arcs.containsKey(id)) {
 			arcs.put(id, new ArcView(id, start, end));
 		} else {
-			arcs.get(id).setSource(start);
-			arcs.get(id).setTarget(end);
+			arcs.get(id).setStart(start);
+			arcs.get(id).setEnd(end);
 		}
 		
 		setDoubleBuffered(true);
@@ -152,9 +152,9 @@ public class PTNDesktop extends JPanel {
 		Graphics2D g2 = (Graphics2D)this.getGraphics();
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		Polygon p = new Polygon();
-		Point end = arc.getTarget();
+		Point end = arc.getEnd();
 		
-		g2.drawLine(arc.getSource().x, arc.getSource().y, end.x,
+		g2.drawLine(arc.getStart().x, arc.getStart().y, end.x,
 				end.y);
 		
 		p.addPoint(end.x, end.y);
