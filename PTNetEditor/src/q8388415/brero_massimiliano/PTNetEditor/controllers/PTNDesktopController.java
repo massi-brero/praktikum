@@ -71,8 +71,8 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 				}
 				
 			}
-			
-			desktop.paintImmediately(desktop.getBounds());
+
+			desktop.revalidate();
 			
 		}
 

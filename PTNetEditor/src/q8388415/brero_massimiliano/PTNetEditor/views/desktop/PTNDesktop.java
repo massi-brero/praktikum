@@ -1,5 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.desktop;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -70,10 +71,11 @@ public class PTNDesktop extends JPanel {
 		while (it.hasNext()) {
 			NodeView nodeView = it.next();
 			nodeView.addMouseMotionListener(mListernerButt1);
-			nodeView.addMouseListener(mListernerButt1);		
+			nodeView.addMouseListener(mListernerButt1);	
 			this.add(nodeView);
 		}
 		
+		setBackground(Color.WHITE);
 		Thread t = new Thread(mListernerButt1);
 		t.start();
 		
@@ -91,10 +93,15 @@ public class PTNDesktop extends JPanel {
 				maxSize.height = getSize().height;
 	
 			this.setPreferredSize(maxSize);
-			this.revalidate();
 			
 		}
 		
+	}
+	
+	@Override
+	public void paintImmediately(Rectangle bounds) {
+		super.paintImmediately(bounds);
+		drawArcs();
 	}
 	
 	/**
@@ -109,6 +116,8 @@ public class PTNDesktop extends JPanel {
 			arcView = (ArcView)it.next().getValue();
 			this.drawArrow(arcView);
 		}
+		
+		this.revalidate();
 		
 	}
 	
@@ -131,22 +140,6 @@ public class PTNDesktop extends JPanel {
 		this.paintImmediately(this.getBounds());
 	}
 	
-	@Override
-	public void paintImmediately(Rectangle bounds) {
-		
-		super.paintImmediately(bounds);
-		Set<String> keys = arcs.keySet();
-		Iterator<String> it = keys.iterator();
-		
-		while (it.hasNext()) {
-			
-			ArcView edge = arcs.get(it.next());
-			drawArrow(edge);
-
-		}
-		
-	}
-	
 	private void drawArrow(ArcView arc) {
 		
 		Graphics2D g2 = (Graphics2D)this.getGraphics();
@@ -162,6 +155,7 @@ public class PTNDesktop extends JPanel {
 		p.addPoint(end.x - 5, end.y + 2);
 		
 		g2.drawPolygon(p);
+
 	}
 	
 	public void deleteLineFromDeskTop(String name) {
