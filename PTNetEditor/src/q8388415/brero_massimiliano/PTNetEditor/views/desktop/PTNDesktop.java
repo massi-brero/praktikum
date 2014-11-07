@@ -66,22 +66,22 @@ public class PTNDesktop extends JLayeredPane {
 		nodes = netHandler.setUpNodes();
 		arcs = netHandler.setUpArcs();
 		Iterator<NodeView> it = getNodes().iterator();
-		PTNDesktopController mListernerButt1 = new PTNDesktopController(this);
+		PTNDesktopController desktopListener = new PTNDesktopController(this);
 		while (it.hasNext()) {
 			NodeView nodeView = it.next();
-			nodeView.addMouseMotionListener(mListernerButt1);
-			nodeView.addMouseListener(mListernerButt1);	
+			nodeView.addMouseMotionListener(desktopListener);
+			nodeView.addMouseListener(desktopListener);	
 			this.add(nodeView);
 		}
 		
 		setBackground(Color.WHITE);
-		Thread t = new Thread(mListernerButt1);
+		Thread t = new Thread(desktopListener);
 		t.start();
 	}
 
 	@Override
 	public void paint(Graphics g) {
-
+		
 		super.paint(g);
 		drawArcs();
 		
@@ -134,14 +134,13 @@ public class PTNDesktop extends JLayeredPane {
 			arcs.get(id).setEnd(end);
 		}
 		
-		setDoubleBuffered(true);
 		this.paintImmediately(this.getBounds());
 	}
 	
 	public void drawArrow(ArcView arc) {
 		
 		Graphics2D g2 = (Graphics2D)this.getGraphics();
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		//g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		Polygon p = new Polygon();
 		Point end = arc.getEnd();
 		

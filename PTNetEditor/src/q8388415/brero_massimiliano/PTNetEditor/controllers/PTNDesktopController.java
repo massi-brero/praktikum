@@ -134,7 +134,8 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			oldLocation.setLocation(-1, -1);
 		} else if (PTNAppController.isDrawing && isAllowedTarget) {
 			drawEdge(source, target);
-		} else if (PTNAppController.isDrawing && !isAllowedTarget)  {
+		} else  { // delete idle arcs that did not find a target
+			System.out.println("delete");
 			desktop.deleteLineFromDeskTop("newArc");
 		}
 		
