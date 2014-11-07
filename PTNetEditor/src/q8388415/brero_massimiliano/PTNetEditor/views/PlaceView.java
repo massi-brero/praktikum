@@ -31,7 +31,6 @@ public class PlaceView extends NodeView {
 		setSize(DEFAULT_SIZE);
 		this.setType(PTNNodeTypes.place);
 		nodeLabel.setVerticalTextPosition(JLabel.NORTH);
-		// setIconTextGap((int)Math.floor(-DEFAULT_SIZE.getWidth()/3.2));
 	}
 	
 	/**

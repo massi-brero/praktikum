@@ -2,12 +2,12 @@ package snippet;
 
 import java.awt.Point;
 
-public class ArcView {
+public class _ArcView {
 	
 	private Point start;
 	private Point end;
 	
-	public ArcView(Point s, Point e) {
+	public _ArcView(Point s, Point e) {
 		
 		setStart(s);
 		setEnd(e);

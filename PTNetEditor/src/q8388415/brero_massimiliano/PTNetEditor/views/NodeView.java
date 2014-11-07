@@ -44,7 +44,6 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 		//this.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.setHorizontalAlignment(JLabel.CENTER);
 		this.setOpaque(false);
-		//this.getIcon().
 		this.setVerticalAlignment(JLabel.CENTER);
 		this.setHorizontalTextPosition(JLabel.CENTER);
 		this.setVerticalTextPosition(JLabel.CENTER);

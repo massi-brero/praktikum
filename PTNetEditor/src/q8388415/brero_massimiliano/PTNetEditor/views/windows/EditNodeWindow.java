@@ -30,7 +30,8 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 		panel = new JPanel();
 		panel.setSize(100, 200);
 		panel.setLayout(new GridLayout(0,2));
-		
+		this.setLocationRelativeTo(node);
+		this.setFocusable(false);
 		this.sourceNode = node;
 		
 		initializeDialog(node);
@@ -80,7 +81,7 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		this.sendUpdatedNode();
-		dispose();
+		this.dispose();
 	}
 
 	/**

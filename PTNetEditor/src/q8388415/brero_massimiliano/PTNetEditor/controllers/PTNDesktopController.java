@@ -44,7 +44,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
 			Point end = new Point(e.getX(), e.getY());
 			
-			desktop.updateArcs(source.getName(), start, end);
+			desktop.updateArcs("newArc", start, end);
 			
 		} else {
 			
@@ -71,8 +71,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 				}
 				
 			}
-
-			desktop.revalidate();
 			
 		}
 
@@ -101,8 +99,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			
 		}
 		
-		desktop.repaint();
-
 	}
 
 	@Override
@@ -134,16 +130,12 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		
 		
 		if (isDragged) {
-			
 			isDragged = false;
 			oldLocation.setLocation(-1, -1);
-			
 		} else if (PTNAppController.isDrawing && isAllowedTarget) {
-			
 			drawEdge(source, target);
-
-		} else {
-			desktop.deleteLineFromDeskTop(source.getName());
+		} else if (PTNAppController.isDrawing && !isAllowedTarget)  {
+			desktop.deleteLineFromDeskTop("newArc");
 		}
 		
 		// set global variables to default and deselect buttons

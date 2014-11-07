@@ -12,9 +12,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
-import javax.swing.JPanel;
+import javax.swing.JLayeredPane;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
@@ -38,7 +37,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
  * @author q8388415
  *
  */
-public class PTNDesktop extends JPanel {
+public class PTNDesktop extends JLayeredPane {
 	
 	private ArrayList<NodeView> nodes;
 	private PTNNetViewHandler netHandler;
@@ -78,13 +77,14 @@ public class PTNDesktop extends JPanel {
 		setBackground(Color.WHITE);
 		Thread t = new Thread(mListernerButt1);
 		t.start();
-		
 	}
 
+	@Override
 	public void paint(Graphics g) {
 
 		super.paint(g);
 		drawArcs();
+		
 		if (getSize().width > maxSize.width || getSize().height > maxSize.height) {
 			
 			if (getSize().width > maxSize.width) 
@@ -107,7 +107,7 @@ public class PTNDesktop extends JPanel {
 	/**
 	 * Draws all arcs currently in arcs hashTable.
 	 */
-	private void drawArcs() {
+	public void drawArcs() {
 		
 		Iterator<Map.Entry<String, ArcView>> it = arcs.entrySet().iterator();
 		ArcView arcView = null;
@@ -116,8 +116,6 @@ public class PTNDesktop extends JPanel {
 			arcView = (ArcView)it.next().getValue();
 			this.drawArrow(arcView);
 		}
-		
-		this.revalidate();
 		
 	}
 	
@@ -140,7 +138,7 @@ public class PTNDesktop extends JPanel {
 		this.paintImmediately(this.getBounds());
 	}
 	
-	private void drawArrow(ArcView arc) {
+	public void drawArrow(ArcView arc) {
 		
 		Graphics2D g2 = (Graphics2D)this.getGraphics();
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -153,15 +151,17 @@ public class PTNDesktop extends JPanel {
 		p.addPoint(end.x, end.y);
 		p.addPoint(end.x - 5, end.y - 2);
 		p.addPoint(end.x - 5, end.y + 2);
-		
 		g2.drawPolygon(p);
 
 	}
 	
-	public void deleteLineFromDeskTop(String name) {
-		
-		arcs.remove(name);
-		repaint();
+	/**
+	 * If id is "newArc" an arc with a non valid target will be deleted.
+	 * @param id
+	 */
+	public void deleteLineFromDeskTop(String id) {
+		arcs.remove(id);
+		this.repaint();
 		
 	}
 
@@ -172,8 +172,10 @@ public class PTNDesktop extends JPanel {
 		popUp.setVisible(true);
 		
 		PTNINodeDTO nodeUpdate = popUp.sendUpdatedNode();
-		
 		this.updateNode(source, nodeUpdate);
+		
+		// so our arcs won't be obscured
+		this.paintImmediately(this.getBounds());
 			
 	}
 	
@@ -184,7 +186,6 @@ public class PTNDesktop extends JPanel {
 			((PlaceView)paintedNode).updateTokenLabel(nodeUpdate.getToken());
 		
 		paintedNode.setNodeLabelText(nodeUpdate.getNodeLabelText());
-		repaint();
 		
 	}
 	
