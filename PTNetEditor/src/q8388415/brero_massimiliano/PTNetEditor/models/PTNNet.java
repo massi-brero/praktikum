@@ -65,6 +65,21 @@ public class PTNNet {
 		
 	}
 	
+	public HashMap<String,PTNNode> getPredecessors(String id) {
+		PTNArc arc;
+		HashMap<String, PTNNode> list = new HashMap<String, PTNNode>();
+		Iterator<Map.Entry<String, PTNArc>> it = arcs.entrySet().iterator();
+		
+		while(it.hasNext()) {
+			arc = (PTNArc) it.next().getValue();
+			if (id.equals(arc.getTarget().getId()))
+				list.put(arc.getSource().getId(), arc.getSource());
+		}
+		
+		return list;
+		
+	}
+	
 	public int getNumberOfSuccessors(String id) {
 		return 1;
 	}

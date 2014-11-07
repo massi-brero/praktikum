@@ -71,6 +71,17 @@ public class PTNNetTest {
 	}
 	
 	@Test
+	public void testgetPredecessor() {
+		
+		HashMap<String, PTNNode> list = new HashMap<String, PTNNode>();
+		list = net.getPredecessors(node2.getId());
+		
+		assertTrue(list.containsKey(new String("n1")) && !list.containsKey("n3"));
+		
+	}
+	
+	
+	@Test
 	public void testGetNumberOfNodes(){
 		assertEquals(3, net.getNumberOfNodes());
 	}
