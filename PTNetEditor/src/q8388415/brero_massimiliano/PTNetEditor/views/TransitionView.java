@@ -12,8 +12,8 @@ public class TransitionView extends NodeView {
 	final static String sourceIconSelected = "rectangle_selected.png";
 	final Dimension DEFAULT_SIZE;
 	
-	public TransitionView() {
-		super(sourceIconStandard, sourceIconSelected);
+	public TransitionView(String id) {
+		super(id, sourceIconStandard, sourceIconSelected);
 		DEFAULT_SIZE = new Dimension(70, 70);
 		this.init();
 	}

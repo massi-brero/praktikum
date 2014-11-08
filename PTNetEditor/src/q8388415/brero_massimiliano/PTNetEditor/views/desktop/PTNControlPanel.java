@@ -67,7 +67,7 @@ public class PTNControlPanel extends JPanel {
 	
 	private void setUpListeners() {
 		
-		Iterator<NodeView> it = desktop.getNodes().iterator();
+		Iterator<NodeView> it = desktop.getNodeViews().iterator();
 		
 		while (it.hasNext()) {
 

@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.awt.Point;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 import org.junit.After;
 import org.junit.Before;
@@ -100,6 +101,26 @@ public class PTNNetTest {
 	public void testIsCorrectPairFalse() {
 		assertFalse(net.isCorrectPair(node2, node3));
 	}
+	
+	@Test
+	public void testgetArcsBySource() {
+		assertFalse(net.isCorrectPair(node2, node3));
+	}
+	
+
+	@Test
+	public void testGetArcsBySource() {
+		HashMap<String, PTNArc> result = net.getArcsBySource(node1);
+		assertTrue(result.containsValue(arc1) && result.containsValue(arc2));
+	}
+	
+	@Test
+	public void testGetArcsByTarget() {
+		HashMap<String, PTNArc> result = net.getArcsByTarget(node2);
+		assertTrue(result.containsValue(arc1));
+	}
+	
+	
 
 
 }

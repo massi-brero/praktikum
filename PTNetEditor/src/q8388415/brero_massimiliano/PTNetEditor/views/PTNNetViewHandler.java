@@ -15,6 +15,7 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNPlace;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
+import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 /**
  * We may delegate net view drawing, update and set-up operations to this class.
@@ -27,9 +28,11 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 public class PTNNetViewHandler {
 
 	private PTNNet net;
+	private PTNDesktop desktop;
 
-	public PTNNetViewHandler(PTNNet net) {
+	public PTNNetViewHandler(PTNNet net, PTNDesktop desktop) {
 		this.net = net;
+		this.desktop = desktop;
 	}
 
 	public ArrayList<NodeView> setUpNodes() {
@@ -47,10 +50,10 @@ public class PTNNetViewHandler {
 
 				switch (type) {
 				case place:
-					nodeView = new PlaceView(((PTNPlace) node).getToken());
+					nodeView = new PlaceView(node.getId(), ((PTNPlace) node).getToken());
 					break;
 				case transition:
-					nodeView = new TransitionView();
+					nodeView = new TransitionView(node.getId());
 					break;
 				default:
 					throw new PTNNodeConstructionException(
@@ -122,14 +125,81 @@ public class PTNNetViewHandler {
 		Point normalizedLocation = null;
 		
 		if (type == PTNNodeTypes.place) {
-			size = (new PlaceView(0)).getSize();
+			//@todo handle this without initializing an object
+			size = (new PlaceView("", 0)).getSize();
 		} else if (type == PTNNodeTypes.transition) {
-			size = (new TransitionView()).getSize();
+			size = (new TransitionView("")).getSize();
 		}
 		
 		normalizedLocation = new Point(node.getLocation().x + (int)size.getWidth()/2, node.getLocation().y + (int)size.getHeight()/2);
 		
 		return normalizedLocation;
+	}
+
+	/**
+	 * Handles redrawing all incoming and outgoing arcs for a node that has been moved for the view.
+	 * This method will also update the arc and corresponding node in our net model.
+	 * 
+	 * @param source
+	 */
+	public void upDateNetAndView(NodeView nodeView) {
+		
+		PTNArc arc;
+		PTNNode node = net.getNodeById(nodeView.getId());
+		HashMap<String, PTNArc>arcsToMoveSource = net.getArcsBySource(node);
+		HashMap<String, PTNArc>arcsToMoveTarget = net.getArcsByTarget(node);
+		Iterator<Map.Entry<String, PTNArc>> it_s = arcsToMoveSource.entrySet().iterator();
+		Iterator<Map.Entry<String, PTNArc>> it_t = arcsToMoveTarget.entrySet().iterator();
+		
+		while (it_s.hasNext()) {
+			arc = (PTNArc) it_s.next().getValue();
+			node.setLocation(nodeView.getLocation());
+			arc.setSource(node);
+			desktop.updateArcs(arc.getId(), normalizeLocation(node), normalizeLocation(arc.getTarget()));
+		}
+		
+		while (it_t.hasNext()) {
+			arc = (PTNArc) it_t.next().getValue();
+			node.setLocation(nodeView.getLocation());
+			arc.setTarget(node);
+			desktop.updateArcs(arc.getId(), normalizeLocation(arc.getSource()), normalizeLocation(node));
+		}
+		
+	}
+
+	/**
+	 * Removes node from net model an its view reprensatation.
+	 * Removes also all incoming and outgoing arcs of given node.
+	 * 
+	 * @param nodeView
+	 */
+	public void removeNodeAndArcs(NodeView nodeView) {
+		
+		PTNNode node = net.getNodeById(nodeView.getId());
+		HashMap<String, PTNArc>arcsToRemoveBySource = net.getArcsBySource(node);
+		HashMap<String, PTNArc>arcsToRemoveByTarget = net.getArcsByTarget(node);
+		Iterator<Map.Entry<String, PTNArc>> it_s = arcsToRemoveBySource.entrySet().iterator();
+		Iterator<Map.Entry<String, PTNArc>> it_t = arcsToRemoveByTarget.entrySet().iterator();
+		
+		net.removeNode(node);
+		System.out.println(net.getNodes().size());
+		desktop.getNodeViews().remove(nodeView);
+		System.out.println(desktop.getNodeViews().size());
+		
+		while (it_s.hasNext()) 
+			this.removeArcsFromNetAndDesktop(it_s.next().getValue());
+			
+		
+		while (it_t.hasNext())
+			this.removeArcsFromNetAndDesktop(it_t.next().getValue());
+
+		desktop.paintImmediately(desktop.getBounds());
+	}
+	
+	private void removeArcsFromNetAndDesktop (PTNArc arc) {
+		arc = (PTNArc) arc;
+		desktop.removeArc(arc.getId());
+		net.getArcs().remove(arc.getId());
 	}
 
 }

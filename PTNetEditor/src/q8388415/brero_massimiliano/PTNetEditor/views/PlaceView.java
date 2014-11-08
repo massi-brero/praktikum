@@ -15,8 +15,8 @@ public class PlaceView extends NodeView {
 	private int token = 0;
 	public final static String DOT_SIGN = "\u2022";
 
-	public PlaceView(int token) {
-		super(sourceIconStandard, sourceIconSelected);
+	public PlaceView(String id, int token) {
+		super(id, sourceIconStandard, sourceIconSelected);
 		DEFAULT_SIZE = new Dimension(70, 70);
 		this.init();
 		this.updateTokenLabel(token);

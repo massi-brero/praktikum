@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
+
 public class PTNNet {
 	
 	private HashMap<String,PTNNode> nodes;
@@ -145,6 +147,66 @@ public class PTNNet {
 	 */
 	public boolean isCorrectPair(PTNNode source, PTNNode target) {
 		return source.getType() != target.getType();
+	}
+	
+	/**
+	 * Returns all arcs that have the given source.
+	 * 
+	 * @param source
+	 * @return
+	 */
+	public HashMap<String, PTNArc> getArcsBySource(PTNNode source) {
+		
+		return getArcsBySourceOrTarget(source, true);
+		
+	}
+	
+	/**
+	 * Returns all arcs that have the given target.
+	 * 
+	 * @param source
+	 * @return
+	 */
+	public HashMap<String, PTNArc> getArcsByTarget(PTNNode source) {
+		
+		return getArcsBySourceOrTarget(source, false);
+		
+	}
+	
+	/**
+	 * Delegate method for getArcsBySource(PTNNode source) and getArcsByTarget(PTNNode source).
+	 * 
+	 * @param node
+	 * @param isSource
+	 * @return
+	 */
+	private HashMap<String, PTNArc> getArcsBySourceOrTarget(PTNNode node, Boolean isSource) {
+		
+		String id = node.getId();
+		PTNArc arc;
+		HashMap<String, PTNArc> list = new HashMap<String, PTNArc>();
+		Iterator<Map.Entry<String, PTNArc>> it = arcs.entrySet().iterator();
+		
+		while(it.hasNext()) {
+			arc = (PTNArc) it.next().getValue();
+			
+			if (isSource) {
+				if (id.equals(arc.getSource().getId()))
+					list.put(arc.getId(), arc);				
+			} else {
+				if (id.equals(arc.getTarget().getId()))
+					list.put(arc.getId(), arc);	
+			}
+		}
+		
+		return list;
+		
+	}
+
+	public void removeNode(PTNNode node) {
+		
+		this.getNodes().remove(node.getId());
+		
 	}
 
 }

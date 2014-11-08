@@ -7,16 +7,18 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
@@ -39,18 +41,31 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
  */
 public class PTNDesktop extends JLayeredPane {
 	
+	private final int D_HEIGHT = 300;
+	private final int D_WIDTH = 600;
 	private ArrayList<NodeView> nodes;
 	private PTNNetViewHandler netHandler;
 	private PTNNet net;
+	private BufferedImage offscreenI;
+	private Graphics offscreenG;
 	// Using a Hashtable instead of an ArrayList like nodes makes it easier to identify arcs by id for our drawing operations.
 	private Hashtable<String, ArcView> arcs;
-	// biggest size of desktop so far; we need this to adapt the scroll pane's bars 
-	private Dimension maxSize;
 	
+	// biggest size of desktop so far; we need this to adapt the scroll pane's bars 
+	private Dimension maxSize; 
+	
+	/**
+	 * Basic operations will be put in the controller, like initializing
+	 * attributes for buffered painting;
+	 * 
+	 * @param appControl
+	 * @param net
+	 */
 	public PTNDesktop(PTNAppController appControl, PTNNet net) {
 		
+		offscreenI = new BufferedImage(D_WIDTH, D_HEIGHT, BufferedImage.TYPE_INT_RGB);
 		this.net = net;
-		this.netHandler = new PTNNetViewHandler(net);
+		this.netHandler = new PTNNetViewHandler(net, this);
 		setFocusable(true);
 		addKeyListener(appControl);
 		setDoubleBuffered(true);
@@ -58,14 +73,17 @@ public class PTNDesktop extends JLayeredPane {
 
 	}
 	
+	/**
+	 * set up the desktop;
+	 */
 	private void init() {
 		
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension(500, 300));
+		this.setPreferredSize(new Dimension(D_WIDTH, D_HEIGHT));
 		maxSize = getSize();
 		nodes = netHandler.setUpNodes();
 		arcs = netHandler.setUpArcs();
-		Iterator<NodeView> it = getNodes().iterator();
+		Iterator<NodeView> it = getNodeViews().iterator();
 		PTNDesktopController desktopListener = new PTNDesktopController(this);
 		while (it.hasNext()) {
 			NodeView nodeView = it.next();
@@ -158,7 +176,8 @@ public class PTNDesktop extends JLayeredPane {
 	 * If id is "newArc" an arc with a non valid target will be deleted.
 	 * @param id
 	 */
-	public void deleteLineFromDeskTop(String id) {
+	public void removeArc(String id) {
+		
 		arcs.remove(id);
 		this.repaint();
 		
@@ -171,7 +190,7 @@ public class PTNDesktop extends JLayeredPane {
 		popUp.setVisible(true);
 		
 		PTNINodeDTO nodeUpdate = popUp.sendUpdatedNode();
-		this.updateNode(source, nodeUpdate);
+		this.updateNodeAttributes(source, nodeUpdate);
 		
 		// so our arcs won't be obscured
 		this.paintImmediately(this.getBounds());
@@ -179,7 +198,7 @@ public class PTNDesktop extends JLayeredPane {
 	}
 	
 	
-	private void updateNode(NodeView paintedNode, PTNINodeDTO nodeUpdate) {
+	private void updateNodeAttributes(NodeView paintedNode, PTNINodeDTO nodeUpdate) {
 
 		if (paintedNode instanceof PlaceView)
 			((PlaceView)paintedNode).updateTokenLabel(nodeUpdate.getToken());
@@ -188,8 +207,12 @@ public class PTNDesktop extends JLayeredPane {
 		
 	}
 	
-	public ArrayList<NodeView> getNodes() {
+	public ArrayList<NodeView> getNodeViews() {
 		return this.nodes;
+	}
+	
+	public Hashtable<String, ArcView>getArcViews() {
+		return this.arcs;
 	}
 	
 	/**
@@ -199,7 +222,7 @@ public class PTNDesktop extends JLayeredPane {
 	 */
 	public boolean hasSelected() {
 		
-		Iterator<NodeView> it = getNodes().iterator();
+		Iterator<NodeView> it = getNodeViews().iterator();
 		
 		while (it.hasNext()) {
 			if (it.next().isSelected())
@@ -212,7 +235,7 @@ public class PTNDesktop extends JLayeredPane {
 	
 	public void deselectNodes() {
 		
-		Iterator<NodeView> it = getNodes().iterator();
+		Iterator<NodeView> it = getNodeViews().iterator();
 		
 		while (it.hasNext()) {
 			NodeView node = (NodeView) it.next();
@@ -221,14 +244,17 @@ public class PTNDesktop extends JLayeredPane {
 		
 	}
 	
+	/**
+	 * 
+	 */
 	public void deleteSelected() {
 		
-		Iterator<NodeView> it = getNodes().iterator();
+		Iterator<NodeView> it = getNodeViews().iterator();
 		// we store the nodes we want to delete so we don't manipulate the iterator and remove
 		// stuff while it's still going through our list
 		ArrayList<NodeView> nodesToRemove = new ArrayList<NodeView>();
 		
-		if (!getNodes().isEmpty()) {
+		if (!getNodeViews().isEmpty()) {
 			while (it.hasNext()) {
 				NodeView node = (NodeView) it.next();
 				if (node.isSelected()) {
@@ -238,13 +264,22 @@ public class PTNDesktop extends JLayeredPane {
 				}
 			}	
 			
+			it = nodesToRemove.iterator();
 			//now we remove them nodes from our precious list
 			while (it.hasNext()) {
-				getNodes().remove(it.next());
+				netHandler.removeNodeAndArcs(it.next());
 			}
 			
 		}
 		
+	}
+
+	/**
+	 * Stub for redrawing all incoming and outgoing arcs for a node that has been moved.
+	 * @param source
+	 */
+	public void redrawArcs(NodeView source) {
+		netHandler.upDateNetAndView(source);
 	}
 	
 }

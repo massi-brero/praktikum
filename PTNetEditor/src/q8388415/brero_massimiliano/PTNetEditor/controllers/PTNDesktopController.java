@@ -1,6 +1,5 @@
 package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
-import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -14,12 +13,16 @@ import java.util.Iterator;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
+/**
+ * 
+ * @author 8388415
+ *
+ */
 public class PTNDesktopController implements MouseMotionListener, MouseListener, ActionListener, Runnable {
 
 	private PTNDesktop desktop;
@@ -51,23 +54,26 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			if (!isDragged) {
 				isDragged = true;
 			} else {
-				
+
 				int diffX = e.getX() - (int) oldLocation.getX();
 				int diffY = e.getY() - (int) oldLocation.getY();
 				
 				if (desktop.hasSelected()) {
 					
-					ArrayList<NodeView> nodes = desktop.getNodes();
+					ArrayList<NodeView> nodes = desktop.getNodeViews();
 					Iterator<NodeView> it = nodes.iterator();
 					
 					while (it.hasNext()) {
 						NodeView node = (NodeView) it.next();
-						if(node.isSelected())
-							node.setLocation(node.getX() + diffX, node.getY() + diffY);			
+						if(node.isSelected()) {
+							node.setLocation(node.getX() + diffX, node.getY() + diffY);		
+							desktop.redrawArcs((NodeView)node);
+						}
 					}
 					
 				} else {
 					source.setLocation(source.getX() + diffX, source.getY() + diffY);
+					desktop.redrawArcs((NodeView)source);
 				}
 				
 			}
@@ -134,9 +140,8 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			oldLocation.setLocation(-1, -1);
 		} else if (PTNAppController.isDrawing && isAllowedTarget) {
 			drawEdge(source, target);
-		} else  { // delete idle arcs that did not find a target
-			System.out.println("delete");
-			desktop.deleteLineFromDeskTop("newArc");
+		} else  { // delete idle arcs that did not find a target 
+			desktop.removeArc("newArc");
 		}
 		
 		// set global variables to default and deselect buttons
@@ -147,8 +152,10 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	private void drawEdge(JComponent source, JComponent target) {
 		
 		Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
-		Point end = new Point(target.getLocation().x + target.getWidth()/2, target.getLocation().y + target.getHeight()/2);;
-		desktop.updateArcs(source.getName(), start, end);
+		Point end = new Point(target.getLocation().x + target.getWidth()/2, target.getLocation().y + target.getHeight()/2);
+		//delete remaining interim arcs
+		desktop.removeArc("newArc");
+		desktop.updateArcs("drawnArc", start, end);
 	}
 
 	@Override
@@ -165,7 +172,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
-				// continue waitung even if interruoted
+				// continue waiting even if interrupted
 			}
 			if (PTNAppController.deselectAll) {
 				desktop.deselectNodes();

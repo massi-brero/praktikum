@@ -26,12 +26,14 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 	private int scale = 1;
 	final int scaleFactor = 1;
 	private PTNNodeTypes type;
+	private String id;
 
-	public NodeView(String sourceStandardIcon, String sourceSelectedIcon) {
+	public NodeView(String id, String sourceStandardIcon, String sourceSelectedIcon) {
 		
 		this.nodeLabel = new JLabel("");
 		iconStandard = new ImageIcon(sourceStandardIcon);
 		iconSelected = new ImageIcon(sourceSelectedIcon);
+		this.setId(id);
 		this.init();
 
 	}
@@ -181,5 +183,15 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 		this.getNodeLabel().setText(text);
 		
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	
 		
 }
