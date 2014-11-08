@@ -24,7 +24,6 @@ public class PTNBootstrap {
 		
 		bootstrap = new PTNBootstrap();
 		bootstrap.init();
-		
 
 	}
 	
@@ -47,13 +46,16 @@ public class PTNBootstrap {
 			node1.setLabel("testtext");
 			PTNTransition node2 = new PTNTransition("node2", "n2", new Point(10, 10));
 			PTNTransition node3 = new PTNTransition("node3", "n3", new Point(200, 250));
+			PTNTransition node4 = new PTNTransition("node4", "n4", new Point(200, 70));
 			node2.setLabel("testtext");
 			node3.setLabel("testtext");
+			node4.setLabel("testtext");
 			PTNArc arc1 = new PTNArc("a1", node1, node2);
 			PTNArc arc2 = new PTNArc("a2", node1, node3);
 			net.addNode(node1);
 			net.addNode(node2);
 			net.addNode(node3);
+			net.addNode(node4);
 			net.addArc(arc1);
 			net.addArc(arc2);
 			

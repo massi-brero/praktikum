@@ -8,6 +8,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNArcConstructionException;
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
@@ -182,9 +184,7 @@ public class PTNNetViewHandler {
 		Iterator<Map.Entry<String, PTNArc>> it_t = arcsToRemoveByTarget.entrySet().iterator();
 		
 		net.removeNode(node);
-		System.out.println(net.getNodes().size());
 		desktop.getNodeViews().remove(nodeView);
-		System.out.println(desktop.getNodeViews().size());
 		
 		while (it_s.hasNext()) 
 			this.removeArcsFromNetAndDesktop(it_s.next().getValue());
@@ -200,6 +200,30 @@ public class PTNNetViewHandler {
 		arc = (PTNArc) arc;
 		desktop.removeArc(arc.getId());
 		net.getArcs().remove(arc.getId());
+	}
+
+	public void addNewArc(String id, NodeView sourceView, NodeView targetView) {
+		
+		
+		if (net.getArcs().containsKey(id)) {
+			System.out.println("null");
+			JOptionPane.showConfirmDialog(desktop, "Diese ID ist bereits vergeben.", "Ungültige ID", JOptionPane.WARNING_MESSAGE);
+			
+		} else if (id.equals("")) {
+			System.out.println("leer");
+			System.out.println("nix");
+			JOptionPane.showConfirmDialog(desktop, "Sie müssen eine ID mit mind. einem Zeichen eingeben.", "Ungültige ID", JOptionPane.WARNING_MESSAGE);
+			
+		} else {
+
+			PTNNode source = net.getNodeById(sourceView.getId());
+			PTNNode target = net.getNodeById(targetView.getId());
+			net.addArc(new PTNArc(id, source, target));
+			desktop.updateArcs(id, normalizeLocation(source).getLocation(), normalizeLocation(target).getLocation());
+			
+		}
+		
+		
 	}
 
 }

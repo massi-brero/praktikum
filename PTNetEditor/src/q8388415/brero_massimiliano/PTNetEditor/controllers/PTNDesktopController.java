@@ -42,6 +42,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		JComponent source = (JComponent) e.getComponent();
 		e.translatePoint(source.getX(), source.getY());
 
+		//here we are drawing an arc
 		if (PTNAppController.isDrawing) {
 
 			Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
@@ -97,7 +98,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		
 		if (source instanceof JLabel && 3 == e.getButton()) {
 
-			desktop.callDialog(source);
+			desktop.callNodeAttributeDialog(source);
 			
 		} else if (PTNAppController.selectMode) {
 			
@@ -128,7 +129,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	public void mouseReleased(MouseEvent e) {
 		
 		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-		JComponent source = (JComponent) e.getComponent();
+		NodeView source = (NodeView) e.getComponent();
 		JComponent target = (JComponent) desktop.findComponentAt(mouseLocation);
 
 		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) || 
@@ -139,23 +140,27 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			isDragged = false;
 			oldLocation.setLocation(-1, -1);
 		} else if (PTNAppController.isDrawing && isAllowedTarget) {
-			drawEdge(source, target);
-		} else  { // delete idle arcs that did not find a target 
-			desktop.removeArc("newArc");
+			//We can cast savely to node view since we now know that we have a NodeView type under the mouse pointer.
+			this.drawTempEdge(source, target);
+			desktop.callNewArcDialog(source, (NodeView)target);
+			PTNAppController.isDrawing = false;
+			
 		}
-		
+			
+		//delete all temporary arcs that may have be lingering on the desktop.
+		desktop.removeArc("newArc");
+	
 		// set global variables to default and deselect buttons
 		desktop.requestFocus();
 
 	}
 
-	private void drawEdge(JComponent source, JComponent target) {
+	private void drawTempEdge(JComponent source, JComponent target) {
 		
 		Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
 		Point end = new Point(target.getLocation().x + target.getWidth()/2, target.getLocation().y + target.getHeight()/2);
-		//delete remaining interim arcs
-		desktop.removeArc("newArc");
-		desktop.updateArcs("drawnArc", start, end);
+		//
+		desktop.updateArcs("newArc", start, end);
 	}
 
 	@Override

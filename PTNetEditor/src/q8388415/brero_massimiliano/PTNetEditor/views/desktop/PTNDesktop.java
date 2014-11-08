@@ -13,12 +13,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
-import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
@@ -26,6 +24,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PTNNetViewHandler;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
+import q8388415.brero_massimiliano.PTNetEditor.views.windows.NewArcWindow;
 
 /**
  * When we set up the desktop we'll translate our net structure into node views.
@@ -182,20 +181,6 @@ public class PTNDesktop extends JLayeredPane {
 		this.repaint();
 		
 	}
-
-	public void callDialog(NodeView source) {
-		
-		EditNodeWindow popUp = new EditNodeWindow(source);
-		popUp.setModal(true);
-		popUp.setVisible(true);
-		
-		PTNINodeDTO nodeUpdate = popUp.sendUpdatedNode();
-		this.updateNodeAttributes(source, nodeUpdate);
-		
-		// so our arcs won't be obscured
-		this.paintImmediately(this.getBounds());
-			
-	}
 	
 	
 	private void updateNodeAttributes(NodeView paintedNode, PTNINodeDTO nodeUpdate) {
@@ -281,5 +266,34 @@ public class PTNDesktop extends JLayeredPane {
 	public void redrawArcs(NodeView source) {
 		netHandler.upDateNetAndView(source);
 	}
+	
+	public void callNodeAttributeDialog(NodeView source) {
+		
+		EditNodeWindow popUp = new EditNodeWindow(source);
+		popUp.setModal(true);
+		popUp.setVisible(true);
+		
+		PTNINodeDTO nodeUpdate = popUp.sendUpdatedNode();
+		this.updateNodeAttributes(source, nodeUpdate);
+		
+		// so our arcs won't be obscured
+		this.paintImmediately(this.getBounds());
+			
+	}
+	
+	public void callNewArcDialog(NodeView source, NodeView target) {
+		
+		NewArcWindow popUp = new NewArcWindow();
+		popUp.setModal(true);
+		popUp.setVisible(true);
+		
+		String id = popUp.sendId();
+		netHandler.addNewArc(id, source, target);
+		
+		this.paintImmediately(this.getBounds());
+			
+	}
+	
+	
 	
 }
