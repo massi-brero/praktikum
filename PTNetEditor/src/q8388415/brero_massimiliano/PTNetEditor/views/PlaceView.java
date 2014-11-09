@@ -19,7 +19,7 @@ public class PlaceView extends NodeView {
 		super(id, sourceIconStandard, sourceIconSelected);
 		DEFAULT_SIZE = new Dimension(70, 70);
 		this.init();
-		this.updateTokenLabel(token);
+		this.updateToken(token);
 	}
 
 	/**
@@ -30,7 +30,7 @@ public class PlaceView extends NodeView {
 
 		setSize(DEFAULT_SIZE);
 		this.setType(PTNNodeTypes.place);
-		nodeLabel.setVerticalTextPosition(JLabel.NORTH);
+		nameLabel.setVerticalTextPosition(JLabel.NORTH);
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public class PlaceView extends NodeView {
 	 * @param text
 	 * @return void
 	 */
-	public void updateTokenLabel (int token) {
+	public void updateToken (int token) {
 		
 		try {
 				

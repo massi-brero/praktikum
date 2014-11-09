@@ -16,13 +16,15 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNPlace;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 /**
  * We may delegate net view drawing, update and set-up operations to this class.
  * If we want to add more types of nodes or change some view logic we just have
- * to change, replace this classs.
+ * to change, replace this class.
  * 
  * @author brero
  * 
@@ -31,6 +33,7 @@ public class PTNNetViewHandler {
 
 	private PTNNet net;
 	private PTNDesktop desktop;
+	final Point START_LOCATION_NEW_NODE = new Point(15,15);
 
 	public PTNNetViewHandler(PTNNet net, PTNDesktop desktop) {
 		this.net = net;
@@ -69,7 +72,7 @@ public class PTNNetViewHandler {
 
 				nodeView.setName(node.getName());
 				nodeView.setLocation(node.getLocation());
-				nodeView.setLabelText(node.getLabel());
+				nodeView.setNameLabel(node.getLabel());
 				nodeViewList.add(nodeView);
 
 			}
@@ -202,13 +205,22 @@ public class PTNNetViewHandler {
 		net.getArcs().remove(arc.getId());
 	}
 
+	/**
+	 * Adds a new arc to desktop view and net model.
+	 * Will show error panes if id = "" or there's already
+	 * the id that was given.
+	 * 
+	 * @param id
+	 * @param sourceView
+	 * @param targetView
+	 */
 	public void addNewArc(String id, NodeView sourceView, NodeView targetView) {
 		
 		if (net.getArcs().containsKey(id)) {
-			JOptionPane.showConfirmDialog(desktop, "Diese ID ist bereits vergeben.", "Ungültige ID", JOptionPane.WARNING_MESSAGE);
+			if(0 == this.showErrorPaneIdExists())
+				desktop.callNewArcDialog(sourceView, targetView);
 		} else if (id.equals("")) {
-			if(0 == JOptionPane.showConfirmDialog(desktop, "Sie müssen eine ID mit mind. einem Zeichen eingeben.", 
-					"Ungültige ID", JOptionPane.WARNING_MESSAGE))
+			if(0 == this.showErrorPaneEmptyId())
 				desktop.callNewArcDialog(sourceView, targetView);
 		} else {
 
@@ -217,9 +229,63 @@ public class PTNNetViewHandler {
 			net.addArc(new PTNArc(id, source, target));
 			desktop.updateArcs(id, normalizeLocation(source).getLocation(), normalizeLocation(target).getLocation());
 			
+		}		
+	}
+	
+	/**
+	 * Adds a new node to desktop view and the net model. 
+	 * Place token are initialized with 0. You may change initial 
+	 * positioning with START_LOCATION_NEW_NODE.
+	 * @param id
+	 * @param name
+	 * @param type
+	 */
+	public void addNewNode(PTNINodeDTO nodeParams) {
+		String id = nodeParams.getId();
+		String name = nodeParams.getNodeName();
+		PTNNodeTypes type = nodeParams.getType();
+		int token = nodeParams.getToken();
+		NodeView nodeView = null;
+		
+		if (net.getArcs().containsKey(id)) {
+			if(0 == this.showErrorPaneIdExists())
+				desktop.callNewNodeDialog();
+		} else if (id.equals("")) {
+			if(0 == this.showErrorPaneEmptyId())
+				desktop.callNewNodeDialog();
+		} else {
+			
+			try {
+				if (type == PTNNodeTypes.place) {
+					net.addNode(new PTNPlace(name, id, START_LOCATION_NEW_NODE));
+					nodeView = new PlaceView(id, 0);				
+					((PlaceView)nodeView).updateToken(token);
+				} else if (type == PTNNodeTypes.transition) {
+					net.addNode(new PTNTransition(name, id, START_LOCATION_NEW_NODE));
+					nodeView = new TransitionView(id);
+				}
+				
+				nodeView.setNameLabel(name);
+				nodeView.setLocation(START_LOCATION_NEW_NODE);
+				desktop.addListenertoNode(nodeView);
+				desktop.getNodeViews().add(nodeView);
+				desktop.add(nodeView);
+				
+			} catch (PTNNodeConstructionException e) {
+				e.printStackTrace();
+			}
 		}
 		
-		
+	}
+	
+	private int showErrorPaneIdExists() {
+		return JOptionPane.showConfirmDialog(desktop, "Diese ID ist bereits vergeben.", 
+				"Ungültige ID", JOptionPane.WARNING_MESSAGE);
+	}
+	
+	private int showErrorPaneEmptyId() {
+		return JOptionPane.showConfirmDialog(desktop, "Sie müssen eine ID mit mind. einem Zeichen eingeben.", 
+				"Ungültige ID", JOptionPane.WARNING_MESSAGE);
 	}
 
 }

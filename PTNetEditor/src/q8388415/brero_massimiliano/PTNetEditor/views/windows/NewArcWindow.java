@@ -38,8 +38,8 @@ public class NewArcWindow extends JDialog implements ActionListener {
 	private void initializeDialog() {
 		
 		idField = new JTextField("", 20);
-		this.addToPanel(idField);
 		this.addToPanel(new JLabel("Kanten ID"));
+		this.addToPanel(idField);
 		
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(this);

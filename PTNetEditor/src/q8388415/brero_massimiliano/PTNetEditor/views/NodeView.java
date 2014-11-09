@@ -21,7 +21,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 	private final int CHANGE_HEIGHT = 4;
 	protected ImageIcon iconStandard;
 	protected ImageIcon iconSelected;
-	protected JLabel nodeLabel;
+	protected JLabel nameLabel;
 	private boolean selected = false;
 	private int scale = 1;
 	final int scaleFactor = 1;
@@ -30,7 +30,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 
 	public NodeView(String id, String sourceStandardIcon, String sourceSelectedIcon) {
 		
-		this.nodeLabel = new JLabel("");
+		this.nameLabel = new JLabel("");
 		iconStandard = new ImageIcon(sourceStandardIcon);
 		iconSelected = new ImageIcon(sourceSelectedIcon);
 		this.setId(id);
@@ -40,7 +40,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 	
 	private void init() {
 		
-		this.add(nodeLabel);
+		this.add(nameLabel);
 		this.setIcon(iconStandard);
 		this.setLayout(new FlowLayout());
 		this.setDoubleBuffered(true);
@@ -62,12 +62,12 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 		this.setIcon(ic);
 	}
 	
-	public JLabel getNodeLabel() {
-		return nodeLabel;
+	public JLabel getNameLabel() {
+		return nameLabel;
 	}
 
-	public void setLabelText(String label) {
-		this.nodeLabel.setText(label);
+	public void setNameLabel(String label) {
+		this.nameLabel.setText(label);
 	}
 
 	public boolean isSelected() {
@@ -169,8 +169,8 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 	
 	protected void updateLabelTextSize(int factor) {
 		int changeSize = factor;
-		Font nodeLabelFont = nodeLabel.getFont();
-		this.nodeLabel.setFont(new Font(nodeLabelFont.getFontName(), Font.PLAIN, (int)(nodeLabelFont.getSize() + changeSize)));
+		Font nodeLabelFont = nameLabel.getFont();
+		this.nameLabel.setFont(new Font(nodeLabelFont.getFontName(), Font.PLAIN, (int)(nodeLabelFont.getSize() + changeSize)));
 	}
 
 	/**
@@ -180,7 +180,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 	 */
 	public void setNodeLabelText(String text) {
 		
-		this.getNodeLabel().setText(text);
+		this.getNameLabel().setText(text);
 		
 	}
 

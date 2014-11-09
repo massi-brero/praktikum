@@ -2,21 +2,22 @@ package q8388415.brero_massimiliano.PTNetEditor.views.desktop;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Iterator;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
-import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
-import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.partials.PTNEnlargementPanel;
 
 public class PTNControlPanel extends JPanel {
 	
 	private JButton deselect;
 	private JButton delSelection;
+	private JButton addNewNode;
 	private JPanel buttonPanel;
 	private JPanel controllerPanel;
 	private PTNDesktop desktop;
@@ -24,13 +25,22 @@ public class PTNControlPanel extends JPanel {
 	private PTNEnlargementPanel transitionSizePanel;
 	private PTNEnlargementPanel arrowHeadSizePanel;
 	
-	public PTNControlPanel(PTNAppController appControl, PTNDesktop desktop) {
+	public PTNControlPanel(PTNAppController appControl, final PTNDesktop desktop) {
 		
 		this.desktop = desktop;
 		deselect = new JButton("unselect");
 		delSelection = new JButton("erase");
 		deselect.addActionListener(appControl);
 		delSelection.addActionListener(appControl);
+		addNewNode = new JButton("neuer Knoten");
+		addNewNode.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				desktop.callNewNodeDialog();				
+			}
+		});
+		
 
 		this.init();
 		
@@ -55,7 +65,7 @@ public class PTNControlPanel extends JPanel {
 		// add basic buttons
 		buttonPanel.add(deselect);
 		buttonPanel.add(delSelection);
-		//buttonPanel.add(new JButton("unused"));
+		buttonPanel.add(addNewNode);
 		
 		this.setSize(new Dimension(700, 30));
 		this.setLayout(new GridLayout(0, 2));

@@ -21,7 +21,7 @@ public class TransitionView extends NodeView {
 	private void init() {
 		setSize(DEFAULT_SIZE);
 		this.setType(PTNNodeTypes.transition);
-		nodeLabel.setBounds(+500, -5, 10, 20);
+		nameLabel.setBounds(+500, -5, 10, 20);
 		//setIconTextGap((int)Math.floor(-DEFAULT_SIZE.getWidth()/3.2));
 	}
 

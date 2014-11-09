@@ -18,6 +18,7 @@ import javax.swing.JLayeredPane;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
@@ -25,6 +26,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.PTNNetViewHandler;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.NewArcWindow;
+import q8388415.brero_massimiliano.PTNetEditor.views.windows.NewNodeWindow;
 
 /**
  * When we set up the desktop we'll translate our net structure into node views.
@@ -44,6 +46,7 @@ public class PTNDesktop extends JLayeredPane {
 	private final int D_WIDTH = 600;
 	private ArrayList<NodeView> nodes;
 	private PTNNetViewHandler netHandler;
+	PTNDesktopController desktopListener;
 	private PTNNet net;
 	private BufferedImage offscreenI;
 	private Graphics offscreenG;
@@ -83,11 +86,10 @@ public class PTNDesktop extends JLayeredPane {
 		nodes = netHandler.setUpNodes();
 		arcs = netHandler.setUpArcs();
 		Iterator<NodeView> it = getNodeViews().iterator();
-		PTNDesktopController desktopListener = new PTNDesktopController(this);
+		desktopListener = new PTNDesktopController(this);
 		while (it.hasNext()) {
 			NodeView nodeView = it.next();
-			nodeView.addMouseMotionListener(desktopListener);
-			nodeView.addMouseListener(desktopListener);	
+			this.addListenertoNode(nodeView);
 			this.add(nodeView);
 		}
 		
@@ -186,9 +188,9 @@ public class PTNDesktop extends JLayeredPane {
 	private void updateNodeAttributes(NodeView paintedNode, PTNINodeDTO nodeUpdate) {
 
 		if (paintedNode instanceof PlaceView)
-			((PlaceView)paintedNode).updateTokenLabel(nodeUpdate.getToken());
+			((PlaceView)paintedNode).updateToken(nodeUpdate.getToken());
 		
-		paintedNode.setNodeLabelText(nodeUpdate.getNodeLabelText());
+		paintedNode.setNodeLabelText(nodeUpdate.getNodeName());
 		
 	}
 	
@@ -198,6 +200,15 @@ public class PTNDesktop extends JLayeredPane {
 	
 	public Hashtable<String, ArcView>getArcViews() {
 		return this.arcs;
+	}
+	
+	/**
+	 * This method allows us to create new nodes in other classes.
+	 * @return
+	 */
+	public void addListenertoNode(NodeView nodeView) {
+		nodeView.addMouseMotionListener(desktopListener);
+		nodeView.addMouseListener(desktopListener);	
 	}
 	
 	/**
@@ -292,6 +303,19 @@ public class PTNDesktop extends JLayeredPane {
 		
 		this.paintImmediately(this.getBounds());
 			
+	}
+
+	public void callNewNodeDialog() {
+		
+		NewNodeWindow popUp = new NewNodeWindow();
+		popUp.setModal(true);
+		popUp.setVisible(true);
+		
+		PTNINodeDTO nodeParams = popUp.sendParams();
+		netHandler.addNewNode(nodeParams);
+		
+		this.repaint();
+		
 	}
 	
 	
