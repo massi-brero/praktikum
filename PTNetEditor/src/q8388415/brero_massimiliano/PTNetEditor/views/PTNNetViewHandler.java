@@ -204,16 +204,12 @@ public class PTNNetViewHandler {
 
 	public void addNewArc(String id, NodeView sourceView, NodeView targetView) {
 		
-		
 		if (net.getArcs().containsKey(id)) {
-			System.out.println("null");
 			JOptionPane.showConfirmDialog(desktop, "Diese ID ist bereits vergeben.", "Ungültige ID", JOptionPane.WARNING_MESSAGE);
-			
 		} else if (id.equals("")) {
-			System.out.println("leer");
-			System.out.println("nix");
-			JOptionPane.showConfirmDialog(desktop, "Sie müssen eine ID mit mind. einem Zeichen eingeben.", "Ungültige ID", JOptionPane.WARNING_MESSAGE);
-			
+			if(0 == JOptionPane.showConfirmDialog(desktop, "Sie müssen eine ID mit mind. einem Zeichen eingeben.", 
+					"Ungültige ID", JOptionPane.WARNING_MESSAGE))
+				desktop.callNewArcDialog(sourceView, targetView);
 		} else {
 
 			PTNNode source = net.getNodeById(sourceView.getId());
