@@ -229,7 +229,9 @@ public class NetController {
 		} else {
 
 			PTNNode source = net.getNodeById(sourceView.getId());
+			source.setLocation(sourceView.getLocation());
 			PTNNode target = net.getNodeById(targetView.getId());
+			target.setLocation(targetView.getLocation());
 			net.addArc(new PTNArc(id, source, target));
 			desktop.updateArcs(id, normalizeLocation(source).getLocation(), normalizeLocation(target).getLocation());
 			
