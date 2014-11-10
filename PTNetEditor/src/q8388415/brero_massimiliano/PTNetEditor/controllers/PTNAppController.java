@@ -8,6 +8,11 @@ import java.awt.event.KeyListener;
 
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
+/**
+ * This class features some basic state variables that can be checkes by other components.
+ * @author Laptop
+ *
+ */
 public class PTNAppController implements KeyListener, ActionListener {
 	
 	public static boolean isDrawing = false;

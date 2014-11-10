@@ -15,14 +15,13 @@ import java.util.Map;
 
 import javax.swing.JLayeredPane;
 
+import q8388415.brero_massimiliano.PTNetEditor.controllers.NetController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
-import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
-import q8388415.brero_massimiliano.PTNetEditor.views.PTNNetViewHandler;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.NewArcWindow;
@@ -45,7 +44,7 @@ public class PTNDesktop extends JLayeredPane {
 	private final int D_HEIGHT = 300;
 	private final int D_WIDTH = 600;
 	private ArrayList<NodeView> nodes;
-	private PTNNetViewHandler netHandler;
+	private NetController netHandler;
 	PTNDesktopController desktopListener;
 	private PTNNet net;
 	private BufferedImage offscreenI;
@@ -67,7 +66,7 @@ public class PTNDesktop extends JLayeredPane {
 		
 		offscreenI = new BufferedImage(D_WIDTH, D_HEIGHT, BufferedImage.TYPE_INT_RGB);
 		this.net = net;
-		this.netHandler = new PTNNetViewHandler(net, this);
+		this.netHandler = new NetController(net, this);
 		setFocusable(true);
 		addKeyListener(appControl);
 		setDoubleBuffered(true);

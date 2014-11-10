@@ -60,6 +60,9 @@ public class NewNodeWindow extends JDialog implements ActionListener {
 				if (types.getSelectedItem() == PTNNodeTypes.transition) {
 					tokenLabel.setVisible(false);
 					token.setVisible(false);
+				} else {
+					tokenLabel.setVisible(true);
+					token.setVisible(true);
 				}
 			}
 		});

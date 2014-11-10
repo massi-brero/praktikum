@@ -8,13 +8,13 @@ import java.util.Hashtable;
 import org.junit.Before;
 import org.junit.Test;
 
+import q8388415.brero_massimiliano.PTNetEditor.controllers.NetController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNPlace;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
-import q8388415.brero_massimiliano.PTNetEditor.views.PTNNetViewHandler;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 public class PTNNetHandlerTest {
@@ -22,7 +22,7 @@ public class PTNNetHandlerTest {
 	private PTNNet net;
 	private PTNNode node1, node2, node3;
 	private PTNArc arc1, arc2;
-	private PTNNetViewHandler netHandler;
+	private NetController netHandler;
 
 	@Before
 	public void setUp() throws Exception {
@@ -38,7 +38,7 @@ public class PTNNetHandlerTest {
 		net.addArc(arc1);
 		net.addArc(arc2);
 		PTNDesktop desktop  = new PTNDesktop(new PTNAppController(), net);
-		netHandler = new PTNNetViewHandler(net, desktop);
+		netHandler = new NetController(net, desktop);
 	}
 	
 	@Test 

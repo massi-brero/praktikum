@@ -130,13 +130,13 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		
 		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
 		NodeView source = (NodeView) e.getComponent();
-		JComponent target = (JComponent) desktop.findComponentAt(mouseLocation);
+		JComponent target = (JComponent) desktop.getComponentAt(mouseLocation);
 
 		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) || 
 									(source instanceof TransitionView && target instanceof PlaceView);
 		
-		
 		if (isDragged) {
+			//Dragging is over so reset moving variables.
 			isDragged = false;
 			oldLocation.setLocation(-1, -1);
 		} else if (PTNAppController.isDrawing && isAllowedTarget) {
@@ -150,11 +150,11 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		//delete all temporary arcs that may have be lingering on the desktop.
 		desktop.removeArc("newArc");
 	
-		// set global variables to default and deselect buttons
 		desktop.requestFocus();
 
 	}
 
+	// Draws an arc that is displayed until user impouts an correct id.
 	private void drawTempEdge(JComponent source, JComponent target) {
 		
 		Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);

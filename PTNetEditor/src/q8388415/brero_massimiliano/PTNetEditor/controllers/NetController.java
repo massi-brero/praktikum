@@ -1,4 +1,4 @@
-package q8388415.brero_massimiliano.PTNetEditor.views;
+package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
 import java.awt.Dimension;
 import java.awt.Point;
@@ -19,23 +19,27 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNPlace;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
+import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
+import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
+import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
+import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 /**
- * We may delegate net view drawing, update and set-up operations to this class.
+ * This controller handles net related operations like update and set-up operations.
  * If we want to add more types of nodes or change some view logic we just have
  * to change, replace this class.
  * 
  * @author brero
  * 
  */
-public class PTNNetViewHandler {
+public class NetController {
 
 	private PTNNet net;
 	private PTNDesktop desktop;
 	final Point START_LOCATION_NEW_NODE = new Point(15,15);
 
-	public PTNNetViewHandler(PTNNet net, PTNDesktop desktop) {
+	public NetController(PTNNet net, PTNDesktop desktop) {
 		this.net = net;
 		this.desktop = desktop;
 	}
