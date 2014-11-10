@@ -1,6 +1,8 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.desktop;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,29 +50,21 @@ public class PTNControlPanel extends JPanel {
 
 	private void init() {
 		
-		buttonPanel = new JPanel();
 		controllerPanel = new JPanel();
-		buttonPanel.setLayout(new GridLayout(0,1));
-		controllerPanel.setLayout(new GridLayout(0,1));
+		//controllerPanel.setLayout(new FlowLayout());
 		
 		// add enlargement Panels
 		placeSizePanel = new PTNEnlargementPanel("Place Size");
 		transitionSizePanel = new PTNEnlargementPanel("Transition Size");
 		arrowHeadSizePanel = new PTNEnlargementPanel("Arrowhead Size");
+		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		controllerPanel.add(placeSizePanel);
-		controllerPanel.add(transitionSizePanel);
-		controllerPanel.add(arrowHeadSizePanel);
+		controllerPanel.add(placeSizePanel, BorderLayout.WEST);
+		controllerPanel.add(transitionSizePanel, BorderLayout.CENTER);
+		controllerPanel.add(arrowHeadSizePanel, BorderLayout.EAST);
 		
-		// add basic buttons
-		buttonPanel.add(deselect);
-		buttonPanel.add(delSelection);
-		buttonPanel.add(addNewNode);
-		
-		this.setSize(new Dimension(700, 30));
-		this.setLayout(new GridLayout(0, 2));
+		this.setSize(new Dimension(700, 20));
 		this.setUpListeners();
-		this.add(buttonPanel);
 		this.add(controllerPanel);
 		setDoubleBuffered(true);
 	}

@@ -69,12 +69,13 @@ public class PTNAppController implements KeyListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		String cmd = e.getActionCommand();
+		System.out.println(cmd);
 
 		switch (cmd) {
-		case "unselect":
+		case "Markierung aufheben":
 			this.deselectAll = true;			
 			break;
-		case "erase":
+		case "Markierte Knoten löschen":
 			PTNAppController.deleteSelection = true;
 			break;
 		default:

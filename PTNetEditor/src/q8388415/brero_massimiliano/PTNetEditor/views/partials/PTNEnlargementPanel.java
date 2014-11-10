@@ -1,7 +1,10 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.partials;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 
@@ -17,10 +20,10 @@ public class PTNEnlargementPanel extends JPanel {
 	private JLabel label;
 	private JButton plusButton;
 	private JButton minusButton;
-	final int START_WIDTH = 140;
-	final int START_HEIGHT = 40;
-	final int BUTTON_WIDTH = 18;
-	final int BUTTON_HEIGHT = 18;
+	final int START_WIDTH = 150;
+	final int START_HEIGHT = 20;
+	final int BUTTON_WIDTH = 15;
+	final int BUTTON_HEIGHT = 15;
 	
 	public PTNEnlargementPanel(String s) {
 		label  = new JLabel(s);
@@ -40,9 +43,7 @@ public class PTNEnlargementPanel extends JPanel {
 		plusButton.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
 		minusButton.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
 		this.setPreferredSize(new Dimension(START_WIDTH, START_HEIGHT));
-		BoxLayout box = new BoxLayout(this, BoxLayout.X_AXIS);
-		box.preferredLayoutSize(this);
-		this.setLayout(box);
+		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		this.add(label);
 		this.add(plusButton);

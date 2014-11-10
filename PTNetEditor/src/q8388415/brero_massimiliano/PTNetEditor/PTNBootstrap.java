@@ -1,12 +1,15 @@
 package q8388415.brero_massimiliano.PTNetEditor;
 
 import java.awt.Point;
+
 import javax.swing.JFrame;
+
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNPlace;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
+import q8388415.brero_massimiliano.PTNetEditor.views.PTNMenu;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNControlPanel;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.MainFrame;
@@ -32,8 +35,9 @@ public class PTNBootstrap {
 		PTNAppController appControl = new PTNAppController();
 		PTNDesktop desktop = new PTNDesktop(appControl, this.setUpNet());
 		PTNControlPanel controlPanel = new PTNControlPanel(appControl, desktop);
+		PTNMenu menu = new PTNMenu(desktop, appControl);
 		
-		JFrame frame = new MainFrame(desktop, controlPanel);
+		JFrame frame = new MainFrame(desktop, controlPanel, menu);
 		
 	}
 

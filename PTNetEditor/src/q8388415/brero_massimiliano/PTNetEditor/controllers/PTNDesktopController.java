@@ -9,11 +9,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
+import q8388415.brero_massimiliano.PTNetEditor.views.PTNMenu;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
@@ -126,11 +125,14 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	}
 
 	@Override
+	/**
+	 * We got to correct our mouse location to take our menu bar into account.
+	 */
 	public void mouseReleased(MouseEvent e) {
-		
 		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+		mouseLocation = new Point(mouseLocation.x, mouseLocation.y - PTNMenu.HEIGHT);
 		NodeView source = (NodeView) e.getComponent();
-		JComponent target = (JComponent) desktop.getComponentAt(mouseLocation);
+		JComponent target = (JComponent) desktop.findComponentAt(mouseLocation);
 
 		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) || 
 									(source instanceof TransitionView && target instanceof PlaceView);
