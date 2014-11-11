@@ -33,7 +33,6 @@ public class MainFrame extends JFrame {
 	}
 
 
-	
 	private void setupScrollPane() {
 		
 		scPane = new JScrollPane();

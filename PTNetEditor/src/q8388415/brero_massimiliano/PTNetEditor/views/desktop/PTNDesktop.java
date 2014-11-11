@@ -103,7 +103,7 @@ public class PTNDesktop extends JLayeredPane {
 	public void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
-		drawArcs();
+		drawArcs(g);
 		
 		if (getSize().width > maxSize.width || getSize().height > maxSize.height) {
 			
@@ -121,20 +121,20 @@ public class PTNDesktop extends JLayeredPane {
 	@Override
 	public void paintImmediately(Rectangle bounds) {
 		super.paintImmediately(bounds);
-		drawArcs();
+		drawArcs(this.getGraphics());
 	}
 	
 	/**
 	 * Draws all arcs currently in arcs hashTable.
 	 */
-	public void drawArcs() {
+	public void drawArcs(Graphics g) {
 		
 		Iterator<Map.Entry<String, ArcView>> it = arcs.entrySet().iterator();
 		ArcView arcView = null;
 
 		while (it.hasNext()) {
 			arcView = (ArcView)it.next().getValue();
-			this.drawArrow(arcView);
+			this.drawArrow(g, arcView);
 		}
 		
 	}
@@ -157,22 +157,23 @@ public class PTNDesktop extends JLayeredPane {
 		this.paintImmediately(this.getBounds());
 	}
 	
-	public void drawArrow(ArcView arc) {
-		System.out.println(arc.getStart());
-		Graphics2D g2 = (Graphics2D)this.getGraphics();
+	public void drawArrow(Graphics  g, ArcView arc) {
+		
+		Graphics2D g2 = (Graphics2D)g;
+		g2.setColor(Color.BLACK);
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		Polygon p = new Polygon();
 		Point end = arc.getEnd();
 		
 		g2.drawLine(arc.getStart().x, arc.getStart().y, end.x,
 				end.y);
+
 		
 		p.addPoint(end.x, end.y);
 		p.addPoint(end.x - 5, end.y - 2);
 		p.addPoint(end.x - 5, end.y + 2);
 		g2.drawPolygon(p);
 		
-
 	}
 	
 	/**

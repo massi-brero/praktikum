@@ -87,10 +87,8 @@ public class PTNControlPanel extends JPanel {
 			default:
 				break;
 			}
-			
-			
-		}
-		
+				
+		}		
 		
 	}
 

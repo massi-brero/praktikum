@@ -142,7 +142,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			isDragged = false;
 			oldLocation.setLocation(-1, -1);
 		} else if (PTNAppController.isDrawing && isAllowedTarget) {
-			//We can cast savely to node view since we now know that we have a NodeView type under the mouse pointer.
+			//We can cast safely to node view since we now know that we have a NodeView type under the mouse pointer.
 			this.drawTempEdge(source, target);
 			desktop.callNewArcDialog(source, (NodeView)target);
 			PTNAppController.isDrawing = false;
