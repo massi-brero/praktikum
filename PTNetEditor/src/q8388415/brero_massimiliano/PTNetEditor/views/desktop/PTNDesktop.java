@@ -68,6 +68,7 @@ public class PTNDesktop extends JLayeredPane {
 		this.net = net;
 		this.netHandler = new NetController(net, this);
 		setFocusable(true);
+		this.setOpaque(false);
 		addKeyListener(appControl);
 		setDoubleBuffered(true);
 		this.init();
@@ -96,11 +97,11 @@ public class PTNDesktop extends JLayeredPane {
 		Thread t = new Thread(desktopListener);
 		t.start();
 	}
-
+	
 	@Override
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
 		
-		super.paint(g);
+		super.paintComponent(g);
 		drawArcs();
 		
 		if (getSize().width > maxSize.width || getSize().height > maxSize.height) {
