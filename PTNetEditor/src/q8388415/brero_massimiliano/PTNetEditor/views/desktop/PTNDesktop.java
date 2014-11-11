@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -157,9 +158,9 @@ public class PTNDesktop extends JLayeredPane {
 	}
 	
 	public void drawArrow(ArcView arc) {
-		
+		System.out.println(arc.getStart());
 		Graphics2D g2 = (Graphics2D)this.getGraphics();
-		//g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		Polygon p = new Polygon();
 		Point end = arc.getEnd();
 		
@@ -170,6 +171,7 @@ public class PTNDesktop extends JLayeredPane {
 		p.addPoint(end.x - 5, end.y - 2);
 		p.addPoint(end.x - 5, end.y + 2);
 		g2.drawPolygon(p);
+		
 
 	}
 	

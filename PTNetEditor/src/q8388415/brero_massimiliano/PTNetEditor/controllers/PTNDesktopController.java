@@ -130,7 +130,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	 */
 	public void mouseReleased(MouseEvent e) {
 		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-		mouseLocation = new Point(mouseLocation.x, mouseLocation.y - PTNMenu.HEIGHT);
+		mouseLocation = new Point(mouseLocation.x, mouseLocation.y - 2*PTNMenu.HEIGHT);
 		NodeView source = (NodeView) e.getComponent();
 		JComponent target = (JComponent) desktop.findComponentAt(mouseLocation);
 
@@ -161,7 +161,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		
 		Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
 		Point end = new Point(target.getLocation().x + target.getWidth()/2, target.getLocation().y + target.getHeight()/2);
-		//
+		
 		desktop.updateArcs("newArc", start, end);
 	}
 

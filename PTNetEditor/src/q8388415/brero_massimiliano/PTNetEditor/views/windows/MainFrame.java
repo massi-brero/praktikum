@@ -23,9 +23,7 @@ public class MainFrame extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.desktop = desktop;
 		this.setupScrollPane();
-		Panel panel = new Panel();
-		panel.add(menu);
-		this.getContentPane().add(panel, BorderLayout.PAGE_START);
+		this.getContentPane().add(menu, BorderLayout.PAGE_START);
 		this.getContentPane().add(scPane, BorderLayout.CENTER);
 		this.getContentPane().add(controlPanel, BorderLayout.PAGE_END);
 		
