@@ -26,7 +26,7 @@ public class PlaceView extends NodeView {
 	 * @return void
 	 */
 	private void init() {
-		System.out.println(scale);
+		
 		this.setSize(DEFAULT_SIZE);
 		if (1 < currentPlaceScale) 
 			this.updateSize(currentPlaceScale-1);

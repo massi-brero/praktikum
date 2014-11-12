@@ -9,8 +9,14 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
+
+import javax.security.auth.login.AppConfigurationEntry;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
+import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PTNMenu;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
@@ -47,7 +53,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
 			Point end = new Point(e.getX(), e.getY());
 			
-			desktop.updateArcs("newArc", start, end);
+			desktop.updateArc("newArc", start, end);
 			
 		} else {
 			
@@ -162,7 +168,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
 		Point end = new Point(target.getLocation().x + target.getWidth()/2, target.getLocation().y + target.getHeight()/2);
 		
-		desktop.updateArcs("newArc", start, end);
+		desktop.updateArc("newArc", start, end);
 	}
 
 	@Override
@@ -181,12 +187,32 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			} catch (InterruptedException e) {
 				// continue waiting even if interrupted
 			}
+			
+			/**
+			 * select and deselect nodes
+			 */
 			if (PTNAppController.deselectAll) {
 				desktop.deselectNodes();
 				PTNAppController.deselectAll = false;
 			} else if (PTNAppController.deleteSelection) {
 				desktop.deleteSelected();
 				PTNAppController.deleteSelection = false;
+			}
+			
+			/**
+			 * check if arcs must be redrawn e. g. becaus of scale increasement/decreasement of nodes
+			 */
+			if (PTNAppController.redrawArcs) {
+				Iterator<Map.Entry<String, ArcView>> it = desktop.getArcViews().entrySet().iterator();
+
+				while (it.hasNext()) {
+					ArcView arcView = it.next().getValue();
+					//desktop.update(arcView.getId(), normalizePositions);
+					
+				}
+				
+				PTNAppController.redrawArcs = false;
+
 			}
 			
 		}

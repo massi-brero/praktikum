@@ -145,7 +145,7 @@ public class PTNDesktop extends JLayeredPane {
 	 * @param start
 	 * @param end
 	 */
-	public void updateArcs(String id, Point start, Point end) {
+	public void updateArc(String id, Point start, Point end) {
 		
 		if (!arcs.containsKey(id)) {
 			arcs.put(id, new ArcView(id, start, end));

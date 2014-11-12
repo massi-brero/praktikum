@@ -6,19 +6,22 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 /**
- * This class features some basic state variables that can be checkes by other components.
+ * This class features some basic state variables that can be checked by other components.
  * @author Laptop
  *
  */
-public class PTNAppController implements KeyListener, ActionListener {
+public class PTNAppController implements KeyListener, PTNIScaleListener {
 	
 	public static boolean isDrawing = false;
 	public static boolean deleteSelection = false;
 	public static boolean deselectAll = false;
-	public static boolean selectMode = false;	
+	public static boolean selectMode = false;
+	public static boolean redrawArcs = false;	
+	
 	public PTNAppController() {
 
 	}
@@ -78,6 +81,10 @@ public class PTNAppController implements KeyListener, ActionListener {
 		case "Markierte Knoten löschen":
 			PTNAppController.deleteSelection = true;
 			break;
+		case "+":
+			this.increaseScale();
+		case "-":
+			this.decreaseScale();
 		default:
 			break;
 		}
@@ -91,5 +98,19 @@ public class PTNAppController implements KeyListener, ActionListener {
 	public static void setSelectMode(boolean selectMode) {
 		PTNAppController.selectMode = selectMode;
 	}
+
+	@Override
+	public void increaseScale() {
+		redrawArcs = true;
+	}
+
+	@Override
+	public void decreaseScale() {
+		redrawArcs = true;
+	}
+	
+
+	
+	
 	
 }

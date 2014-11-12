@@ -19,6 +19,7 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNPlace;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
+import q8388415.brero_massimiliano.PTNetEditor.utils.PTNArcHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
@@ -37,11 +38,13 @@ public class PTNNetController {
 
 	private PTNNet net;
 	private PTNDesktop desktop;
+	private PTNArcHelper arcHelper;
 	final Point START_LOCATION_NEW_NODE = new Point(15,15);
 
 	public PTNNetController(PTNNet net, PTNDesktop desktop) {
 		this.net = net;
 		this.desktop = desktop;
+		this.arcHelper = new PTNArcHelper();
 	}
 
 	public ArrayList<NodeView> setUpNodes() {
@@ -105,8 +108,8 @@ public class PTNNetController {
 						|| null == arc.getSource().getLocation()) {
 					throw new PTNArcConstructionException("Fehler: Allgemeiner Fehler beim Aufbau der Kanten");				
 				}
-				Point start = this.normalizeLocation(arc.getSource());
-				Point end = this.normalizeLocation(arc.getTarget());
+				Point start = arcHelper.normalizeLocation(arc.getSource());
+				Point end = arcHelper.normalizeLocation(arc.getTarget());
 				arcView = new ArcView(arc.getId(), start, end);
 				arcViewList.put(arc.getId(), arcView);
 			}
@@ -122,28 +125,6 @@ public class PTNNetController {
 
 	}
 
-	/**
-	 * 
-	 * @param location
-	 * @return Dimension now in the center of our NodeView
-	 */
-	private Point normalizeLocation(PTNNode node) {
-		
-		PTNNodeTypes type = node.getType();
-		Dimension size = null;
-		Point normalizedLocation = null;
-		
-		if (type == PTNNodeTypes.place) {
-			//@todo handle this without initializing an object
-			size = (new PlaceView("", 0)).getSize();
-		} else if (type == PTNNodeTypes.transition) {
-			size = (new TransitionView("")).getSize();
-		}
-		
-		normalizedLocation = new Point(node.getLocation().x + (int)size.getWidth()/2, node.getLocation().y + (int)size.getHeight()/2);
-		
-		return normalizedLocation;
-	}
 
 	/**
 	 * Handles redrawing all incoming and outgoing arcs for a node that has been moved for the view.
@@ -164,14 +145,14 @@ public class PTNNetController {
 			arc = (PTNArc) it_s.next().getValue();
 			node.setLocation(nodeView.getLocation());
 			arc.setSource(node);
-			desktop.updateArcs(arc.getId(), normalizeLocation(node), normalizeLocation(arc.getTarget()));
+			desktop.updateArc(arc.getId(), arcHelper.normalizeLocation(node), arcHelper.normalizeLocation(arc.getTarget()));
 		}
 		
 		while (it_t.hasNext()) {
 			arc = (PTNArc) it_t.next().getValue();
 			node.setLocation(nodeView.getLocation());
 			arc.setTarget(node);
-			desktop.updateArcs(arc.getId(), normalizeLocation(arc.getSource()), normalizeLocation(node));
+			desktop.updateArc(arc.getId(), arcHelper.normalizeLocation(arc.getSource()), arcHelper.normalizeLocation(node));
 		}
 		
 	}
@@ -233,7 +214,7 @@ public class PTNNetController {
 			PTNNode target = net.getNodeById(targetView.getId());
 			target.setLocation(targetView.getLocation());
 			net.addArc(new PTNArc(id, source, target));
-			desktop.updateArcs(id, normalizeLocation(source).getLocation(), normalizeLocation(target).getLocation());
+			desktop.updateArc(id, arcHelper.normalizeLocation(source).getLocation(), arcHelper.normalizeLocation(target).getLocation());
 			
 		}		
 	}

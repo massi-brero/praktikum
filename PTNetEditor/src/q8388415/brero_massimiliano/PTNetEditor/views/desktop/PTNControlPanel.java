@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
 
+import javax.security.auth.login.AppConfigurationEntry;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -23,6 +24,7 @@ public class PTNControlPanel extends JPanel {
 	private JPanel buttonPanel;
 	private JPanel controllerPanel;
 	private PTNDesktop desktop;
+	private PTNAppController appControl;
 	private PTNEnlargementPanel placeSizePanel;
 	private PTNEnlargementPanel transitionSizePanel;
 	private PTNEnlargementPanel arrowHeadSizePanel;
@@ -30,12 +32,14 @@ public class PTNControlPanel extends JPanel {
 	public PTNControlPanel(PTNAppController appControl, final PTNDesktop desktop) {
 		
 		this.desktop = desktop;
+		this.appControl = appControl;
 		deselect = new JButton("unselect");
 		delSelection = new JButton("erase");
 		deselect.addActionListener(appControl);
 		delSelection.addActionListener(appControl);
 		addNewNode = new JButton("neuer Knoten");
-		addNewNode.addActionListener(new ActionListener() {			
+		addNewNode.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				desktop.callNewNodeDialog();				
@@ -68,8 +72,16 @@ public class PTNControlPanel extends JPanel {
 		setDoubleBuffered(true);
 	}
 	
+	/**
+	 * Listen when scale for node changes
+	 */
 	private void setUpListeners() {
 		
+		// for global arcs update.
+		placeSizePanel.addScaleListener(appControl);
+		transitionSizePanel.addScaleListener(appControl);
+		
+		// for nodes.... They will upgrade themselves "individually".
 		Iterator<NodeView> it = desktop.getNodeViews().iterator();
 		
 		while (it.hasNext()) {

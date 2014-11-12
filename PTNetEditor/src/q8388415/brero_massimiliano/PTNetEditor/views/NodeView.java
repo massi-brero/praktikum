@@ -101,8 +101,6 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 			this.updateSize(scaleFactor);
 		}
 		
-		System.out.println(scale);
-		
 	}
 
 	@Override
@@ -120,6 +118,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 		
 		if (e.getActionCommand() == "+") {
 			this.increaseScale();
+
 		}
 		else if (e.getActionCommand() == "-") {
 			this.decreaseScale();
