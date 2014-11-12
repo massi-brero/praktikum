@@ -23,7 +23,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 	protected ImageIcon iconSelected;
 	protected JLabel nameLabel;
 	private boolean selected = false;
-	private int scale = 1;
+	protected int scale = 1;
 	final int scaleFactor = 1;
 	private PTNNodeTypes type;
 	private String id;
@@ -80,7 +80,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 			setIcon(iconSelected);
 		else
 			setIcon(iconStandard);
-		//TODO Warum funktioniert scale - 1 besser als scale?
+		//@todo Warum funktioniert scale - 1 besser als scale?
 		this.updateIconSize(scale-1);
 	}
 
@@ -99,8 +99,9 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 		if (scale <= SCALE_MAX) {
 			scale += scaleFactor;
 			this.updateSize(scaleFactor);
-			
 		}
+		
+		System.out.println(scale);
 		
 	}
 

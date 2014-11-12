@@ -8,7 +8,7 @@ import java.util.Hashtable;
 import org.junit.Before;
 import org.junit.Test;
 
-import q8388415.brero_massimiliano.PTNetEditor.controllers.NetController;
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
@@ -22,7 +22,7 @@ public class PTNNetHandlerTest {
 	private PTNNet net;
 	private PTNNode node1, node2, node3;
 	private PTNArc arc1, arc2;
-	private NetController netHandler;
+	private PTNNetController netHandler;
 
 	@Before
 	public void setUp() throws Exception {
@@ -38,7 +38,7 @@ public class PTNNetHandlerTest {
 		net.addArc(arc1);
 		net.addArc(arc2);
 		PTNDesktop desktop  = new PTNDesktop(new PTNAppController(), net);
-		netHandler = new NetController(net, desktop);
+		netHandler = new PTNNetController(net, desktop);
 	}
 	
 	@Test 

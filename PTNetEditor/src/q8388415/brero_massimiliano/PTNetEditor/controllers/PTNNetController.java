@@ -33,13 +33,13 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
  * @author brero
  * 
  */
-public class NetController {
+public class PTNNetController {
 
 	private PTNNet net;
 	private PTNDesktop desktop;
 	final Point START_LOCATION_NEW_NODE = new Point(15,15);
 
-	public NetController(PTNNet net, PTNDesktop desktop) {
+	public PTNNetController(PTNNet net, PTNDesktop desktop) {
 		this.net = net;
 		this.desktop = desktop;
 	}
@@ -151,7 +151,7 @@ public class NetController {
 	 * 
 	 * @param source
 	 */
-	public void upDateNetAndView(NodeView nodeView) {
+	public void updateArcsForNode(NodeView nodeView) {
 		
 		PTNArc arc;
 		PTNNode node = net.getNodeById(nodeView.getId());
@@ -247,6 +247,7 @@ public class NetController {
 	 * @param type
 	 */
 	public void addNewNode(PTNINodeDTO nodeParams) {
+		
 		String id = nodeParams.getId();
 		String name = nodeParams.getNodeName();
 		PTNNodeTypes type = nodeParams.getType();

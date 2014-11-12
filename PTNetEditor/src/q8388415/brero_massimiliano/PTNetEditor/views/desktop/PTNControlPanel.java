@@ -35,8 +35,7 @@ public class PTNControlPanel extends JPanel {
 		deselect.addActionListener(appControl);
 		delSelection.addActionListener(appControl);
 		addNewNode = new JButton("neuer Knoten");
-		addNewNode.addActionListener(new ActionListener() {
-			
+		addNewNode.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				desktop.callNewNodeDialog();				

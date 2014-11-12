@@ -16,7 +16,7 @@ import java.util.Map;
 
 import javax.swing.JLayeredPane;
 
-import q8388415.brero_massimiliano.PTNetEditor.controllers.NetController;
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
@@ -45,7 +45,7 @@ public class PTNDesktop extends JLayeredPane {
 	private final int D_HEIGHT = 300;
 	private final int D_WIDTH = 600;
 	private ArrayList<NodeView> nodes;
-	private NetController netHandler;
+	private PTNNetController netHandler;
 	PTNDesktopController desktopListener;
 	private PTNNet net;
 	private BufferedImage offscreenI;
@@ -67,7 +67,7 @@ public class PTNDesktop extends JLayeredPane {
 		
 		offscreenI = new BufferedImage(D_WIDTH, D_HEIGHT, BufferedImage.TYPE_INT_RGB);
 		this.net = net;
-		this.netHandler = new NetController(net, this);
+		this.netHandler = new PTNNetController(net, this);
 		setFocusable(true);
 		this.setOpaque(false);
 		addKeyListener(appControl);
@@ -278,7 +278,7 @@ public class PTNDesktop extends JLayeredPane {
 	 * @param source
 	 */
 	public void redrawArcs(NodeView source) {
-		netHandler.upDateNetAndView(source);
+		netHandler.updateArcsForNode(source);
 	}
 	
 	public void callNodeAttributeDialog(NodeView source) {
