@@ -45,7 +45,7 @@ public class PTNDesktop extends JLayeredPane {
 	private final int D_HEIGHT = 300;
 	private final int D_WIDTH = 600;
 	private ArrayList<NodeView> nodes;
-	private PTNNetController netHandler;
+	private PTNNetController netControl;
 	PTNDesktopController desktopListener;
 	private PTNNet net;
 	private BufferedImage offscreenI;
@@ -67,7 +67,7 @@ public class PTNDesktop extends JLayeredPane {
 		
 		offscreenI = new BufferedImage(D_WIDTH, D_HEIGHT, BufferedImage.TYPE_INT_RGB);
 		this.net = net;
-		this.netHandler = new PTNNetController(net, this);
+		this.netControl = new PTNNetController(net, this);
 		setFocusable(true);
 		this.setOpaque(false);
 		addKeyListener(appControl);
@@ -84,8 +84,8 @@ public class PTNDesktop extends JLayeredPane {
 		this.setLayout(null);
 		this.setPreferredSize(new Dimension(D_WIDTH, D_HEIGHT));
 		maxSize = getSize();
-		nodes = netHandler.setUpNodes();
-		arcs = netHandler.setUpArcs();
+		nodes = netControl.setUpNodes();
+		arcs = netControl.setUpArcs();
 		Iterator<NodeView> it = getNodeViews().iterator();
 		desktopListener = new PTNDesktopController(this);
 		while (it.hasNext()) {
@@ -95,8 +95,11 @@ public class PTNDesktop extends JLayeredPane {
 		}
 		
 		setBackground(Color.WHITE);
-		Thread t = new Thread(desktopListener);
-		t.start();
+		//start controller threads
+		Thread t1 = new Thread(desktopListener);
+		t1.start();
+		Thread t2 = new Thread(netControl);
+		t2.start();
 	}
 	
 	@Override
@@ -134,7 +137,7 @@ public class PTNDesktop extends JLayeredPane {
 
 		while (it.hasNext()) {
 			arcView = (ArcView)it.next().getValue();
-			this.drawArrow(g, arcView);
+			arcView.drawArc(g);
 		}
 		
 	}
@@ -155,25 +158,6 @@ public class PTNDesktop extends JLayeredPane {
 		}
 		
 		this.paintImmediately(this.getBounds());
-	}
-	
-	public void drawArrow(Graphics  g, ArcView arc) {
-		
-		Graphics2D g2 = (Graphics2D)g;
-		g2.setColor(Color.BLACK);
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		Polygon p = new Polygon();
-		Point end = arc.getEnd();
-		
-		g2.drawLine(arc.getStart().x, arc.getStart().y, end.x,
-				end.y);
-
-		
-		p.addPoint(end.x, end.y);
-		p.addPoint(end.x - 5, end.y - 2);
-		p.addPoint(end.x - 5, end.y + 2);
-		g2.drawPolygon(p);
-		
 	}
 	
 	/**
@@ -266,7 +250,7 @@ public class PTNDesktop extends JLayeredPane {
 			it = nodesToRemove.iterator();
 			//now we remove them nodes from our precious list
 			while (it.hasNext()) {
-				netHandler.removeNodeAndArcs(it.next());
+				netControl.removeNodeAndArcs(it.next());
 			}
 			
 		}
@@ -278,7 +262,7 @@ public class PTNDesktop extends JLayeredPane {
 	 * @param source
 	 */
 	public void redrawArcs(NodeView source) {
-		netHandler.updateArcsForNode(source);
+		netControl.updateArcsForNode(source);
 	}
 	
 	public void callNodeAttributeDialog(NodeView source) {
@@ -302,7 +286,7 @@ public class PTNDesktop extends JLayeredPane {
 		popUp.setVisible(true);
 		
 		String id = popUp.sendId();
-		netHandler.addNewArc(id, source, target);
+		netControl.addNewArc(id, source, target);
 		
 		this.paintImmediately(this.getBounds());
 			
@@ -315,7 +299,7 @@ public class PTNDesktop extends JLayeredPane {
 		popUp.setVisible(true);
 		
 		PTNINodeDTO nodeParams = popUp.sendParams();
-		netHandler.addNewNode(nodeParams);
+		netControl.addNewNode(nodeParams);
 		
 		this.repaint();
 		

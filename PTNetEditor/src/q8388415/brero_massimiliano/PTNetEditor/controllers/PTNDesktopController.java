@@ -16,6 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
+import q8388415.brero_massimiliano.PTNetEditor.utils.PTNArcHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PTNMenu;
@@ -31,12 +32,14 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 public class PTNDesktopController implements MouseMotionListener, MouseListener, ActionListener, Runnable {
 
 	private PTNDesktop desktop;
+	PTNArcHelper arcHelper;
 	private volatile Point oldLocation;
 	static boolean isDragged = false;
 
 	public PTNDesktopController(PTNDesktop dt) {
 
 		this.desktop = dt;
+		arcHelper = new PTNArcHelper();
 		oldLocation = new Point(-1, -1);
 
 	}
@@ -135,6 +138,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	 * We got to correct our mouse location to take our menu bar into account.
 	 */
 	public void mouseReleased(MouseEvent e) {
+		
 		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
 		mouseLocation = new Point(mouseLocation.x, mouseLocation.y - 2*PTNMenu.HEIGHT);
 		NodeView source = (NodeView) e.getComponent();
@@ -167,7 +171,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		
 		Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
 		Point end = new Point(target.getLocation().x + target.getWidth()/2, target.getLocation().y + target.getHeight()/2);
-		
 		desktop.updateArc("newArc", start, end);
 	}
 
@@ -183,7 +186,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		
 		while (true) {
 			try {
-				Thread.sleep(10);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				// continue waiting even if interrupted
 			}
@@ -197,22 +200,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			} else if (PTNAppController.deleteSelection) {
 				desktop.deleteSelected();
 				PTNAppController.deleteSelection = false;
-			}
-			
-			/**
-			 * check if arcs must be redrawn e. g. becaus of scale increasement/decreasement of nodes
-			 */
-			if (PTNAppController.redrawArcs) {
-				Iterator<Map.Entry<String, ArcView>> it = desktop.getArcViews().entrySet().iterator();
-
-				while (it.hasNext()) {
-					ArcView arcView = it.next().getValue();
-					//desktop.update(arcView.getId(), normalizePositions);
-					
-				}
-				
-				PTNAppController.redrawArcs = false;
-
 			}
 			
 		}

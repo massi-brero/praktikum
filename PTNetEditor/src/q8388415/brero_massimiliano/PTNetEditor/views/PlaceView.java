@@ -12,7 +12,8 @@ public class PlaceView extends NodeView {
 	final Dimension DEFAULT_SIZE = new Dimension(70, 70);
 	private int token = 0;
 	// we need a global sclae variable e. g. for creating new nodes of this type
-	static int currentPlaceScale = 1;
+	public static int currentPlaceScale = 1;
+	public static Dimension currentSize = null;
 	public final static String DOT_SIGN = "\u2022";
 
 	public PlaceView(String id, int token) {
@@ -28,6 +29,7 @@ public class PlaceView extends NodeView {
 	private void init() {
 		
 		this.setSize(DEFAULT_SIZE);
+		currentSize = currentSize == null ? DEFAULT_SIZE : currentSize;
 		if (1 < currentPlaceScale) 
 			this.updateSize(currentPlaceScale-1);
 		this.setType(PTNNodeTypes.place);
@@ -46,6 +48,7 @@ public class PlaceView extends NodeView {
 		this.setFont(new Font(tokenFont.getFontName(), Font.PLAIN, (int) (tokenFont.getSize() + addSize)));
 		super.updateSize(factor);
 		currentPlaceScale = scale;
+		currentSize = this.getSize();
 		
 	}
 	

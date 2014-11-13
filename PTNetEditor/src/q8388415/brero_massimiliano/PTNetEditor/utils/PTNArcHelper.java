@@ -28,7 +28,8 @@ public class PTNArcHelper {
 		
 		if (type == PTNNodeTypes.place) {
 			//@todo handle this without initializing an object
-			size = (new PlaceView("", 0)).getSize();
+
+			size = PlaceView.currentSize;
 		} else if (type == PTNNodeTypes.transition) {
 			size = (new TransitionView("")).getSize();
 		}

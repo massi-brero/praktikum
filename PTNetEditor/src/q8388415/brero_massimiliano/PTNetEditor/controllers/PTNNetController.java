@@ -34,7 +34,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
  * @author brero
  * 
  */
-public class PTNNetController {
+public class PTNNetController implements Runnable {
 
 	private PTNNet net;
 	private PTNDesktop desktop;
@@ -112,6 +112,7 @@ public class PTNNetController {
 				Point end = arcHelper.normalizeLocation(arc.getTarget());
 				arcView = new ArcView(arc.getId(), start, end);
 				arcViewList.put(arc.getId(), arcView);
+
 			}
 		} catch (PTNArcConstructionException e) {
 			// TODO Fehler-Dialog öffnen
@@ -274,6 +275,27 @@ public class PTNNetController {
 	private int showErrorPaneEmptyId() {
 		return JOptionPane.showConfirmDialog(desktop, "Sie müssen eine ID mit mind. einem Zeichen eingeben.", 
 				"Ungültige ID", JOptionPane.WARNING_MESSAGE);
+	}
+	
+	public void run() {
+		
+		while (true) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// continue waiting even if interrupted
+			}
+			/**
+			 * check if arcs must be redrawn e. g. becaus of scale increasement/decreasement of nodes
+			 */
+			if (PTNAppController.redrawArcs) {
+				this.setUpArcs();
+				PTNAppController.redrawArcs = false;
+
+			}
+			
+		}
+		
 	}
 
 }
