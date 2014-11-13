@@ -32,7 +32,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 public class PTNDesktopController implements MouseMotionListener, MouseListener, ActionListener, Runnable {
 
 	private PTNDesktop desktop;
-	PTNArcHelper arcHelper;
+	private PTNArcHelper arcHelper;
 	private volatile Point oldLocation;
 	static boolean isDragged = false;
 
@@ -56,7 +56,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
 			Point end = new Point(e.getX(), e.getY());
 			
-			desktop.updateArc("newArc", start, end);
+			desktop.updateArcs("newArc", start, end);
 			
 		} else {
 			
@@ -171,7 +171,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		
 		Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
 		Point end = new Point(target.getLocation().x + target.getWidth()/2, target.getLocation().y + target.getHeight()/2);
-		desktop.updateArc("newArc", start, end);
+		desktop.updateArcs("newArc", start, end);
 	}
 
 	@Override

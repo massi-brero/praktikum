@@ -83,8 +83,10 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 			break;
 		case "+":
 			this.increaseScale();
+			break;
 		case "-":
 			this.decreaseScale();
+			break;
 		default:
 			break;
 		}

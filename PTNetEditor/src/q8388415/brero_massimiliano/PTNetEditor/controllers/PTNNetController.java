@@ -20,6 +20,7 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNArcHelper;
+import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
@@ -39,12 +40,14 @@ public class PTNNetController implements Runnable {
 	private PTNNet net;
 	private PTNDesktop desktop;
 	private PTNArcHelper arcHelper;
+	private PTNNodeHelper nodeHelper;
 	final Point START_LOCATION_NEW_NODE = new Point(15,15);
 
 	public PTNNetController(PTNNet net, PTNDesktop desktop) {
 		this.net = net;
 		this.desktop = desktop;
 		this.arcHelper = new PTNArcHelper();
+		this.nodeHelper = new PTNNodeHelper();
 	}
 
 	public ArrayList<NodeView> setUpNodes() {
@@ -146,14 +149,14 @@ public class PTNNetController implements Runnable {
 			arc = (PTNArc) it_s.next().getValue();
 			node.setLocation(nodeView.getLocation());
 			arc.setSource(node);
-			desktop.updateArc(arc.getId(), arcHelper.normalizeLocation(node), arcHelper.normalizeLocation(arc.getTarget()));
+			desktop.updateArcs(arc.getId(), arcHelper.normalizeLocation(node), arcHelper.normalizeLocation(arc.getTarget()));
 		}
 		
 		while (it_t.hasNext()) {
 			arc = (PTNArc) it_t.next().getValue();
 			node.setLocation(nodeView.getLocation());
 			arc.setTarget(node);
-			desktop.updateArc(arc.getId(), arcHelper.normalizeLocation(arc.getSource()), arcHelper.normalizeLocation(node));
+			desktop.updateArcs(arc.getId(), arcHelper.normalizeLocation(arc.getSource()), arcHelper.normalizeLocation(node));
 		}
 		
 	}
@@ -177,7 +180,6 @@ public class PTNNetController implements Runnable {
 		
 		while (it_s.hasNext()) 
 			this.removeArcsFromNetAndDesktop(it_s.next().getValue());
-			
 		
 		while (it_t.hasNext())
 			this.removeArcsFromNetAndDesktop(it_t.next().getValue());
@@ -185,6 +187,10 @@ public class PTNNetController implements Runnable {
 		desktop.paintImmediately(desktop.getBounds());
 	}
 	
+	/**
+	 * 
+	 * @param arc
+	 */
 	private void removeArcsFromNetAndDesktop (PTNArc arc) {
 		arc = (PTNArc) arc;
 		desktop.removeArc(arc.getId());
@@ -215,7 +221,9 @@ public class PTNNetController implements Runnable {
 			PTNNode target = net.getNodeById(targetView.getId());
 			target.setLocation(targetView.getLocation());
 			net.addArc(new PTNArc(id, source, target));
-			desktop.updateArc(id, arcHelper.normalizeLocation(source).getLocation(), arcHelper.normalizeLocation(target).getLocation());
+			ArcView arcView = new ArcView(id, arcHelper.normalizeLocation(source).getLocation(), arcHelper.normalizeLocation(target).getLocation());
+			arcHelper.addArcListener(arcView);
+			desktop.updateArcs(arcView);
 			
 		}		
 	}
@@ -249,9 +257,11 @@ public class PTNNetController implements Runnable {
 					net.addNode(new PTNPlace(name, id, START_LOCATION_NEW_NODE));
 					nodeView = new PlaceView(id, 0);				
 					((PlaceView)nodeView).updateToken(token);
+					nodeHelper.addPlaceListener((PlaceView)nodeView);
 				} else if (type == PTNNodeTypes.transition) {
 					net.addNode(new PTNTransition(name, id, START_LOCATION_NEW_NODE));
 					nodeView = new TransitionView(id);
+					nodeHelper.addTransitionListener((TransitionView)nodeView);
 				}
 				
 				nodeView.setNameLabel(name);
@@ -286,12 +296,33 @@ public class PTNNetController implements Runnable {
 				// continue waiting even if interrupted
 			}
 			/**
-			 * check if arcs must be redrawn e. g. becaus of scale increasement/decreasement of nodes
+			 * check if arcs must be redrawn e. g. because of scale increasement/decreasement of nodes
 			 */
 			if (PTNAppController.redrawArcs) {
-				this.setUpArcs();
-				PTNAppController.redrawArcs = false;
+				
+				HashMap<String, PTNArc> arcs = net.getArcs();
+				ArcView arcView = null;
+				Hashtable<String , ArcView> arcViewList = desktop.getArcViews();
+				PTNArc arc;
 
+				Iterator<Map.Entry<String, PTNArc>> it = arcs.entrySet().iterator();
+
+				while (it.hasNext()) {
+					
+					arc = it.next().getValue();
+					arcView = arcViewList.get(arc.getId());
+					
+					Point start = arcHelper.normalizeLocation(arc.getSource());
+					Point end = arcHelper.normalizeLocation(arc.getTarget());
+					
+					arcView.setStart(start);
+					arcView.setEnd(end);
+					
+				}
+				
+				desktop.repaint();
+				PTNAppController.redrawArcs = false;
+				
 			}
 			
 		}

@@ -34,7 +34,8 @@ public class PTNBootstrap {
 				
 		PTNAppController appControl = new PTNAppController();
 		final PTNDesktop desktop = new PTNDesktop(appControl, this.setUpNet());
-		final PTNControlPanel controlPanel = new PTNControlPanel(appControl, desktop);
+		final PTNControlPanel controlPanel = PTNControlPanel.getInstance();
+		controlPanel.initialize(desktop, appControl);
 		final PTNMenu menu = new PTNMenu(desktop, appControl);
 		
 		SwingUtilities.invokeLater(new Runnable() {

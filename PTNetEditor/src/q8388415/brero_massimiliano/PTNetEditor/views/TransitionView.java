@@ -11,8 +11,9 @@ public class TransitionView extends NodeView {
 	PTNDesktopController listener;
 	final static String sourceIconStandard = "rectangle.png";
 	final static String sourceIconSelected = "rectangle_selected.png";
-	// we need a global sclae variable e. g. for creating new nodes of this type
+	// we need a global scale variable e. g. for creating new nodes of this type
 	static int currentPlaceScale = 1;
+	public static Dimension currentSize = null;
 	final Dimension DEFAULT_SIZE = new Dimension(70, 70);
 	
 	public TransitionView(String id) {
@@ -22,6 +23,7 @@ public class TransitionView extends NodeView {
 	
 	private void init() {
 		setSize(DEFAULT_SIZE);
+		currentSize = currentSize == null ? DEFAULT_SIZE : currentSize;
 		if (1 < this.currentPlaceScale) 
 			this.updateSize(currentPlaceScale-1);
 		this.setType(PTNNodeTypes.transition);
@@ -36,6 +38,7 @@ public class TransitionView extends NodeView {
 
 		super.updateSize(factor);
 		currentPlaceScale = scale;
+		currentSize = this.getSize();
 		
 	}
 	

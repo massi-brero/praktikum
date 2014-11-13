@@ -45,11 +45,9 @@ public class PTNDesktop extends JLayeredPane {
 	private final int D_HEIGHT = 300;
 	private final int D_WIDTH = 600;
 	private ArrayList<NodeView> nodes;
-	private PTNNetController netControl;
-	PTNDesktopController desktopListener;
+	private PTNNetController netController;
+	PTNDesktopController desktopController;
 	private PTNNet net;
-	private BufferedImage offscreenI;
-	private Graphics offscreenG;
 	// Using a Hashtable instead of an ArrayList like nodes makes it easier to identify arcs by id for our drawing operations.
 	private Hashtable<String, ArcView> arcs;
 	
@@ -65,9 +63,8 @@ public class PTNDesktop extends JLayeredPane {
 	 */
 	public PTNDesktop(PTNAppController appControl, PTNNet net) {
 		
-		offscreenI = new BufferedImage(D_WIDTH, D_HEIGHT, BufferedImage.TYPE_INT_RGB);
 		this.net = net;
-		this.netControl = new PTNNetController(net, this);
+		this.netController = new PTNNetController(net, this);
 		setFocusable(true);
 		this.setOpaque(false);
 		addKeyListener(appControl);
@@ -84,10 +81,10 @@ public class PTNDesktop extends JLayeredPane {
 		this.setLayout(null);
 		this.setPreferredSize(new Dimension(D_WIDTH, D_HEIGHT));
 		maxSize = getSize();
-		nodes = netControl.setUpNodes();
-		arcs = netControl.setUpArcs();
+		nodes = netController.setUpNodes();
+		arcs = netController.setUpArcs();
 		Iterator<NodeView> it = getNodeViews().iterator();
-		desktopListener = new PTNDesktopController(this);
+		desktopController = new PTNDesktopController(this);
 		while (it.hasNext()) {
 			NodeView nodeView = it.next();
 			this.addListenertoNode(nodeView);
@@ -96,9 +93,9 @@ public class PTNDesktop extends JLayeredPane {
 		
 		setBackground(Color.WHITE);
 		//start controller threads
-		Thread t1 = new Thread(desktopListener);
+		Thread t1 = new Thread(desktopController);
 		t1.start();
-		Thread t2 = new Thread(netControl);
+		Thread t2 = new Thread(netController);
 		t2.start();
 	}
 	
@@ -148,7 +145,7 @@ public class PTNDesktop extends JLayeredPane {
 	 * @param start
 	 * @param end
 	 */
-	public void updateArc(String id, Point start, Point end) {
+	public void updateArcs(String id, Point start, Point end) {
 		
 		if (!arcs.containsKey(id)) {
 			arcs.put(id, new ArcView(id, start, end));
@@ -158,6 +155,24 @@ public class PTNDesktop extends JLayeredPane {
 		}
 		
 		this.paintImmediately(this.getBounds());
+	}
+	
+	/**
+	 * Overloads public void updateArcs(String id, Point start, Point end) so methods
+	 * can also directly use Arview objects.
+	 * @param arcView
+	 */
+	public void updateArcs(ArcView arcView) {
+		
+		if (!arcs.containsKey(arcView.getId())) {
+			arcs.put(arcView.getId(), arcView);
+		} else {
+			arcs.get(arcView.getId()).setStart(arcView.getStart());
+			arcs.get(arcView.getId()).setEnd(arcView.getEnd());
+		}
+		
+		this.paintImmediately(this.getBounds());
+		
 	}
 	
 	/**
@@ -194,8 +209,8 @@ public class PTNDesktop extends JLayeredPane {
 	 * @return
 	 */
 	public void addListenertoNode(NodeView nodeView) {
-		nodeView.addMouseMotionListener(desktopListener);
-		nodeView.addMouseListener(desktopListener);	
+		nodeView.addMouseMotionListener(desktopController);
+		nodeView.addMouseListener(desktopController);	
 	}
 	
 	/**
@@ -250,7 +265,7 @@ public class PTNDesktop extends JLayeredPane {
 			it = nodesToRemove.iterator();
 			//now we remove them nodes from our precious list
 			while (it.hasNext()) {
-				netControl.removeNodeAndArcs(it.next());
+				netController.removeNodeAndArcs(it.next());
 			}
 			
 		}
@@ -262,7 +277,7 @@ public class PTNDesktop extends JLayeredPane {
 	 * @param source
 	 */
 	public void redrawArcs(NodeView source) {
-		netControl.updateArcsForNode(source);
+		netController.updateArcsForNode(source);
 	}
 	
 	public void callNodeAttributeDialog(NodeView source) {
@@ -286,7 +301,7 @@ public class PTNDesktop extends JLayeredPane {
 		popUp.setVisible(true);
 		
 		String id = popUp.sendId();
-		netControl.addNewArc(id, source, target);
+		netController.addNewArc(id, source, target);
 		
 		this.paintImmediately(this.getBounds());
 			
@@ -299,7 +314,7 @@ public class PTNDesktop extends JLayeredPane {
 		popUp.setVisible(true);
 		
 		PTNINodeDTO nodeParams = popUp.sendParams();
-		netControl.addNewNode(nodeParams);
+		netController.addNewNode(nodeParams);
 		
 		this.repaint();
 		

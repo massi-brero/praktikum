@@ -11,7 +11,7 @@ public class PlaceView extends NodeView {
 	final static String sourceIconSelected = "circle_selected.png";
 	final Dimension DEFAULT_SIZE = new Dimension(70, 70);
 	private int token = 0;
-	// we need a global sclae variable e. g. for creating new nodes of this type
+	// we need a global scale variable e. g. for creating new nodes of this type
 	public static int currentPlaceScale = 1;
 	public static Dimension currentSize = null;
 	public final static String DOT_SIGN = "\u2022";

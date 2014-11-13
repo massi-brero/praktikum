@@ -6,8 +6,11 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
 
-public class ArcView {
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
+
+public class ArcView implements PTNIScaleListener {
 	
 	private Point start;
 	private Point end;
@@ -60,6 +63,30 @@ public class ArcView {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		if (e.getActionCommand() == "+") {
+			this.increaseScale();
+
+		}
+		else if (e.getActionCommand() == "-") {
+			this.decreaseScale();
+		}
+		
+	}
+
+	@Override
+	public void increaseScale() {
+		System.out.println("arc_increase");
+	}
+
+	@Override
+	public void decreaseScale() {
+		System.out.println("arc_decrease");
+		
 	}
 	
 }
