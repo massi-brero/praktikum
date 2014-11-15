@@ -1,6 +1,5 @@
 package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
-import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,8 +45,8 @@ public class PTNNetController implements Runnable {
 	public PTNNetController(PTNNet net, PTNDesktop desktop) {
 		this.net = net;
 		this.desktop = desktop;
-		this.arcHelper = new PTNArcHelper();
-		this.nodeHelper = new PTNNodeHelper();
+		this.arcHelper = new PTNArcHelper(desktop);
+		this.nodeHelper = new PTNNodeHelper(desktop);
 	}
 
 	public ArrayList<NodeView> setUpNodes() {
@@ -113,7 +112,7 @@ public class PTNNetController implements Runnable {
 				}
 				Point start = arcHelper.normalizeLocation(arc.getSource());
 				Point end = arcHelper.normalizeLocation(arc.getTarget());
-				arcView = new ArcView(arc.getId(), start, end);
+				arcView = new ArcView(arc.getId(), start, end, this);
 				arcViewList.put(arc.getId(), arcView);
 
 			}
@@ -207,21 +206,25 @@ public class PTNNetController implements Runnable {
 	 * @param targetView
 	 */
 	public void addNewArc(String id, NodeView sourceView, NodeView targetView) {
+		PTNNode source = net.getNodeById(sourceView.getId());
+		source.setLocation(sourceView.getLocation());
+		PTNNode target = net.getNodeById(targetView.getId());
+		target.setLocation(targetView.getLocation());
+		Point normalizedSourceLocation = arcHelper.normalizeLocation(source);
+		Point normalizedTargetLocation = arcHelper.normalizeLocation(target) ;
 		
 		if (net.getArcs().containsKey(id)) {
-			if(0 == this.showErrorPaneIdExists())
+			if(0 == arcHelper.showErrorPaneIdExists())
 				desktop.callNewArcDialog(sourceView, targetView);
 		} else if (id.equals("")) {
-			if(0 == this.showErrorPaneEmptyId())
+			if(0 == arcHelper.showErrorPaneEmptyId())
 				desktop.callNewArcDialog(sourceView, targetView);
+		} else if (arcHelper.isAlreadyOnDesktop(normalizedSourceLocation, normalizedTargetLocation)) {
+				arcHelper.showErrorPaneDoubleArc();
 		} else {
 
-			PTNNode source = net.getNodeById(sourceView.getId());
-			source.setLocation(sourceView.getLocation());
-			PTNNode target = net.getNodeById(targetView.getId());
-			target.setLocation(targetView.getLocation());
 			net.addArc(new PTNArc(id, source, target));
-			ArcView arcView = new ArcView(id, arcHelper.normalizeLocation(source).getLocation(), arcHelper.normalizeLocation(target).getLocation());
+			ArcView arcView = new ArcView(id, normalizedSourceLocation, normalizedTargetLocation, this);
 			arcHelper.addArcListener(arcView);
 			desktop.updateArcs(arcView);
 			
@@ -245,10 +248,10 @@ public class PTNNetController implements Runnable {
 		NodeView nodeView = null;
 		
 		if (net.getArcs().containsKey(id)) {
-			if(0 == this.showErrorPaneIdExists())
+			if(0 == nodeHelper.showErrorPaneIdExists())
 				desktop.callNewNodeDialog();
 		} else if (id.equals("")) {
-			if(0 == this.showErrorPaneEmptyId())
+			if(0 == nodeHelper.showErrorPaneEmptyId())
 				desktop.callNewNodeDialog();
 		} else {
 			
@@ -277,14 +280,8 @@ public class PTNNetController implements Runnable {
 		
 	}
 	
-	private int showErrorPaneIdExists() {
-		return JOptionPane.showConfirmDialog(desktop, "Diese ID ist bereits vergeben.", 
-				"Ungültige ID", JOptionPane.WARNING_MESSAGE);
-	}
-	
-	private int showErrorPaneEmptyId() {
-		return JOptionPane.showConfirmDialog(desktop, "Sie müssen eine ID mit mind. einem Zeichen eingeben.", 
-				"Ungültige ID", JOptionPane.WARNING_MESSAGE);
+	public void repaintDesktop() {
+		desktop.paintImmediately(desktop.getBounds());
 	}
 	
 	public void run() {
@@ -299,7 +296,6 @@ public class PTNNetController implements Runnable {
 			 * check if arcs must be redrawn e. g. because of scale increasement/decreasement of nodes
 			 */
 			if (PTNAppController.redrawArcs) {
-				
 				HashMap<String, PTNArc> arcs = net.getArcs();
 				ArcView arcView = null;
 				Hashtable<String , ArcView> arcViewList = desktop.getArcViews();

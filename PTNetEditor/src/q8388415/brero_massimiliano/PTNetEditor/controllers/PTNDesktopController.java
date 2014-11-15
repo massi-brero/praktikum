@@ -39,7 +39,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	public PTNDesktopController(PTNDesktop dt) {
 
 		this.desktop = dt;
-		arcHelper = new PTNArcHelper();
+		arcHelper = new PTNArcHelper(desktop);
 		oldLocation = new Point(-1, -1);
 
 	}
@@ -56,7 +56,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
 			Point end = new Point(e.getX(), e.getY());
 			
-			desktop.updateArcs("newArc", start, end);
+			desktop.updateArcs("", start, end);
 			
 		} else {
 			
@@ -160,7 +160,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		}
 			
 		//delete all temporary arcs that may have be lingering on the desktop.
-		desktop.removeArc("newArc");
+		desktop.removeArc("");
 	
 		desktop.requestFocus();
 
@@ -171,7 +171,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		
 		Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
 		Point end = new Point(target.getLocation().x + target.getWidth()/2, target.getLocation().y + target.getHeight()/2);
-		desktop.updateArcs("newArc", start, end);
+		desktop.updateArcs("", start, end);
 	}
 
 	@Override

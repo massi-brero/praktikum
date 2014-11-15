@@ -10,29 +10,51 @@ import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.geom.AffineTransform;
 
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
 
+/**
+ * Visual reprensentation of an arc connecting 2 nodes. This class just knows about
+ * starting and ending points. It does not know anything about a source or target 
+ * node since it's just a view and we do no want to implement any logic in here.
+ * So e.g. the adjusting process for start and end point is taking care of by the 
+ * net controller and its delegates: the arc helper and the node helper classes.
+ * 
+ * @author Laptop
+ *
+ */
 public class ArcView implements PTNIScaleListener {
 	
 	private Point start;
 	private Point end;
 	private String id;
-	private double scale = 1;
-	private AffineTransform at = new AffineTransform();
+	private static double scale = 1.0;
+	private PTNNetController netController;
+	// We need this flag to check if an arc was just drawn (and thus can be deleted safely on the desktop).
+	private final int ARROW_SIZE_X = 8;
+	private final int ARROW_SIZE_Y = 4;
 	
-	public ArcView(String id, Point s, Point e) {
+	public ArcView(String id, Point s, Point e, PTNNetController netController) {
 		
+		this.netController = netController;
 		this.setStart(s);
 		this.setEnd(e);
 		this.setId(id);
 		
 	}
 	
+	/**
+	 * We compute the slope angle of our line here. We can cat that simply by
+	 * using our start and end points for calculating the arc steepness (interpreted as a function
+	 * Then this method uses the Math.atan2() method to get the angle from the steepness.
+	 * We need that so drawArrowHead can be rotated and its tip always faces the right direction.
+	 * 
+	 * @param g
+	 */
 	public void drawArc(Graphics  g) {
-		
 		double gradient = Math.atan2(this.getEnd().y - this.getStart().y, this.getEnd().x - this.getStart().x);
 		Graphics2D g2 = (Graphics2D)g;
-		g2.setColor(Color.BLACK);
+		g2.setColor(Color.BLUE);
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		Point end = this.getEnd();
 		
@@ -42,31 +64,42 @@ public class ArcView implements PTNIScaleListener {
 	}
 	
 	/**
-	 * Draws the arrow head at the end of the lines and rotates it according to line 
-	 * position.
+	 * 	Draws the arrow head at the end of the lines and rotates it according to line 
+	 * position. The arrow head will always face the right direction.
+	 * 
+	 * @param g2
 	 * @param end
-	 * @return
+	 * @param gradient
 	 */
 	private void drawArrowHead(Graphics2D g2, Point end, double gradient) {
-		Polygon p = new Polygon();
-		p.addPoint(end.x, end.y);
-		p.addPoint(end.x - 5, end.y - 2);
-		p.addPoint(end.x - 5, end.y + 2);
-		Point midPoint = midpoint(this.getStart(), this.getEnd());
-		at.setToIdentity();
-		at.translate(midPoint.x, midPoint.y);
-		at.scale(scale, scale);
-		at.rotate(gradient);
-		Shape shape = at.createTransformedShape(p);
+
+		AffineTransform rotateTrans = new AffineTransform();
+		Polygon p = this.getArrowHeadPolygon();
+
+		// setToRotation allows us to set fixed anchor point, so we don't have to
+		// calculate for the "classic" translate method of AffineTransform.
+		rotateTrans.setToIdentity();
+		rotateTrans.setToRotation(gradient, end.getX(), end.getY());
+
+		Shape shape = rotateTrans.createTransformedShape(p);
+		
 		g2.fill(shape);
 		g2.draw(shape);
 		
 	}
 	
-	private static Point midpoint(Point p1, Point p2) {
-	    return new Point((int)((p1.x + p2.x)/2.0), 
-	                     (int)((p1.y + p2.y)/2.0));
+	private Polygon getArrowHeadPolygon() {
+		Polygon p = new Polygon();
+		p.addPoint(end.x, end.y);
+		// Okay, this can also be done with an AffineTransorm. But since we already use it for rotating
+		// it would involve quite some translating computations and multiplying those matrices is also 
+		// a little more complex than this simple but effective approach;
+		p.addPoint((int)(end.x - ARROW_SIZE_X * ArcView.scale), (int)(end.y - ARROW_SIZE_Y * ArcView.scale));
+		p.addPoint((int)(end.x - ARROW_SIZE_X * ArcView.scale), (int)(end.y + ARROW_SIZE_Y * ArcView.scale));
+		
+		return p;
 	}
+	
 	
 	public Point getStart() {
 		return start;
@@ -107,23 +140,18 @@ public class ArcView implements PTNIScaleListener {
 
 	@Override
 	public void increaseScale() {
-		System.out.println("arc_increase");
+		if (ArcView.scale < 5) {
+			ArcView.scale += 0.2;
+			netController.repaintDesktop();
+		}
 	}
 
 	@Override
 	public void decreaseScale() {
-		System.out.println("arc_decrease");
-		
+		if (ArcView.scale > 1) {
+			ArcView.scale -= 0.2;
+			netController.repaintDesktop();			
+		}
 	}
-
-	public double getScale() {
-		return scale;
-	}
-
-	public void setScale(double scale) {
-		this.scale = scale;
-	}
-	
-	
 	
 }

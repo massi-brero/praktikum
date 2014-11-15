@@ -19,6 +19,7 @@ import javax.swing.JLayeredPane;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
@@ -131,7 +132,6 @@ public class PTNDesktop extends JLayeredPane {
 		
 		Iterator<Map.Entry<String, ArcView>> it = arcs.entrySet().iterator();
 		ArcView arcView = null;
-
 		while (it.hasNext()) {
 			arcView = (ArcView)it.next().getValue();
 			arcView.drawArc(g);
@@ -148,7 +148,8 @@ public class PTNDesktop extends JLayeredPane {
 	public void updateArcs(String id, Point start, Point end) {
 		
 		if (!arcs.containsKey(id)) {
-			arcs.put(id, new ArcView(id, start, end));
+			ArcView arcView = new ArcView(id, start, end, netController);
+			arcs.put(id, arcView);
 		} else {
 			arcs.get(id).setStart(start);
 			arcs.get(id).setEnd(end);
