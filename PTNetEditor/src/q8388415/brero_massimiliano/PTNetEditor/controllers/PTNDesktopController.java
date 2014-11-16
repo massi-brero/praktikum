@@ -9,15 +9,12 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 
-import javax.security.auth.login.AppConfigurationEntry;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNArcHelper;
-import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
+import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PTNMenu;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
@@ -33,6 +30,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 	private PTNDesktop desktop;
 	private PTNArcHelper arcHelper;
+	private PTNNodeHelper nodeHelper;
 	private volatile Point oldLocation;
 	static boolean isDragged = false;
 
@@ -40,11 +38,16 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 		this.desktop = dt;
 		arcHelper = new PTNArcHelper(desktop);
+		nodeHelper = new PTNNodeHelper(desktop);
 		oldLocation = new Point(-1, -1);
 
 	}
 
 	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
+	 */
 	public void mouseDragged(MouseEvent e) {
 
 		JComponent source = (JComponent) e.getComponent();
@@ -54,8 +57,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		if (PTNAppController.isDrawing) {
 
 			Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);
-			Point end = new Point(e.getX(), e.getY());
-			
+			Point end = new Point(e.getX(), e.getY());		
 			desktop.updateArcs("", start, end);
 			
 		} else {
@@ -100,13 +102,17 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	}
 
 	@Override
+	/**
+	 * Context menu wanted ? -> Right Click
+	 * Node selected? -> Left Click
+	 */
 	public void mouseClicked(MouseEvent e) {
 		
 		NodeView source = (NodeView) e.getComponent();
 		
 		if (source instanceof JLabel && 3 == e.getButton()) {
 
-			desktop.callNodeAttributeDialog(source);
+			nodeHelper.handleContextmenu(source);
 			
 		} else if (PTNAppController.selectMode) {
 			
@@ -166,7 +172,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 	}
 
-	// Draws an arc that is displayed until user impouts an correct id.
+	// Draws an arc that is displayed until user inputs an correct id.
 	private void drawTempEdge(JComponent source, JComponent target) {
 		
 		Point start = new Point(source.getLocation().x + source.getWidth()/2, source.getLocation().y + source.getHeight()/2);

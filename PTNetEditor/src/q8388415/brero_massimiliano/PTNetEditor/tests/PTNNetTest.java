@@ -120,7 +120,16 @@ public class PTNNetTest {
 		assertTrue(result.containsValue(arc1));
 	}
 	
+	@Test
+	public void testGetOutgoingArcs() {
+		HashMap<String, PTNArc> result = net.getOutgoingArcs(node1);
+		assertTrue(result.containsValue(arc1) && result.containsValue(arc2));
+	}
 	
-
-
+	@Test
+	public void testGetIncomingArcs() {
+		HashMap<String, PTNArc> result = net.getIncomingArcs(node2);
+		assertTrue(result.containsValue(arc1) && !result.containsValue(arc2));
+	}
+	
 }

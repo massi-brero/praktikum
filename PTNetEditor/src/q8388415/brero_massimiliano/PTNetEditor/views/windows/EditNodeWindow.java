@@ -34,9 +34,9 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 		this.setFocusable(false);
 		this.sourceNode = node;
 		
-		initializeDialog(node);
-		add(panel);
-		pack();
+		this.initializeDialog(node);
+		this.add(panel);
+		this.pack();
 
 	}
 	

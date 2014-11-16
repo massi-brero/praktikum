@@ -3,12 +3,8 @@ package q8388415.brero_massimiliano.PTNetEditor.views.desktop;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Polygon;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -16,15 +12,15 @@ import java.util.Map;
 
 import javax.swing.JLayeredPane;
 
-import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
-import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
+import q8388415.brero_massimiliano.PTNetEditor.views.windows.DeleteArcWindow;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.NewArcWindow;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.NewNodeWindow;
@@ -281,6 +277,13 @@ public class PTNDesktop extends JLayeredPane {
 		netController.updateArcsForNode(source);
 	}
 	
+	
+	/**
+	 * Each dialog has its own corresponding window.
+	 * Since this windows shall be modal we will call them
+	 * from our desktop instead of simply calling them from the controller.
+	 */
+	
 	public void callNodeAttributeDialog(NodeView source) {
 		
 		EditNodeWindow popUp = new EditNodeWindow(source);
@@ -318,6 +321,16 @@ public class PTNDesktop extends JLayeredPane {
 		netController.addNewNode(nodeParams);
 		
 		this.repaint();
+		
+	}
+	
+	public void callDeleteArcsDialog(NodeView sourceView) {
+		
+		DeleteArcWindow popUp = new DeleteArcWindow(net, sourceView);
+		popUp.setModal(true);
+		popUp.setVisible(true);
+		
+		
 		
 	}
 	

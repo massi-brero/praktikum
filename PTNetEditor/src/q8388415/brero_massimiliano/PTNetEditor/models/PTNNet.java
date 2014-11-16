@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNArcDirections;
 
 public class PTNNet {
 	
@@ -80,6 +80,47 @@ public class PTNNet {
 		
 		return list;
 		
+	}
+	
+	/**
+	 * Returns all incoming or outgoing arcs in a directed graph for a given node.
+	 * @param node
+	 * @param direction PTNArcDirection: incoming/outgoing
+	 * @return
+	 */
+	private HashMap<String, PTNArc> getIncomingOutgoingArcs(PTNNode node,
+			PTNArcDirections direction) {
+		HashMap<String, PTNArc> resultList = new HashMap<String, PTNArc>();
+		HashMap<String, PTNArc> arcList = this.getArcs();
+		PTNArc arc;
+
+		Iterator<Map.Entry<String, PTNArc>> it = arcList.entrySet().iterator();
+
+		while (it.hasNext()) {
+			arc = it.next().getValue();
+
+			if (direction == PTNArcDirections.incoming) {
+				if (arc.getTarget().getId().equals(node.getId())) {
+					resultList.put(arc.getId(), arc);
+				}
+			} else {
+				if (arc.getSource().getId().equals(node.getId())) {
+					resultList.put(arc.getId(), arc);
+				}
+			}
+
+		}
+
+		return resultList;
+
+	}
+	
+	public HashMap<String, PTNArc> getOutgoingArcs(PTNNode node) {
+		return this.getIncomingOutgoingArcs(node, PTNArcDirections.outgoing);
+	}
+	
+	public HashMap<String, PTNArc> getIncomingArcs(PTNNode node) {
+		return this.getIncomingOutgoingArcs(node, PTNArcDirections.incoming);
 	}
 	
 	public int getNumberOfSuccessors(String id) {
