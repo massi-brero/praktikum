@@ -6,15 +6,18 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
@@ -324,14 +327,23 @@ public class PTNDesktop extends JLayeredPane {
 		
 	}
 	
+	/*
+	 * initializes Dialog for deleting Arcs. Since we want to delete them both from our view and
+	 * from the net model, we will pass them to the controller and let him do the job.
+	 */
 	public void callDeleteArcsDialog(NodeView sourceView) {
 		
 		DeleteArcWindow popUp = new DeleteArcWindow(net, sourceView);
 		popUp.setModal(true);
 		popUp.setVisible(true);
 		
+		HashMap<String, PTNArc> arcsToDelete = popUp.sendArcsToDelete();
 		
-		
+		if (0 < arcsToDelete.size()) 
+			if (0 == (JOptionPane.showConfirmDialog(this, "Wollen Sie die Kanten wirklich löschen?", "Löschen?", JOptionPane.WARNING_MESSAGE)))
+				netController.removeArcsFromNetAndDesktop(arcsToDelete);
+				
+
 	}
 	
 	

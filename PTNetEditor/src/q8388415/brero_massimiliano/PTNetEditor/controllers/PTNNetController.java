@@ -178,22 +178,39 @@ public class PTNNetController implements Runnable {
 		desktop.getNodeViews().remove(nodeView);
 		
 		while (it_s.hasNext()) 
-			this.removeArcsFromNetAndDesktop(it_s.next().getValue());
+			this.removeArcFromNetAndDesktop(it_s.next().getValue());
 		
 		while (it_t.hasNext())
-			this.removeArcsFromNetAndDesktop(it_t.next().getValue());
+			this.removeArcFromNetAndDesktop(it_t.next().getValue());
 
 		desktop.paintImmediately(desktop.getBounds());
+	}
+	
+	/**
+	 * Removes one arc both from the view and the net model.
+	 * @param arc PTNArc
+	 */
+	private void removeArcFromNetAndDesktop (PTNArc arc) {
+		arc = (PTNArc) arc;
+		desktop.removeArc(arc.getId());
+		net.getArcs().remove(arc.getId());
 	}
 	
 	/**
 	 * 
 	 * @param arc
 	 */
-	private void removeArcsFromNetAndDesktop (PTNArc arc) {
-		arc = (PTNArc) arc;
-		desktop.removeArc(arc.getId());
-		net.getArcs().remove(arc.getId());
+	public void removeArcsFromNetAndDesktop (HashMap<String, PTNArc> arcs) {
+		Iterator<Map.Entry<String, PTNArc>> it = arcs.entrySet().iterator();
+		PTNArc arc;
+		
+		while (it.hasNext()) {
+			arc = it.next().getValue();
+			this.removeArcFromNetAndDesktop(arc);	
+		}
+		
+		desktop.repaint();
+		
 	}
 
 	/**

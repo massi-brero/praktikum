@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
@@ -31,6 +32,7 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 	private PTNNode node;
 	private HashMap<String, PTNArc> incomingArcs;
 	private HashMap<String, PTNArc> outgoingArcs;
+	private HashMap<String, PTNArc> allNodeArcs;
 	private HashMap<String, PTNArc> arcsToDelete;
 	private ActionListener listener;
 	private NodeView nodeView;
@@ -39,14 +41,17 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 	public DeleteArcWindow(PTNNet net, NodeView nodeView) {
 		this.net = net;
 		this.nodeView = nodeView;
-		this.listener = listener;
+		allNodeArcs = new HashMap<String, PTNArc>();
+		arcsToDelete = new HashMap<String, PTNArc>();
 		node = net.getNodeById(nodeView.getId());
+		incomingArcs = net.getIncomingArcs(node);
+		outgoingArcs = net.getOutgoingArcs(node);
+		allNodeArcs.putAll(incomingArcs);
+		allNodeArcs.putAll(outgoingArcs);
 		this.init();
 	}
 
 	private void init() {
-		incomingArcs = net.getIncomingArcs(node);
-		outgoingArcs = net.getOutgoingArcs(node);
 
 		this.setLocationRelativeTo(nodeView);
 		this.setFocusable(false);
@@ -55,6 +60,7 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 		this.getContentPane().add(this.setupOutgoingArcsPanel());
 		this.add(this.getOkButton());
 		this.pack();
+		
 	}
 
 	private Component getOkButton() {
@@ -119,15 +125,23 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 	}
 
 	@Override
+	/**
+	 * Adds or removes selected/deselected arcs from the arcsToDeleteList.
+	 * source.getName() returns the id of the arc that was selected
+	 */
 	public void itemStateChanged(ItemEvent e) {
 		JCheckBox box = (JCheckBox)e.getSource();
 		int change = e.getStateChange();
-		
-		if (change == ItemEvent.SELECTED) {
-			//add to list
-		} else if (change == ItemEvent.DESELECTED) {
-			
-			//remove from list
+		String arcId = ((JCheckBox)e.getSource()).getName();
+		PTNArc changedArc = allNodeArcs.get(arcId);
+				
+		try {
+			if (change == ItemEvent.SELECTED)
+				arcsToDelete.put(changedArc.getId(), changedArc);
+			else if (change == ItemEvent.DESELECTED)
+				arcsToDelete.remove(changedArc.getId());
+		} catch (Exception e1) {
+			JOptionPane.showMessageDialog(this, "Es gab einen internen Fehler beim Kanten löschen.", "Fehöler beim Kantenlöschen.", JOptionPane.WARNING_MESSAGE);
 		}
 		
 	}
@@ -139,13 +153,9 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 	}
 
 	public HashMap<String, PTNArc> sendArcsToDelete() {
-		
-			// evtl. schicken wir hier einen datentyp zurück mit dem der desktop
-			// bzw. der Controller mehr anfaggen kann!
+
 			return arcsToDelete;
-		
-	
-		
+
 	}
 
 }
