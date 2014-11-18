@@ -12,7 +12,6 @@ public abstract class PTNNode {
 	private String id;
 	private Point location;
 	private PTNNodeTypes type;
-	private String label;
 	
 	public PTNNode(String name, String id, Point pos) throws PTNNodeConstructionException{
 		
@@ -61,14 +60,6 @@ public abstract class PTNNode {
 
 	public void setType(PTNNodeTypes type) {
 		this.type = type;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
 	}
 	
 	

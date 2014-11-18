@@ -81,7 +81,6 @@ public class PTNNetController implements Runnable {
 
 				nodeView.setName(node.getName());
 				nodeView.setLocation(node.getLocation());
-				nodeView.setNameLabel(node.getLabel());
 				nodeViewList.add(nodeView);
 
 			}
@@ -284,7 +283,7 @@ public class PTNNetController implements Runnable {
 					nodeHelper.addTransitionListener((TransitionView)nodeView);
 				}
 				
-				nodeView.setNameLabel(name);
+				nodeView.setName(name);
 				nodeView.setLocation(START_LOCATION_NEW_NODE);
 				desktop.addListenertoNode(nodeView);
 				desktop.getNodeViews().add(nodeView);

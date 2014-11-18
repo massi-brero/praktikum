@@ -12,6 +12,13 @@ import javax.swing.JLabel;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
+/**
+ * base Class for the node views. The node's name is displayed in an JLabel nameLabel
+ * which is part of the sourrounding Jlabel representing the node.
+ * 
+ * @author brero
+ *
+ */
 public abstract class NodeView extends JLabel implements PTNIScaleListener {
 	
 	private final int SCALE_MAX = 5;
@@ -66,7 +73,10 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 		return nameLabel;
 	}
 
-	public void setNameLabel(String label) {
+	@Override
+	public void setName(String label) {
+		// name of JComponent is the same as that from the displayed label
+		super.setName(label);
 		this.nameLabel.setText(label);
 	}
 
@@ -173,16 +183,6 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 		this.nameLabel.setFont(new Font(nodeLabelFont.getFontName(), Font.PLAIN, (int)(nodeLabelFont.getSize() + changeSize)));
 	}
 
-	/**
-	 * Sets String for the label related to this node. The label is apart of the container
-	 * and not the text of the parent label which represents the whole node including icon etc. 
-	 * @param text
-	 */
-	public void setNodeLabelText(String text) {
-		
-		this.getNameLabel().setText(text);
-		
-	}
 
 	public String getId() {
 		return id;

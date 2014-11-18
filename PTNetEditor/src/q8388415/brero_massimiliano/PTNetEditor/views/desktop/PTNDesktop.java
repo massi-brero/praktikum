@@ -192,7 +192,7 @@ public class PTNDesktop extends JLayeredPane {
 		if (paintedNode instanceof PlaceView)
 			((PlaceView)paintedNode).updateToken(nodeUpdate.getToken());
 		
-		paintedNode.setNodeLabelText(nodeUpdate.getNodeName());
+		paintedNode.setName(nodeUpdate.getNodeName());
 		
 	}
 	
