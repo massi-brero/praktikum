@@ -13,7 +13,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
 /**
- * base Class for the node views. The node's name is displayed in an JLabel nameLabel
+ * Base Class for the node views. The node's name is displayed in an JLabel nameLabel
  * which is part of the sourrounding Jlabel representing the node.
  * 
  * @author brero

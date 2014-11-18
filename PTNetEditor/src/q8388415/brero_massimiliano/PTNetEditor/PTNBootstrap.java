@@ -53,7 +53,7 @@ public class PTNBootstrap {
 		
 		try {
 			PTNPlace node1 = new PTNPlace("node1", "n1", new Point(100, 100));
-			node1.setName("node1");
+			node1.setName("node1 node1 node1 node1");
 			PTNTransition node2 = new PTNTransition("node2", "n2", new Point(10, 10));
 			PTNTransition node3 = new PTNTransition("node3", "n3", new Point(200, 250));
 			PTNTransition node4 = new PTNTransition("node4", "n4", new Point(200, 70));
