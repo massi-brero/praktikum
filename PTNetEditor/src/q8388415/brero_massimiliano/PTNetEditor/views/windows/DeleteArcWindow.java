@@ -3,6 +3,7 @@ package q8388415.brero_massimiliano.PTNetEditor.views.windows;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +14,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -34,7 +36,10 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 	private HashMap<String, PTNArc> outgoingArcs;
 	private HashMap<String, PTNArc> allNodeArcs;
 	private HashMap<String, PTNArc> arcsToDelete;
-	private ActionListener listener;
+	private JPanel basePanel = new JPanel();
+	private final int BUTTON_HEIGHT = 30;
+	private final int BUTTON_WIDTH = 120;
+	private final int WIDTH = 120;
 	private NodeView nodeView;
 	private JPanel panel;
 
@@ -55,18 +60,31 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 
 		this.setLocationRelativeTo(nodeView);
 		this.setFocusable(false);
-		this.setLayout(new GridLayout(3,1));
-		this.getContentPane().add(this.setupIncomingArcsPanel());
-		this.getContentPane().add(this.setupOutgoingArcsPanel());
-		this.add(this.getOkButton());
+		this.setLayout(new GridLayout(2,1));
+		
+		if (null != incomingArcs && 0 < incomingArcs.size())
+			this.basePanel.add(this.setupIncomingArcsPanel());
+		
+		if (null != outgoingArcs && 0 < outgoingArcs.size())
+			this.basePanel.add(this.setupOutgoingArcsPanel());
+		
+		basePanel.setLayout(new BoxLayout(basePanel, BoxLayout.Y_AXIS));
+		this.getContentPane().add(basePanel);
+		this.getContentPane().add(this.getOkButton());
 		this.pack();
 		
 	}
 
 	private Component getOkButton() {
+		JPanel buttonPanel = new JPanel();
 		JButton ok = new JButton("Weg damit...");
+		
 		ok.addActionListener(this);
-		return ok;
+		ok.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		buttonPanel.add(ok);
+		
+		return buttonPanel;
 	}
 
 	/**
@@ -79,16 +97,12 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 		panel = new JPanel();
 		JCheckBox arcCheck;
 		HashMap<String, PTNArc> arclist = direction == PTNArcDirections.incoming ? incomingArcs : outgoingArcs;
-		String labelText = direction == PTNArcDirections.incoming ? "Eingehende Kanten" : "Eingehende Kanten";
-		panel.setLayout(new GridLayout(arclist.size() + 1, 1));
-		panel.setSize(new Dimension(300, arclist.size() * 14));
-		panel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-		panel.add(new JLabel(labelText));
+		String labelText = direction == PTNArcDirections.incoming ? "Eingehende Kanten" : "Ausgehende Kanten";
+		this.initPanel(arclist, labelText);
 		
 		if (null != arclist && 0 < arclist.size()) {
 
-			Iterator<Map.Entry<String, PTNArc>> it = arclist.entrySet()
-					.iterator();
+			Iterator<Map.Entry<String, PTNArc>> it = arclist.entrySet().iterator();
 			PTNArc arc;
 
 			while (it.hasNext()) {
@@ -105,6 +119,17 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 		
 		return panel;
 
+	}
+
+	private void initPanel(HashMap<String, PTNArc> arclist, String labelText) {
+		
+		int maxLines = incomingArcs.size() >= outgoingArcs.size() ? incomingArcs.size() : outgoingArcs.size();
+		// we add 1 for the headline label
+		panel.setLayout(new GridLayout(maxLines + 1, 1));
+		panel.setSize(new Dimension(WIDTH, arclist.size() * 14));
+		panel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		panel.add(new JLabel(labelText));
+		
 	}
 
 	private JPanel setupIncomingArcsPanel() {
