@@ -13,6 +13,10 @@ public class PTNPlace extends PTNNode {
 		super(name, id, pos);
 	}
 	
+	public PTNPlace(String id) throws PTNNodeConstructionException {
+		super(id);
+	}
+	
 	protected void init() {
 		this.setType(PTNNodeTypes.place);
 	}

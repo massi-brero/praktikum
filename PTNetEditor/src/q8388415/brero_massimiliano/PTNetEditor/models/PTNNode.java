@@ -1,6 +1,5 @@
 package q8388415.brero_massimiliano.PTNetEditor.models;
 
-import java.awt.Dimension;
 import java.awt.Point;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
@@ -11,6 +10,7 @@ public abstract class PTNNode {
 	private String name;
 	private String id;
 	private Point location;
+	static Point DEFAULT_POSITION = new Point(0, 0);
 	private PTNNodeTypes type;
 	
 	public PTNNode(String name, String id, Point pos) throws PTNNodeConstructionException{
@@ -25,7 +25,10 @@ public abstract class PTNNode {
 				this.init();
 			}
 
-		
+	}
+	
+	public PTNNode(String id) throws PTNNodeConstructionException {
+		this("", id, DEFAULT_POSITION);
 	}
 
 	protected abstract void init();
