@@ -158,9 +158,7 @@ public class PNMLParser {
     /**
      *  Added hook for final works when XML was successfully parsed.
      */
-    private void handleParsingFinished() {
-        
-    }
+    public void handleParsingFinished() {}
 
     /**
      * Diese Methode behandelt den Start neuer XML Elemente, in dem der Name des

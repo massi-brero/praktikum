@@ -50,27 +50,39 @@ public class PTNParserTest {
     public void testNewTransition() {
         assertNotNull(net.getNodeById("transition1"));
     }
-    
+
     @Test
     public void testSetPosition() {
         Point pos = new Point(400, 250);
         assertTrue(net.getNodeById("place1").getLocation().equals(pos));
     }
-    
+
     @Test
     public void testSetMarking() {
-        PTNPlace place = (PTNPlace)net.getNodeById("place1");
+        PTNPlace place = (PTNPlace) net.getNodeById("place1");
         assertEquals(0, place.getToken());
     }
-    
+
     @Test
     public void testSetName() {
         assertEquals("a", net.getNodeById("transition1").getName());
     }
     
     @Test
-    public void testgetMaxHeight() {
-        assertEquals(300, (int)parser.getMaxHeight());
+    public void testHandleParsingFinish_1() {
+        assertEquals(2, net.getArcs().size());
     }
+    
+    @Test
+    public void testHandleParsingFinish_2() {
+        assertNotNull(net.getArcById("arc1"));
+    }
+    
+    @Test
+    public void testHandleParsingFinish_3() {
+        assertNotNull(net.getArcsBySource(net.getNodeById("place1")));
+    }
+    
+    
 
 }
