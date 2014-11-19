@@ -20,7 +20,7 @@ import q8388415.brero_massimiliano.PTNetEditor.utils.PTNParser;
 public class PTNParserTest {
 
     private PTNNet net;
-    private String testFilePath = "c:\\Code\\praktikum\\PTNetEditor\\src\\snippet\\Beispiel1.pnml";
+    private String testFilePath = "src\\snippet\\Beispiel1.pnml";
     private PTNParser parser;
 
     @Before
@@ -58,14 +58,19 @@ public class PTNParserTest {
     }
     
     @Test
-    public void setMarking() {
+    public void testSetMarking() {
         PTNPlace place = (PTNPlace)net.getNodeById("place1");
         assertEquals(0, place.getToken());
     }
     
     @Test
-    public void setName() {
+    public void testSetName() {
         assertEquals("a", net.getNodeById("transition1").getName());
+    }
+    
+    @Test
+    public void testgetMaxHeight() {
+        assertEquals(300, (int)parser.getMaxHeight());
     }
 
 }
