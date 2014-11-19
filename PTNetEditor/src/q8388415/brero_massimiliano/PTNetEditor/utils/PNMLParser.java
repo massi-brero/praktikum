@@ -142,7 +142,7 @@ public class PNMLParser {
                         }
                         break;
                     case XMLStreamConstants.END_DOCUMENT:
-                        //schließe den Parser
+                        handleParsingFinished();
                         xmlParser.close();
                         break;
                     default:
@@ -153,6 +153,13 @@ public class PNMLParser {
                 e.printStackTrace();
             }
         }
+    }
+    
+    /**
+     *  Added hook for final works when XML was successfully parsed.
+     */
+    private void handleParsingFinished() {
+        
     }
 
     /**
