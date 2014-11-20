@@ -5,6 +5,7 @@ import java.io.File;
 import javax.swing.SwingUtilities;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNFileController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNParser;
 import q8388415.brero_massimiliano.PTNetEditor.views.PTNMenu;
@@ -36,11 +37,21 @@ public class PTNBootstrap {
     public void init() {
 
         sourceFile = new File("src\\snippet\\Kaffee.pnml");
+        PTNNet net = new PTNNet();
+        /**
+         * Initialize controllers for drawing and basic control operations.
+         */
         PTNAppController appControl = new PTNAppController();
-        final PTNDesktop desktop = new PTNDesktop(appControl, this.setUpNet());
+        final PTNDesktop desktop = new PTNDesktop(appControl, net);
         final PTNControlPanel controlPanel = PTNControlPanel.getInstance();
         controlPanel.initialize(desktop, appControl);
         final PTNMenu menu = new PTNMenu(desktop, appControl);
+        
+        /**
+         * Initialize File IO-Controller
+         */
+        PTNFileController fileControl = new PTNFileController(desktop, net);
+        menu.setFileListener(fileControl);
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {

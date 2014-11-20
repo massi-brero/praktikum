@@ -57,7 +57,6 @@ public class ArcView implements PTNIScaleListener {
 		g2.setColor(Color.BLUE);
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		Point end = this.getEnd();
-		
 		g2.drawLine(this.getStart().x, this.getStart().y, end.x, end.y);
 		this.drawArrowHead(g2, end, gradient);
 	

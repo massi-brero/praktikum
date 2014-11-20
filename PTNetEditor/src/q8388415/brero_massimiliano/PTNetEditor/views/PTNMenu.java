@@ -10,6 +10,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNIFileListener;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 public class PTNMenu extends JMenuBar {
@@ -17,6 +18,7 @@ public class PTNMenu extends JMenuBar {
 	private JMenu standard;
 	private PTNDesktop desktop;
 	private PTNAppController appControl;
+	private PTNIFileListener fileListener;
 	public static final int HEIGHT = 20;
 	public static final int WIDTH = 500;
 	
@@ -33,6 +35,7 @@ public class PTNMenu extends JMenuBar {
 		JMenu standard = this.initStandardMenu();
 		JMenu file = this.initFileMenu();
 		JMenu modus = this.initModusMenu();
+		fileListener = null;
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
 		this.add(standard);
@@ -97,6 +100,10 @@ public class PTNMenu extends JMenuBar {
 		
 		return menu;
 		
+	}
+	
+	public void setFileListener(PTNIFileListener fl) {
+	    this.fileListener = fl;
 	}
 
 }

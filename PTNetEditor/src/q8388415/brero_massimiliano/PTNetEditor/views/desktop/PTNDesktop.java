@@ -42,8 +42,8 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.NewNodeWindow;
  */
 public class PTNDesktop extends JLayeredPane {
 	
-	private final int D_HEIGHT = 300;
-	private final int D_WIDTH = 600;
+	private final int DEFAULT_HEIGHT = 300;
+	private final int DEFAULT_WIDTH = 600;
 	private ArrayList<NodeView> nodes;
 	private PTNNetController netController;
 	PTNDesktopController desktopController;
@@ -79,7 +79,7 @@ public class PTNDesktop extends JLayeredPane {
 	private void init() {
 		
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension(D_WIDTH, D_HEIGHT));
+		this.setPreferredSize(new Dimension(DEFAULT_HEIGHT, DEFAULT_HEIGHT));
 		maxSize = getSize();
 		nodes = netController.setUpNodes();
 		arcs = netController.setUpArcs();
@@ -139,7 +139,7 @@ public class PTNDesktop extends JLayeredPane {
 	}
 	
 	/**
-	 * Draws an arc and adds it to arcs if it#s a new one that was just painted by the user.
+	 * Draws an arc and adds it to arcs if it's a new one that was just painted by the user.
 	 * @param id
 	 * @param start
 	 * @param end
