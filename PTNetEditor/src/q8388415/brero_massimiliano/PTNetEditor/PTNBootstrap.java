@@ -37,6 +37,10 @@ public class PTNBootstrap {
     public void init() {
 
         sourceFile = new File("src\\snippet\\Kaffee.pnml");
+        
+        /**
+         * Here the net is instantiates which basically all of the components will use.
+         */
         PTNNet net = new PTNNet();
         /**
          * Initialize controllers for drawing and basic control operations.
@@ -45,13 +49,7 @@ public class PTNBootstrap {
         final PTNDesktop desktop = new PTNDesktop(appControl, net);
         final PTNControlPanel controlPanel = PTNControlPanel.getInstance();
         controlPanel.initialize(desktop, appControl);
-        final PTNMenu menu = new PTNMenu(desktop, appControl);
-        
-        /**
-         * Initialize File IO-Controller
-         */
-        PTNFileController fileControl = new PTNFileController(desktop, net);
-        menu.setFileListener(fileControl);
+        final PTNMenu menu = new PTNMenu(desktop, appControl, net);
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {

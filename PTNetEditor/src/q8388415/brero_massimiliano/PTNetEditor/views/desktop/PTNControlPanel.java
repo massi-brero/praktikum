@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
@@ -72,7 +73,7 @@ public class PTNControlPanel extends JPanel {
 		controllerPanel.add(arrowHeadSizePanel, BorderLayout.EAST);
 
 		this.setSize(new Dimension(700, 20));
-		this.setUpListeners();
+		this.setUpScaleListeners();
 		this.add(controllerPanel);
 		setDoubleBuffered(true);
 	}
@@ -80,7 +81,7 @@ public class PTNControlPanel extends JPanel {
 	/**
 	 * Listen when scale for node changes
 	 */
-	private void setUpListeners() {
+	private void setUpScaleListeners() {
 
 		// for global arcs update.
 		placeSizePanel.addScaleListener(appController);

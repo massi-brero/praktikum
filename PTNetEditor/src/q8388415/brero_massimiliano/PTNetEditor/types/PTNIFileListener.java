@@ -6,5 +6,5 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 
 public interface PTNIFileListener {
     void readFromFile(File pnm, PTNNet net);
-    int writeToFile(PTNNet net);
+    int writeToFile(File pnm, PTNNet net);
 }

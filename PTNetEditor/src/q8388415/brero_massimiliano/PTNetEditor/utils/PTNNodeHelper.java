@@ -54,12 +54,12 @@ public class PTNNodeHelper implements ActionListener {
 	}
 	
 	public int showErrorPaneIdExists() {
-		return JOptionPane.showConfirmDialog(desktop, "Diese ID ist bereits vergeben.", 
+		return JOptionPane.showConfirmDialog(desktop, "Diese Knoten-ID ist bereits vergeben.", 
 				"Ungültige ID", JOptionPane.WARNING_MESSAGE);
 	}
 	
 	public int showErrorPaneEmptyId() {
-		return JOptionPane.showConfirmDialog(desktop, "Sie müssen eine ID mit mind. einem Zeichen eingeben.", 
+		return JOptionPane.showConfirmDialog(desktop, "Sie müssen eine Knoten-ID mit mind. einem Zeichen eingeben.", 
 				"Ungültige ID", JOptionPane.WARNING_MESSAGE);
 	}
 	
