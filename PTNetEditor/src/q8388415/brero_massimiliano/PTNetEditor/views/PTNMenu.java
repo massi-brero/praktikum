@@ -78,7 +78,6 @@ public class PTNMenu extends JMenuBar {
 
     private JMenu initFileMenu() {
         final PTNFileController fileListener = new PTNFileController(desktop, net);
-        System.out.println((fileListener));
         JMenu menu = new JMenu("Datei");
         menu.setMnemonic('D');
         JMenuItem item1 = new JMenuItem("Datei öffnen");
@@ -88,7 +87,7 @@ public class PTNMenu extends JMenuBar {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println((fileListener));
-                fileListener.readFromFile(readFile, net);
+                fileListener.readFromFile(net);
             }
         });
 

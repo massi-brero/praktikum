@@ -22,7 +22,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.partials.PTNEnlargementPanel;
 
 /**
- * Panel for scaling nodes and arrow heads. It's instatiated with a modified
+ * Panel for scaling nodes and arrow heads. It's instantiated with a modified
  * singleton pattern since we need in in multiple classes e.g. to add scale
  * listeners for new nodes and arcs. Beware that PTNControlPanel must be
  * initialized before other classes may use it.
@@ -79,7 +79,7 @@ public class PTNControlPanel extends JPanel {
 	}
 
 	/**
-	 * Listen when scale for node changes
+	 * Listen when scaling for node or arc heads is chosen.
 	 */
 	private void setUpScaleListeners() {
 
