@@ -7,8 +7,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNArcConstructionException;
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
@@ -27,9 +25,9 @@ import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 /**
- * This controller handles net related operations like update and set-up operations.
- * If we want to add more types of nodes or change some view logic we just have
- * to change, replace this class.
+ * This controller handles net related operations like update and set-up
+ * operations. If we want to add more types of nodes or change some view logic
+ * we just have to change, replace this class.
  * 
  * @author brero
  * 
@@ -40,7 +38,7 @@ public class PTNNetController implements Runnable {
 	private PTNDesktop desktop;
 	private PTNArcHelper arcHelper;
 	private PTNNodeHelper nodeHelper;
-	final Point START_LOCATION_NEW_NODE = new Point(15,15);
+	final Point START_LOCATION_NEW_NODE = new Point(15, 15);
 
 	public PTNNetController(PTNNet net, PTNDesktop desktop) {
 		this.net = net;
@@ -49,7 +47,7 @@ public class PTNNetController implements Runnable {
 		this.nodeHelper = new PTNNodeHelper(desktop);
 	}
 
-	public ArrayList<NodeView> setUpNodes() {
+	public void setUpNodes() {
 
 		HashMap<String, PTNNode> nodes = net.getNodes();
 		ArrayList<NodeView> nodeViewList = new ArrayList<NodeView>();
@@ -57,39 +55,12 @@ public class PTNNetController implements Runnable {
 		PTNNode node;
 		Iterator<Map.Entry<String, PTNNode>> it = nodes.entrySet().iterator();
 
-		try {
 			while (it.hasNext()) {
 				node = it.next().getValue();
 				PTNNodeTypes type = node.getType();
-
-				switch (type) {
-				case place:
-					nodeView = new PlaceView(node.getId(), ((PTNPlace) node).getToken());
-					break;
-				case transition:
-					nodeView = new TransitionView(node.getId());
-					break;
-				default:
-					throw new PTNNodeConstructionException(
-							"Fehler: Kein korrekter Knotentyp!");
-				}
-
-				if (null == node.getLocation()) {
-					throw new PTNNodeConstructionException(
-							"Fehler: Knoten ohne Position");
-				}
-
-				nodeView.setName(node.getName());
-				nodeView.setLocation(node.getLocation());
-				nodeViewList.add(nodeView);
-
+				
+				this.addNewNode(node);
 			}
-		} catch (PTNNodeConstructionException e) {
-			// TODO Fehler-Dialog öffnen
-			e.printStackTrace();
-		}
-
-		return nodeViewList;
 
 	}
 
@@ -107,7 +78,8 @@ public class PTNNetController implements Runnable {
 				arc = (PTNArc) it.next().getValue();
 				if (null == arc.getTarget().getLocation()
 						|| null == arc.getSource().getLocation()) {
-					throw new PTNArcConstructionException("Fehler: Allgemeiner Fehler beim Aufbau der Kanten");				
+					throw new PTNArcConstructionException(
+							"Fehler: Allgemeiner Fehler beim Aufbau der Kanten");
 				}
 				Point start = arcHelper.normalizeLocation(arc.getSource());
 				Point end = arcHelper.normalizeLocation(arc.getTarget());
@@ -127,95 +99,105 @@ public class PTNNetController implements Runnable {
 
 	}
 
-
 	/**
-	 * Handles redrawing all incoming and outgoing arcs for a node that has been moved for the view.
-	 * This method will also update the arc and corresponding node in our net model.
+	 * Handles redrawing all incoming and outgoing arcs for a node that has been
+	 * moved for the view. This method will also update the arc and
+	 * corresponding node in our net model.
 	 * 
 	 * @param source
 	 */
 	public void updateArcsForNode(NodeView nodeView) {
-		
+
 		PTNArc arc;
 		PTNNode node = net.getNodeById(nodeView.getId());
-		HashMap<String, PTNArc>arcsToMoveSource = net.getArcsBySource(node);
-		HashMap<String, PTNArc>arcsToMoveTarget = net.getArcsByTarget(node);
-		Iterator<Map.Entry<String, PTNArc>> it_s = arcsToMoveSource.entrySet().iterator();
-		Iterator<Map.Entry<String, PTNArc>> it_t = arcsToMoveTarget.entrySet().iterator();
-		
+		HashMap<String, PTNArc> arcsToMoveSource = net.getArcsBySource(node);
+		HashMap<String, PTNArc> arcsToMoveTarget = net.getArcsByTarget(node);
+		Iterator<Map.Entry<String, PTNArc>> it_s = arcsToMoveSource.entrySet()
+				.iterator();
+		Iterator<Map.Entry<String, PTNArc>> it_t = arcsToMoveTarget.entrySet()
+				.iterator();
+
 		while (it_s.hasNext()) {
 			arc = (PTNArc) it_s.next().getValue();
 			node.setLocation(nodeView.getLocation());
 			arc.setSource(node);
-			desktop.updateArcs(arc.getId(), arcHelper.normalizeLocation(node), arcHelper.normalizeLocation(arc.getTarget()));
+			desktop.updateArcs(arc.getId(), arcHelper.normalizeLocation(node),
+					arcHelper.normalizeLocation(arc.getTarget()));
 		}
-		
+
 		while (it_t.hasNext()) {
 			arc = (PTNArc) it_t.next().getValue();
 			node.setLocation(nodeView.getLocation());
 			arc.setTarget(node);
-			desktop.updateArcs(arc.getId(), arcHelper.normalizeLocation(arc.getSource()), arcHelper.normalizeLocation(node));
+			desktop.updateArcs(arc.getId(),
+					arcHelper.normalizeLocation(arc.getSource()),
+					arcHelper.normalizeLocation(node));
 		}
-		
+
 	}
 
 	/**
-	 * Removes node from net model an its view reprensatation.
-	 * Removes also all incoming and outgoing arcs of given node.
+	 * Removes node from net model an its view reprensatation. Removes also all
+	 * incoming and outgoing arcs of given node.
 	 * 
 	 * @param nodeView
 	 */
 	public void removeNodeAndArcs(NodeView nodeView) {
-		
+
 		PTNNode node = net.getNodeById(nodeView.getId());
-		HashMap<String, PTNArc>arcsToRemoveBySource = net.getArcsBySource(node);
-		HashMap<String, PTNArc>arcsToRemoveByTarget = net.getArcsByTarget(node);
-		Iterator<Map.Entry<String, PTNArc>> it_s = arcsToRemoveBySource.entrySet().iterator();
-		Iterator<Map.Entry<String, PTNArc>> it_t = arcsToRemoveByTarget.entrySet().iterator();
-		
+		HashMap<String, PTNArc> arcsToRemoveBySource = net
+				.getArcsBySource(node);
+		HashMap<String, PTNArc> arcsToRemoveByTarget = net
+				.getArcsByTarget(node);
+		Iterator<Map.Entry<String, PTNArc>> it_s = arcsToRemoveBySource
+				.entrySet().iterator();
+		Iterator<Map.Entry<String, PTNArc>> it_t = arcsToRemoveByTarget
+				.entrySet().iterator();
+
 		net.removeNode(node);
 		desktop.getNodeViews().remove(nodeView);
-		
-		while (it_s.hasNext()) 
+
+		while (it_s.hasNext())
 			this.removeArcFromNetAndDesktop(it_s.next().getValue());
-		
+
 		while (it_t.hasNext())
 			this.removeArcFromNetAndDesktop(it_t.next().getValue());
 
 		desktop.paintImmediately(desktop.getBounds());
 	}
-	
+
 	/**
 	 * Removes one arc both from the view and the net model.
-	 * @param arc PTNArc
+	 * 
+	 * @param arc
+	 *            PTNArc
 	 */
-	private void removeArcFromNetAndDesktop (PTNArc arc) {
+	private void removeArcFromNetAndDesktop(PTNArc arc) {
 		arc = (PTNArc) arc;
 		desktop.removeArc(arc.getId());
 		net.getArcs().remove(arc.getId());
 	}
-	
+
 	/**
 	 * 
 	 * @param arc
 	 */
-	public void removeArcsFromNetAndDesktop (HashMap<String, PTNArc> arcs) {
+	public void removeArcsFromNetAndDesktop(HashMap<String, PTNArc> arcs) {
 		Iterator<Map.Entry<String, PTNArc>> it = arcs.entrySet().iterator();
 		PTNArc arc;
-		
+
 		while (it.hasNext()) {
 			arc = it.next().getValue();
-			this.removeArcFromNetAndDesktop(arc);	
+			this.removeArcFromNetAndDesktop(arc);
 		}
-		
+
 		desktop.repaint();
-		
+
 	}
 
 	/**
-	 * Adds a new arc to desktop view and net model.
-	 * Will show error panes if id = "" or there's already
-	 * the id that was given.
+	 * Adds a new arc to desktop view and net model. Will show error panes if id
+	 * = "" or there's already the id that was given.
 	 * 
 	 * @param id
 	 * @param sourceView
@@ -227,81 +209,104 @@ public class PTNNetController implements Runnable {
 		PTNNode target = net.getNodeById(targetView.getId());
 		target.setLocation(targetView.getLocation());
 		Point normalizedSourceLocation = arcHelper.normalizeLocation(source);
-		Point normalizedTargetLocation = arcHelper.normalizeLocation(target) ;
-		
+		Point normalizedTargetLocation = arcHelper.normalizeLocation(target);
+
 		if (net.getArcs().containsKey(id)) {
-			if(0 == arcHelper.showErrorPaneIdExists())
+			if (0 == arcHelper.showErrorPaneIdExists())
 				desktop.callNewArcDialog(sourceView, targetView);
 		} else if (id.equals("")) {
-			if(0 == arcHelper.showErrorPaneEmptyId())
+			if (0 == arcHelper.showErrorPaneEmptyId())
 				desktop.callNewArcDialog(sourceView, targetView);
-		} else if (arcHelper.isAlreadyOnDesktop(normalizedSourceLocation, normalizedTargetLocation)) {
-				arcHelper.showErrorPaneDoubleArc();
+		} else if (arcHelper.isAlreadyOnDesktop(normalizedSourceLocation,
+				normalizedTargetLocation)) {
+			arcHelper.showErrorPaneDoubleArc();
 		} else {
 
 			net.addArc(new PTNArc(id, source, target));
-			ArcView arcView = new ArcView(id, normalizedSourceLocation, normalizedTargetLocation, this);
+			ArcView arcView = new ArcView(id, normalizedSourceLocation,
+					normalizedTargetLocation, this);
 			arcHelper.addArcListener(arcView);
 			desktop.updateArcs(arcView);
-			
-		}		
+
+		}
 	}
 	
+
 	/**
-	 * Adds a new node to desktop view and the net model. 
-	 * Place token are initialized with 0. You may change initial 
-	 * positioning with START_LOCATION_NEW_NODE.
+	 * Adds a new node to desktop view and the net model. Place token are
+	 * initialized with 0. You may change initial positioning with
+	 * START_LOCATION_NEW_NODE.
+	 * 
 	 * @param id
 	 * @param name
 	 * @param type
 	 */
-	public void addNewNode(PTNINodeDTO nodeParams) {
-		
-		String id = nodeParams.getId();
-		String name = nodeParams.getNodeName();
-		PTNNodeTypes type = nodeParams.getType();
-		int token = nodeParams.getToken();
+	public void addNewNode(PTNINodeDTO nodeInformation) {
+
+		String id = nodeInformation.getId();
+		String name = nodeInformation.getNodeName();
+		PTNNodeTypes type = nodeInformation.getType();
+		int token = nodeInformation.getToken();
 		NodeView nodeView = null;
-		
+		Point nodeLocation = this.determineNodeLocation(nodeInformation);
+
 		if (net.getArcs().containsKey(id)) {
-			if(0 == nodeHelper.showErrorPaneIdExists())
+			if (0 == nodeHelper.showErrorPaneIdExists())
 				desktop.callNewNodeDialog();
 		} else if (id.equals("")) {
-			if(0 == nodeHelper.showErrorPaneEmptyId())
+			if (0 == nodeHelper.showErrorPaneEmptyId())
 				desktop.callNewNodeDialog();
 		} else {
-			
+
 			try {
 				if (type == PTNNodeTypes.place) {
-					net.addNode(new PTNPlace(name, id, START_LOCATION_NEW_NODE));
-					nodeView = new PlaceView(id, 0);				
-					((PlaceView)nodeView).updateToken(token);
-					nodeHelper.addPlaceListener((PlaceView)nodeView);
+					net.addNode(new PTNPlace(name, id, nodeLocation));
+					nodeView = new PlaceView(id, 0);
+					((PlaceView) nodeView).updateToken(token);
+					nodeHelper.addPlaceListener((PlaceView) nodeView);
 				} else if (type == PTNNodeTypes.transition) {
-					net.addNode(new PTNTransition(name, id, START_LOCATION_NEW_NODE));
+					net.addNode(new PTNTransition(name, id, nodeLocation));
 					nodeView = new TransitionView(id);
-					nodeHelper.addTransitionListener((TransitionView)nodeView);
+					nodeHelper.addTransitionListener((TransitionView) nodeView);
 				}
-				
+
 				nodeView.setName(name);
-				nodeView.setLocation(START_LOCATION_NEW_NODE);
+				nodeView.setLocation(nodeLocation);
 				desktop.addListenertoNode(nodeView);
 				desktop.getNodeViews().add(nodeView);
 				desktop.add(nodeView);
-				
+
 			} catch (PTNNodeConstructionException e) {
 				e.printStackTrace();
 			}
 		}
+
+	}
+
+	/**
+	 * Checks and returns node location by determining if nodeInformation
+	 * contains information about a new node or it is information about a node
+	 * from a file that already has a location.
+	 * 
+	 * @param nodeInformation
+	 * @return Point
+	 * 		default location or given location for node
+	 */
+	private Point determineNodeLocation(PTNINodeDTO nodeInformation) {
+		
+		if (nodeInformation instanceof PTNNode)
+			return ((PTNNode)nodeInformation).getLocation();
+		else 
+			return START_LOCATION_NEW_NODE;
 		
 	}
-	
+
 	public void repaintDesktop() {
 		desktop.paintImmediately(desktop.getBounds());
 	}
-	
+
 	public void run() {
-		
+
 		while (true) {
 			try {
 				Thread.sleep(100);
@@ -309,36 +314,38 @@ public class PTNNetController implements Runnable {
 				// continue waiting even if interrupted
 			}
 			/**
-			 * check if arcs must be redrawn e. g. because of scale increasement/decreasement of nodes
+			 * check if arcs must be redrawn e. g. because of scale
+			 * increasement/decreasement of nodes
 			 */
 			if (PTNAppController.redrawArcs) {
 				HashMap<String, PTNArc> arcs = net.getArcs();
 				ArcView arcView = null;
-				Hashtable<String , ArcView> arcViewList = desktop.getArcViews();
+				Hashtable<String, ArcView> arcViewList = desktop.getArcViews();
 				PTNArc arc;
 
-				Iterator<Map.Entry<String, PTNArc>> it = arcs.entrySet().iterator();
+				Iterator<Map.Entry<String, PTNArc>> it = arcs.entrySet()
+						.iterator();
 
 				while (it.hasNext()) {
-					
+
 					arc = it.next().getValue();
 					arcView = arcViewList.get(arc.getId());
-					
+
 					Point start = arcHelper.normalizeLocation(arc.getSource());
 					Point end = arcHelper.normalizeLocation(arc.getTarget());
-					
+
 					arcView.setStart(start);
 					arcView.setEnd(end);
-					
+
 				}
-				
+
 				desktop.repaint();
 				PTNAppController.redrawArcs = false;
-				
+
 			}
-			
+
 		}
-		
+
 	}
 
 }

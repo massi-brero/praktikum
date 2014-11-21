@@ -54,11 +54,10 @@ public class PTNControlPanel extends JPanel {
 		this.desktop = desktop;
 		this.appController = appController;
 		isInitialized = true;
-		this.init();
-	}
-
-	private void init() {
-
+		
+		/**
+		 * Set up panel.
+		 */
 		controllerPanel = new JPanel();
 		// controllerPanel.setLayout(new FlowLayout());
 
@@ -73,9 +72,19 @@ public class PTNControlPanel extends JPanel {
 		controllerPanel.add(arrowHeadSizePanel, BorderLayout.EAST);
 
 		this.setSize(new Dimension(700, 20));
-		this.setUpScaleListeners();
+		
 		this.add(controllerPanel);
 		setDoubleBuffered(true);
+		
+		//add listeners
+		this.init();
+	}
+
+	public void init() {
+
+
+		this.setUpScaleListeners();
+
 	}
 
 	/**

@@ -28,5 +28,10 @@ public class PTNPlace extends PTNNode {
 	public void setToken(int token) {
 		this.token = token;
 	}
+
+	@Override
+	public String getNodeName() {
+		return this.getName();
+	}
 	
 }

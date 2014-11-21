@@ -3,9 +3,18 @@ package q8388415.brero_massimiliano.PTNetEditor.models;
 import java.awt.Point;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
-public abstract class PTNNode {
+/**
+ * Base model class for our node types. By implementing PTNINodeDTO
+ * we may use it as data store object.
+ * 
+ * {@link PTNINodeDTO}
+ * @author brero
+ *
+ */
+public abstract class PTNNode implements PTNINodeDTO {
 
     private String name;
     private String id;

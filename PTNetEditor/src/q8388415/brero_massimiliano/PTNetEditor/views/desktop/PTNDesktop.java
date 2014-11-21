@@ -81,21 +81,16 @@ public class PTNDesktop extends JLayeredPane {
     }
 
     /**
-     * set up the desktop;
+     * Set up the desktop and calls the set-up operations on the net controller
      */
     public void init() {
-
+    	nodes = new ArrayList<NodeView>();
         this.setPreferredSize(new Dimension(DEFAULT_HEIGHT, DEFAULT_HEIGHT));
         maxSize = getSize();
-        nodes = netController.setUpNodes();
+        netController.setUpNodes();
         arcs = netController.setUpArcs();
         Iterator<NodeView> it = getNodeViews().iterator();
         desktopController = new PTNDesktopController(this);
-        while (it.hasNext()) {
-            NodeView nodeView = it.next();
-            this.addListenertoNode(nodeView);
-            this.add(nodeView);
-        }
 
         setBackground(Color.WHITE);
         // start controller threads
@@ -106,6 +101,9 @@ public class PTNDesktop extends JLayeredPane {
     }
 
     @Override
+    /**
+     * Computes the maximum size this pane had so we can adjust the ScrollPanes' handles.
+     */
     public void paintComponent(Graphics g) {
 
         super.paintComponent(g);

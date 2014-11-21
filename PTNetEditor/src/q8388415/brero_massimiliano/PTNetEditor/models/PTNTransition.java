@@ -37,6 +37,16 @@ public class PTNTransition extends PTNNode {
 	public void setHasMarking(Boolean hasMarking) {
 		this.hasMarking = hasMarking;
 	}
+
+	@Override
+	public String getNodeName() {
+		return this.getName();
+	}
+
+	@Override
+	public int getToken() {
+		return 0;
+	}
 	
 
 }
