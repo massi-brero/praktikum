@@ -250,4 +250,9 @@ public class PTNNet {
 		
 	}
 
+    public void reset() {
+        nodes = new HashMap<String,PTNNode>();
+        arcs = new HashMap<String,PTNArc>();      
+    }
+
 }

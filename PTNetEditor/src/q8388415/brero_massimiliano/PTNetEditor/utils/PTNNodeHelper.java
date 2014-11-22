@@ -1,5 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.utils;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -109,6 +110,21 @@ public class PTNNodeHelper implements ActionListener {
 		if (null != sourceView)
 			desktop.callDeleteArcsDialog(sourceView);
 	}
+
+    /**
+     * Prepares a node view so it my be diplayed on the desktop.
+     * 
+     * @param name
+     * @param nodeView
+     * @param nodeLocation
+     */
+    public void initNodeView(String name, NodeView nodeView, Point nodeLocation) {
+        nodeView.setName(name);
+        nodeView.setLocation(nodeLocation);
+        desktop.addListenertoNode(nodeView);
+        desktop.getNodeViews().add(nodeView);
+        desktop.add(nodeView);
+    }
 
 
 }

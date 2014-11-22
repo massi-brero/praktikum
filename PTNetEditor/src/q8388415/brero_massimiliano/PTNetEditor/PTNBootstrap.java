@@ -5,7 +5,6 @@ import java.io.File;
 import javax.swing.SwingUtilities;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
-import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNFileController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNParser;
 import q8388415.brero_massimiliano.PTNetEditor.views.PTNMenu;
@@ -18,8 +17,6 @@ public class PTNBootstrap {
     private static PTNBootstrap bootstrap;
     private PTNParser parser;
     private File sourceFile;
-    private double desktopWidth;
-    private double desktopHeight;
 
     public PTNBootstrap() {
     }
@@ -72,9 +69,6 @@ public class PTNBootstrap {
             parser = new PTNParser(sourceFile, net);
             parser.initParser();
             parser.parse();
-            
-            desktopWidth = parser.getMaxWidth();
-            desktopHeight = parser.getMaxWidth();
             
             
         } catch (Exception e) {

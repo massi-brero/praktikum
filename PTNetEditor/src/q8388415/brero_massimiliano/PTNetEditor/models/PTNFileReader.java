@@ -28,7 +28,6 @@ public class PTNFileReader {
 
             
             PTNParser parser = new PTNParser(pnm, net);
-            
             try {
                 
                 parser = new PTNParser(pnm, net);

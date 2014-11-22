@@ -79,31 +79,47 @@ public class PTNDesktop extends JLayeredPane {
         this.init();
 
     }
-
+    
     /**
      * Set up the desktop and calls the set-up operations on the net controller
      */
     public void init() {
-    	nodes = new ArrayList<NodeView>();
-        this.setPreferredSize(new Dimension(DEFAULT_HEIGHT, DEFAULT_HEIGHT));
+        this.reset();
         maxSize = getSize();
         netController.setUpNodes();
         arcs = netController.setUpArcs();
-        Iterator<NodeView> it = getNodeViews().iterator();
         desktopController = new PTNDesktopController(this);
 
-        setBackground(Color.WHITE);
+        this.setBackground(Color.WHITE);
         // start controller threads
         Thread t1 = new Thread(desktopController);
         t1.start();
         Thread t2 = new Thread(netController);
         t2.start();
+        this.repaint();
+    }
+    
+    /**
+     * deletes node and arc view lists and sets size to default values.
+     * 
+     * @return void
+     */
+    public void reset() {
+        nodes = new ArrayList<NodeView>();
+        arcs = new Hashtable<String, ArcView>();
+        this.setPreferredSize(new Dimension(DEFAULT_HEIGHT, DEFAULT_HEIGHT));
+        this.removeAll();
+        this.repaint();
     }
 
-    @Override
+
+    
     /**
      * Computes the maximum size this pane had so we can adjust the ScrollPanes' handles.
+     * 
+     *  @return void
      */
+    @Override
     public void paintComponent(Graphics g) {
 
         super.paintComponent(g);
@@ -319,7 +335,7 @@ public class PTNDesktop extends JLayeredPane {
         popUp.setVisible(true);
 
         String id = popUp.sendId();
-        netController.addNewArc(id, source, target);
+        netController.addNewArcFromDialog(id, source, target);
 
         this.paintImmediately(this.getBounds());
 
