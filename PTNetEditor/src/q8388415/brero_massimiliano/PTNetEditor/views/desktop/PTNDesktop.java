@@ -95,8 +95,8 @@ public class PTNDesktop extends JLayeredPane {
         Thread t1 = new Thread(desktopController);
         t1.start();
         Thread t2 = new Thread(netController);
-        t2.start();
         this.repaint();
+
     }
     
     /**
@@ -107,7 +107,13 @@ public class PTNDesktop extends JLayeredPane {
     public void reset() {
         nodes = new ArrayList<NodeView>();
         arcs = new Hashtable<String, ArcView>();
-        this.setPreferredSize(new Dimension(DEFAULT_HEIGHT, DEFAULT_HEIGHT));
+        
+        /**
+         * Default size is not set if we have another preference set elsewhere
+         */      
+        if (this.getPreferredSize().getWidth() == 0 && this.getPreferredSize().getHeight() == 0)
+            this.setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+
         this.removeAll();
         this.repaint();
     }

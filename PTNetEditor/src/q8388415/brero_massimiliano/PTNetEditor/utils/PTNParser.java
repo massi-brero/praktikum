@@ -150,7 +150,7 @@ public class PTNParser extends PNMLParser {
 
         maxHeight = pos.getY() > maxHeight ? pos.getY() : maxHeight;
         maxWidth = pos.getX() > maxWidth ? pos.getX() : maxWidth;
-
+        
     }
 
     /**

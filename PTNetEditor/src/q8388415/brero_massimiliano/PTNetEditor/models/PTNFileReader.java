@@ -1,8 +1,9 @@
 package q8388415.brero_massimiliano.PTNetEditor.models;
 
+import java.awt.Dimension;
 import java.io.File;
-import java.io.IOException;
 
+import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNetContructionException;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNParser;
 
 /**
@@ -13,37 +14,46 @@ import q8388415.brero_massimiliano.PTNetEditor.utils.PTNParser;
  *
  */
 public class PTNFileReader {
-    
+
     private PTNParser parser = null;
-  
+    private Dimension desktopSize = null;
+
+    public PTNParser getParser() {
+        return parser;
+    }
+
+    public void setParser(PTNParser parser) {
+        this.parser = parser;
+    }
+
     /**
      * Reads file and builds the net that is used throughout this application.
      * 
      * @param pnm
-     *      PNML file
+     *            PNML file
      * @param net
-     *      Net model which practically all classes work with.
+     *            Net model which practically all classes work with.
+     * @throws PTNNetContructionException 
      */
-    public void readFromFile(File pnm, PTNNet net) {
+    public void readFromFile(File pnm, PTNNet net) throws PTNNetContructionException {
 
-            
-            PTNParser parser = new PTNParser(pnm, net);
-            try {
-                
-                parser = new PTNParser(pnm, net);
-                parser.initParser();
-                parser.parse();
-                
-                //desktopWidth = parser.getMaxWidth();
-                //desktopHeight = parser.getMaxWidth();
-                
-                
-//            } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        parser = new PTNParser(pnm, net);
+        parser = new PTNParser(pnm, net);
+        parser.initParser();
+        parser.parse();
+
+        this.setDesktopSize(new Dimension((int)parser.getMaxWidth(), (int)parser.getMaxHeight()));
+
 
     }
+    public Dimension getDesktopSize() {
+        return desktopSize;
+    }
+
+    public void setDesktopSize(Dimension desktopSite) {
+        this.desktopSize = desktopSite;
+    }
+
+    
+    
 }

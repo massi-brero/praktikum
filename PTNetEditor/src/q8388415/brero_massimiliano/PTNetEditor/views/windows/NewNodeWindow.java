@@ -10,6 +10,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -98,8 +99,24 @@ public class NewNodeWindow extends JDialog implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		this.sendParams();
-		this.dispose();
+	   /**
+	    * first check if we have a valid token.
+	    */
+	   System.out.println((token.getText()));
+	   try {
+	       if (token.getText().equals("")) {
+	           JOptionPane.showConfirmDialog(this, "Ein leeres Token Feld ist nicht möglich.", "Token Fehler", JOptionPane.WARNING_MESSAGE);
+	       } else if (Integer.parseInt(token.getText()) > 999 || Integer.parseInt(token.getText()) < 0) {
+	           JOptionPane.showConfirmDialog(this, "Bitte geben Sie eine Zahl zwischen 0-999 ein.", "Token Fehler", JOptionPane.WARNING_MESSAGE);
+	       } else {
+	           this.sendParams();
+	           this.dispose();
+	       }
+	       
+	   } catch (NumberFormatException ex) {
+           JOptionPane.showConfirmDialog(this, "Bitte geben Sie eine Zahl ein.", "Token Fehler", JOptionPane.WARNING_MESSAGE);
+
+	   }
 	}
 
 	/**

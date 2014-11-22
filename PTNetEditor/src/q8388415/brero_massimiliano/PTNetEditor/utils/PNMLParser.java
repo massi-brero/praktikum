@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.NetPermission;
 import java.util.Iterator;
 
 import javax.xml.stream.XMLEventReader;
@@ -14,6 +15,8 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+
+import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNetContructionException;
 
 /**
  * Diese Klasse implementiert die Grundlage für einen einfachen PNML Parser.
@@ -27,8 +30,9 @@ public class PNMLParser {
      * 
      * @param args
      *      Die Konsolen Parameter, mit denen das Programm aufgerufen wird.
+     * @throws PTNNetContructionException 
      */
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws PTNNetContructionException {
         if (args.length > 0) {
             File pnmlDatei = new File(args[0]);
             if (pnmlDatei.exists()) {
@@ -92,7 +96,7 @@ public class PNMLParser {
      * Diese Methode öffnet die PNML Datei als Eingabestrom und initialisiert den XML
      * Parser.
      */
-    public final void initParser() {
+    public final void initParser() throws PTNNetContructionException {
         try {
             InputStream dateiEingabeStrom = new FileInputStream(pnmlDatei);
             XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -113,8 +117,9 @@ public class PNMLParser {
     /**
      * Diese Methode liest die XML Datei und delegiert die 
      * gefundenen XML Elemente an die entsprechenden Methoden.
+     * @throws PTNNetContructionException 
      */
-    public final void parse() {
+    public final void parse() throws PTNNetContructionException {
         while (xmlParser.hasNext()) {
             try {
                 XMLEvent event = xmlParser.nextEvent();
@@ -148,9 +153,10 @@ public class PNMLParser {
                     default:
                 }
             } catch (XMLStreamException e) {
-                System.err.println("Fehler beim Parsen des PNML Dokuments. "
-                        + e.getMessage());
+                String message = "Fehler beim Parsen des PNML Dokuments.";
+                System.err.println(message + " " + e.getMessage());
                 e.printStackTrace();
+                throw new PTNNetContructionException(message);
             }
         }
     }
@@ -167,8 +173,9 @@ public class PNMLParser {
      * 
      * @param event
      *            {@link XMLEvent}
+     * @throws PTNNetContructionException 
      */
-    private void handleStartEvent(final XMLEvent event) {
+    private void handleStartEvent(final XMLEvent event) throws PTNNetContructionException {
         StartElement element = event.asStartElement();
         if (element.getName().toString().toLowerCase().equals("transition")) {
             handleTransition(element);
@@ -207,8 +214,9 @@ public class PNMLParser {
      * 
      * @param element
      *      das Positionselement
+     * @throws PTNNetContructionException 
      */
-    private void handlePosition(final StartElement element) {
+    private void handlePosition(final StartElement element) throws PTNNetContructionException {
         String x = null;
         String y = null;
         Iterator<?> attributes = element.getAttributes();
@@ -223,7 +231,9 @@ public class PNMLParser {
         if (x != null && y != null && lastId != null) {
             setPosition(lastId, x, y);
         } else {
-            System.err.println("Unvollständige Position wurde verworfen!");
+            String message = "Unvollständige Position wurde verworfen!";
+            System.err.println(message);
+            throw new PTNNetContructionException(message);
         }
     }
 
@@ -232,8 +242,9 @@ public class PNMLParser {
      * 
      * @param element
      *      das Transitionselement
+     * @throws PTNNetContructionException 
      */
-    private void handleTransition(final StartElement element) {
+    private void handleTransition(final StartElement element) throws PTNNetContructionException {
         String transitionId = null;
         Iterator<?> attributes = element.getAttributes();
         while (attributes.hasNext()) {
@@ -247,8 +258,10 @@ public class PNMLParser {
             newTransition(transitionId);
             lastId = transitionId;
         } else {
-            System.err.println("Transition ohne id wurde verworfen!");
+            String message = "Transition ohne id wurde verworfen!";
+            System.err.println(message);
             lastId = null;
+            throw new PTNNetContructionException(message);
         }
     }
 
@@ -257,8 +270,9 @@ public class PNMLParser {
      * 
      * @param element
      *      das Stellenelement
+     * @throws PTNNetContructionException 
      */
-    private void handlePlace(final StartElement element) {
+    private void handlePlace(final StartElement element) throws PTNNetContructionException {
         String placeId = null;
         Iterator<?> attributes = element.getAttributes();
         while (attributes.hasNext()) {
@@ -272,8 +286,10 @@ public class PNMLParser {
             newPlace(placeId);
             lastId = placeId;
         } else {
-            System.err.println("Stelle ohne id wurde verworfen!");
+            String message = "Stelle ohne id wurde verworfen!";
+            System.err.println(message);
             lastId = null;
+            throw new PTNNetContructionException(message);
         }
     }
 
@@ -282,8 +298,9 @@ public class PNMLParser {
      * 
      * @param element
      *      das Kantenelement
+     * @throws PTNNetContructionException 
      */
-    private void handleArc(final StartElement element) {
+    private void handleArc(final StartElement element) throws PTNNetContructionException {
         String arcId = null;
         String source = null;
         String target = null;
@@ -301,7 +318,9 @@ public class PNMLParser {
         if (arcId != null && source != null && target != null) {
             newArc(arcId, source, target);
         } else {
-            System.err.println("Unvollständige Kante wurde verworfen!");
+            String message = "Unvollst�ndige Kante wurde verworfen!";
+            System.err.println(message);
+            throw new PTNNetContructionException(message);
         }
         //Die id von Kanten wird nicht gebraucht
         lastId = null;

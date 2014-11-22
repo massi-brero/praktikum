@@ -12,6 +12,12 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNControlPanel;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.MainFrame;
 
+/**
+ * This class starts the application.
+ * 
+ * @author Laptop
+ *
+ */
 public class PTNBootstrap {
 
     private static PTNBootstrap bootstrap;

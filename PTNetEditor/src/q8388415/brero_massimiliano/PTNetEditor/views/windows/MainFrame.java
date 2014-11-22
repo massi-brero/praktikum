@@ -1,10 +1,9 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.windows;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Panel;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
@@ -16,7 +15,8 @@ public class MainFrame extends JFrame {
 
 	private PTNDesktop desktop;
 	private PTNControlPanel controlPanel;
-	private JScrollPane scPane;
+	private JScrollPane scPane = null;
+	private JPanel panelForScrollPane = null;
 
 	public MainFrame(PTNDesktop desktop, PTNControlPanel controlPanel, PTNMenu menu) {
 		
@@ -24,7 +24,7 @@ public class MainFrame extends JFrame {
 		this.desktop = desktop;
 		this.setupScrollPane();
 		this.getContentPane().add(menu, BorderLayout.PAGE_START);
-		this.getContentPane().add(scPane, BorderLayout.CENTER);
+		this.getContentPane().add(panelForScrollPane, BorderLayout.CENTER);
 		this.getContentPane().add(controlPanel, BorderLayout.PAGE_END);
 		
 		this.pack();
@@ -34,13 +34,12 @@ public class MainFrame extends JFrame {
 
 
 	private void setupScrollPane() {
-		
+	    panelForScrollPane = new JPanel();
 		scPane = new JScrollPane();
-		scPane.setPreferredSize(new Dimension(500, 300));
 		JViewport viewport = new JViewport();
         viewport.setView(desktop);
 		scPane.setViewportView(viewport);
-		
+		panelForScrollPane.add(scPane);
 	}
 
 	public PTNDesktop getPTNDesktop() {
