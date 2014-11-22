@@ -54,18 +54,16 @@ public class PTNFileController implements PTNIFileListener {
      * 
      */
     public void readFromFile(PTNNet net) {
-       // this.openFileDialog();
-        net.reset();
+        this.openFileDialog();
+
         desktop.reset();
-        System.out.println(net.getNumberOfNodes());
-        System.out.println(desktop.getNodeViews().size());
-        //desktop.reset();
-//        if (null != lastChosenReadFile) {
-//            net.reset();
-//            readModel.readFromFile(lastChosenReadFile, net);
-//        }
-//        
-//        desktop.init();
+        if (null != lastChosenReadFile) {
+            net.reset();
+            readModel.readFromFile(lastChosenReadFile, net);
+        }
+        
+        desktop.reset();
+        desktop.init();
 
     }
 
