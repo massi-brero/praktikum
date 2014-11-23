@@ -71,6 +71,7 @@ public class PTNFileController implements PTNIFileListener {
         desktop.init();
         desktop.setSize(readModel.getDesktopSize());
 
+
     }
 
     private void callNetContructionWarning(String message) {

@@ -24,6 +24,7 @@ import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
+import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.DeleteArcWindow;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.NewArcWindow;
@@ -79,14 +80,14 @@ public class PTNDesktop extends JLayeredPane {
         this.init();
 
     }
-    
+
     /**
      * Set up the desktop and calls the set-up operations on the net controller
      */
     public void init() {
         this.reset();
         maxSize = getSize();
-        netController.setUpNodes();
+        netController.setUpNodeViews();
         arcs = netController.setUpArcs();
         desktopController = new PTNDesktopController(this);
 
@@ -98,7 +99,7 @@ public class PTNDesktop extends JLayeredPane {
         this.repaint();
 
     }
-    
+
     /**
      * deletes node and arc view lists and sets size to default values.
      * 
@@ -107,10 +108,10 @@ public class PTNDesktop extends JLayeredPane {
     public void reset() {
         nodes = new ArrayList<NodeView>();
         arcs = new Hashtable<String, ArcView>();
-        
+
         /**
          * Default size is not set if we have another preference set elsewhere
-         */      
+         */
         if (this.getPreferredSize().getWidth() == 0 && this.getPreferredSize().getHeight() == 0)
             this.setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 
@@ -118,12 +119,39 @@ public class PTNDesktop extends JLayeredPane {
         this.repaint();
     }
 
-
-    
     /**
-     * Computes the maximum size this pane had so we can adjust the ScrollPanes' handles.
+     * The method setSize is overridden because we want to be sure that all our
+     * nodes fit on the desktop. So we add the biggest current node size to the
+     * size given
+     */
+    @Override
+    public void setSize(Dimension size) {
+
+        this.setSize((int)size.getWidth(), (int)size.getHeight());
+
+    }
+
+    @Override
+    public void setSize(int width, int height) {
+        if (null != PlaceView.currentSize && null != TransitionView.currentSize) {
+
+            double x_padding = PlaceView.currentSize.getWidth() > TransitionView.currentSize.getWidth() ? 
+                                    PlaceView.currentSize.getWidth() : TransitionView.currentSize.getWidth();
+
+            double y_padding = PlaceView.currentSize.getHeight() > TransitionView.currentSize.getHeight() ? 
+                                    PlaceView.currentSize.getHeight() : TransitionView.currentSize.getHeight();
+
+            super.setSize((int) (width + x_padding), (int) (height + y_padding));
+        } else {
+            super.setSize(width, height);
+        }
+    }
+
+    /**
+     * Computes the maximum size this pane had so we can adjust the ScrollPanes'
+     * handles.
      * 
-     *  @return void
+     * @return void
      */
     @Override
     public void paintComponent(Graphics g) {
@@ -341,7 +369,9 @@ public class PTNDesktop extends JLayeredPane {
         popUp.setVisible(true);
 
         String id = popUp.sendId();
-        netController.addNewArcFromDialog(id, source, target);
+        
+        if (null != id)
+            netController.addNewArcFromDialog(id, source, target);
 
         this.paintImmediately(this.getBounds());
 
@@ -354,19 +384,24 @@ public class PTNDesktop extends JLayeredPane {
         popUp.setVisible(true);
 
         PTNINodeDTO nodeParams = popUp.sendParams();
-
+        
         /**
-         * We just allow a unique id per node regardless if it' a place or a transition
+         * We just allow a unique id per node regardless if it' a place or a
+         * transition
          */
-        if (null != net.getNodeById(nodeParams.getId())) {
-            if (0 == nodeHelper.showErrorPaneIdExists())
-                this.callNewNodeDialog();
-        } else if (nodeParams.getId().isEmpty()) {
-            if (0 == nodeHelper.showErrorPaneIdExists())
-                this.callNewNodeDialog();
-        } else {
-            netController.addNewNode(nodeParams);
-            this.repaint();
+        if (null != nodeParams) {
+            
+            if (null != net.getNodeById(nodeParams.getId())) {
+                if (0 == nodeHelper.showErrorPaneIdExists())
+                    this.callNewNodeDialog();
+            } else if (nodeParams.getId().isEmpty()) {
+                if (0 == nodeHelper.showErrorPaneIdExists())
+                    this.callNewNodeDialog();
+            } else {
+                netController.addNewNodeFromDialog(nodeParams);
+                this.repaint();
+            }
+            
         }
 
     }

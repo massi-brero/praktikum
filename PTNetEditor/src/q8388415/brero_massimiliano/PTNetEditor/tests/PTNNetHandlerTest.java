@@ -43,7 +43,7 @@ public class PTNNetHandlerTest {
 	
 	@Test 
 	public void setUpNodesTest() {
-		netHandler.setUpNodes();
+		netHandler.setUpNodeViews();
 		assertEquals(3, net.getNumberOfNodes());
 	}
 	

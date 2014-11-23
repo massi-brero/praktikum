@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -17,6 +18,7 @@ public class NewArcWindow extends JDialog implements ActionListener {
 	JMenuItem item;
 	private JPanel panel;
 	private JTextField idField;
+	private Boolean isInformationToBeSent = false;
 	
 	public NewArcWindow() {
 
@@ -24,6 +26,11 @@ public class NewArcWindow extends JDialog implements ActionListener {
 		panel.setSize(100, 200);
 		panel.setLayout(new GridLayout(2,2));
 		this.setFocusable(false);
+		
+        /**
+         * Do nothing because we could still have incorrect data in some of the fields.
+         */
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		initializeDialog();
 		add(panel);
@@ -44,6 +51,10 @@ public class NewArcWindow extends JDialog implements ActionListener {
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(this);
 		this.addToPanel(okButton);
+		
+		JButton cancelButton = new JButton("Abbrechen");
+        cancelButton.addActionListener(this);
+        this.addToPanel(cancelButton);
 			
 	}
 	
@@ -59,6 +70,10 @@ public class NewArcWindow extends JDialog implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+	    if (e.getActionCommand().equals("OK"))
+	        isInformationToBeSent = true;
+	
+	        
 		this.sendId();
 		this.dispose();
 	}
@@ -68,6 +83,12 @@ public class NewArcWindow extends JDialog implements ActionListener {
 	 * new label text and token number;
 	 */
 	public String sendId() {
-		return idField.getText();
+	    
+	    if (isInformationToBeSent) {
+	        return idField.getText();
+	    }
+	    
+	    return null;
+
 	}
 }

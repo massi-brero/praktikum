@@ -22,6 +22,8 @@ import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 /**
+ * This controller handles basic actions occuring in the desktop like mous dragging.
+ * It's also a thread since it will listen when it's time to delete nodes.
  * 
  * @author 8388415
  *

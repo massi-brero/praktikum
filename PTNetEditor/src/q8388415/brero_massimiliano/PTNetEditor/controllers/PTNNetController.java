@@ -1,7 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -52,15 +51,32 @@ public class PTNNetController implements Runnable {
      * 
      * @return void
      */
-    public void setUpNodes() {
+    public void setUpNodeViews() {
 
         HashMap<String, PTNNode> nodes = net.getNodes();
         PTNNode node;
+        NodeView nodeView = null;
         Iterator<Map.Entry<String, PTNNode>> it = nodes.entrySet().iterator();
 
         while (it.hasNext()) {
             node = it.next().getValue();
-            this.addNewNode(node);
+
+            PTNNodeTypes type = node.getType();
+
+            if (type == PTNNodeTypes.place) {
+
+                nodeView = new PlaceView(node.getId(), node.getToken());
+                nodeHelper.addPlaceListener((PlaceView) nodeView);
+
+            } else if (type == PTNNodeTypes.transition) {
+
+                nodeView = new TransitionView(node.getId());
+                nodeHelper.addTransitionListener((TransitionView) nodeView);
+
+            }
+
+            nodeHelper.initNodeView(node.getName(), nodeView, node.getLocation());
+
         }
 
     }
@@ -88,6 +104,7 @@ public class PTNNetController implements Runnable {
                 Point start = arcHelper.normalizeLocation(arc.getSource());
                 Point end = arcHelper.normalizeLocation(arc.getTarget());
                 arcView = new ArcView(arc.getId(), start, end, this);
+                arcHelper.addArcListener(arcView);
                 arcViewList.put(arc.getId(), arcView);
 
             }
@@ -191,8 +208,9 @@ public class PTNNetController implements Runnable {
     }
 
     /**
-     * Adds a new arc to desktop view and net model after user calls the new arc dialog. 
-     * Will show error panes if id = "" or the given id already already exists.
+     * Adds a new arc to desktop view and net model after user calls the new arc
+     * dialog. Will show error panes if id = "" or the given id already already
+     * exists.
      * 
      * @param id
      * @param sourceView
@@ -233,7 +251,7 @@ public class PTNNetController implements Runnable {
      * @param name
      * @param type
      */
-    public void addNewNode(PTNINodeDTO nodeInformation) {
+    public void addNewNodeFromDialog(PTNINodeDTO nodeInformation) {
 
         String id = nodeInformation.getId();
         String name = nodeInformation.getNodeName();
@@ -242,40 +260,37 @@ public class PTNNetController implements Runnable {
         NodeView nodeView = null;
         Point nodeLocation = this.determineNodeLocation(nodeInformation);
 
-        if (net.getArcs().containsKey(id)) {
+        if (net.getNodes().containsKey(id)) {
             if (0 == nodeHelper.showErrorPaneIdExists())
                 desktop.callNewNodeDialog();
         } else if (id.equals("")) {
             if (0 == nodeHelper.showErrorPaneEmptyId())
                 desktop.callNewNodeDialog();
         } else {
-            
-                try {
-                    if (type == PTNNodeTypes.place) {
-                        
-                        if (null == net.getNodeById(id))
-                            net.addNode(new PTNPlace(name, id, nodeLocation));
-                        
-                        nodeView = new PlaceView(id, 0);
-                        ((PlaceView) nodeView).updateToken(token);
-                        nodeHelper.addPlaceListener((PlaceView) nodeView);
-                        
-                    } else if (type == PTNNodeTypes.transition) {
-                        
-                        if (null == net.getNodeById(id))
-                            net.addNode(new PTNTransition(name, id, nodeLocation));
-                        
-                       nodeView = new TransitionView(id);
-                        nodeHelper.addTransitionListener((TransitionView) nodeView);
-                        
-                    }
 
-                    nodeHelper.initNodeView(name, nodeView, nodeLocation);
+            try {
+                if (type == PTNNodeTypes.place) {
 
-                } catch (PTNNodeConstructionException e) {
-                    e.printStackTrace();
+                    net.addNode(new PTNPlace(name, id, nodeLocation));
+
+                    nodeView = new PlaceView(id, token);
+                    nodeHelper.addPlaceListener((PlaceView) nodeView);
+
+                } else if (type == PTNNodeTypes.transition) {
+
+                    net.addNode(new PTNTransition(name, id, nodeLocation));
+
+                    nodeView = new TransitionView(id);
+                    nodeHelper.addTransitionListener((TransitionView) nodeView);
+
                 }
-         
+
+                nodeHelper.initNodeView(name, nodeView, nodeLocation);
+
+            } catch (PTNNodeConstructionException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
