@@ -48,7 +48,8 @@ public class PTNArcHelper {
 		else if (type == PTNNodeTypes.transition)
 			size = TransitionView.currentSize;
 		
-		normalizedLocation = new Point(node.getLocation().x + (int)size.getWidth()/2, node.getLocation().y + (int)size.getHeight()/2);
+		normalizedLocation = new Point(node.getLocation().x + (int)size.getWidth()/2, 
+		                            node.getLocation().y + (int)size.getHeight()/2);
 		
 		return normalizedLocation;
 	}

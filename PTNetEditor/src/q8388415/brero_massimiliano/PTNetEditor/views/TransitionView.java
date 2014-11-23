@@ -22,9 +22,9 @@ public class TransitionView extends NodeView {
 	}
 	
 	private void init() {
-		setSize(DEFAULT_SIZE);
-		currentSize = currentSize == null ? DEFAULT_SIZE : currentSize;
-		if (1 < this.currentPlaceScale) 
+		setSize(PlaceView.DEFAULT_SIZE);
+		currentSize = currentSize == null ? PlaceView.DEFAULT_SIZE : currentSize;
+		if (1 < PlaceView.currentPlaceScale) 
 			this.updateSize(currentPlaceScale-1);
 		this.setType(PTNNodeTypes.transition);
 		nameLabel.setBounds(+500, -5, 10, 20);
@@ -41,6 +41,16 @@ public class TransitionView extends NodeView {
 		currentSize = this.getSize();
 		
 	}
+	
+    /**
+     * Sets all current size information to its default values.
+     * We need that e.g. when reading a file an importing 
+     * @ return void
+     */
+    public static void resetSize() {
+        currentSize = PlaceView.DEFAULT_SIZE;
+        currentPlaceScale = 1;
+    }
 	
 
 }

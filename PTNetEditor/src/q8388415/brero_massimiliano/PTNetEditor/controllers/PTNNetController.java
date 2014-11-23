@@ -318,16 +318,18 @@ public class PTNNetController implements Runnable {
     public void run() {
 
         while (true) {
+            
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 // continue waiting even if interrupted
             }
             /**
-             * check if arcs must be redrawn e. g. because of scale
+             * Check if arcs must be redrawn e. g. because of scale
              * increasement/decreasement of nodes
              */
             if (PTNAppController.redrawArcs) {
+                System.out.println("redraw_listener");
                 HashMap<String, PTNArc> arcs = net.getArcs();
                 ArcView arcView = null;
                 Hashtable<String, ArcView> arcViewList = desktop.getArcViews();

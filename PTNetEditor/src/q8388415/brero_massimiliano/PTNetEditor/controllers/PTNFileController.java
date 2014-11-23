@@ -1,6 +1,5 @@
 package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
-import java.awt.Dimension;
 import java.io.File;
 
 import javax.swing.JOptionPane;
@@ -9,6 +8,8 @@ import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNetContructionExcep
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNFileReader;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIFileListener;
+import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
+import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.PTNFileChooser;
 
@@ -55,6 +56,9 @@ public class PTNFileController implements PTNIFileListener {
      * 
      */
     public void readFromFile(PTNNet net) {
+        
+        PlaceView.resetSize();
+        TransitionView.resetSize();
         this.openFileDialog();
 
         try {

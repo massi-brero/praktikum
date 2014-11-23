@@ -3,20 +3,12 @@ package q8388415.brero_massimiliano.PTNetEditor.views.desktop;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Iterator;
-import java.util.Map;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationException;
-import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
-import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
-import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.partials.PTNEnlargementPanel;
@@ -95,40 +87,6 @@ public class PTNControlPanel extends JPanel {
 		// for global arcs update.
 		placeSizePanel.addScaleListener(appController);
 		transitionSizePanel.addScaleListener(appController);
-
-		try {
-			if (isInitialized) {
-				// for nodes.... They will upgrade themselves "individually".
-				Iterator<NodeView> it_n = desktop.getNodeViews().iterator();
-				while (it_n.hasNext()) {
-
-					NodeView node = it_n.next();
-
-					switch (node.getType()) {
-					case place:
-						this.addPlaceScaleListener((PlaceView) node);
-						break;
-					case transition:
-						this.addTransitionScaleListener((TransitionView) node);
-						break;
-					default:
-						break;
-					}
-				}
-
-				// add all arcs as listener to controls
-				Iterator<Map.Entry<String, ArcView>> it_a = desktop.getArcViews().entrySet().iterator();
-				while (it_a.hasNext()) {
-					ArcView arc = it_a.next().getValue();
-					this.addArcScaleListener(arc);
-				}
-
-			} else {
-				throw new PTNInitializationException();
-			}
-		} catch (PTNInitializationException e) {
-			e.printStackTrace();
-		}
 
 	}
 

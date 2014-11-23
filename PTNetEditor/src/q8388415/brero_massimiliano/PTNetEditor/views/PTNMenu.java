@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -13,7 +14,6 @@ import javax.swing.JRadioButtonMenuItem;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNFileController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
-import q8388415.brero_massimiliano.PTNetEditor.types.PTNIFileListener;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 public class PTNMenu extends JMenuBar {
@@ -55,6 +55,7 @@ public class PTNMenu extends JMenuBar {
         JMenuItem item1 = new JMenuItem("Markierung aufheben");
         JMenuItem item2 = new JMenuItem("Markierte Knoten löschen");
         JMenuItem item3 = new JMenuItem("Neuer Knoten");
+        JMenuItem item4 = new JMenuItem("Desktop löschen");
 
         // add listeners
         item1.addActionListener(appControl);
@@ -67,10 +68,22 @@ public class PTNMenu extends JMenuBar {
                 desktop.callNewNodeDialog();
             }
         });
+        
+        item4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                net.reset();
+                PlaceView.resetSize();
+                TransitionView.resetSize();
+                desktop.init();
+            }
+        });
 
         menu.add(item1);
         menu.add(item2);
         menu.add(item3);
+        menu.addSeparator();
+        menu.add(item4);
 
         return menu;
 
@@ -83,6 +96,7 @@ public class PTNMenu extends JMenuBar {
         JMenuItem item1 = new JMenuItem("Datei öffnen");
         JMenuItem item2 = new JMenuItem("Datei speichern");
 
+        item1.setIcon(new ImageIcon("icons/open-document.png"));
         item1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

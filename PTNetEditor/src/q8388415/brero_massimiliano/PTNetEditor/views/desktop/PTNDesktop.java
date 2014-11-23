@@ -96,6 +96,7 @@ public class PTNDesktop extends JLayeredPane {
         Thread t1 = new Thread(desktopController);
         t1.start();
         Thread t2 = new Thread(netController);
+        t2.start();
         this.repaint();
 
     }
