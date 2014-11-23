@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import org.hamcrest.core.SubstringMatcher;
+
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
@@ -29,6 +31,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 	protected ImageIcon iconStandard;
 	protected ImageIcon iconSelected;
 	protected JLabel nameLabel;
+	protected final int LABEL_TEXT_LENGTH = 11;
 	private boolean selected = false;
 	protected int scale = 1;
 	final int scaleFactor = 1;
@@ -37,7 +40,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 
 	public NodeView(String id, String sourceStandardIcon, String sourceSelectedIcon) {
 		
-		this.nameLabel = new JLabel("");
+		nameLabel = new JLabel("");
 		iconStandard = new ImageIcon(sourceStandardIcon);
 		iconSelected = new ImageIcon(sourceSelectedIcon);
 		this.setId(id);
@@ -76,8 +79,18 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 	@Override
 	public void setName(String label) {
 		// name of JComponent is the same as that from the displayed label
-		super.setName(label);
-		this.nameLabel.setText(label);
+		
+		String adjustedLabel = label.length() > LABEL_TEXT_LENGTH ?
+		                            label.substring(0, LABEL_TEXT_LENGTH-1) : label;
+		/**
+         * If we have an extra long text we will cut it,
+         * so can can read the first word(s). The full label text can 
+         * be viewed with the tooltip window.
+         * .
+         */
+	    this.setToolTipText(label);
+	    super.setName(adjustedLabel);
+		nameLabel.setText(adjustedLabel);
 	}
 
 	public boolean isSelected() {
