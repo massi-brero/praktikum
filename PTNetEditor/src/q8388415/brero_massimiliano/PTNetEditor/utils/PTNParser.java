@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNetContructionException;
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
@@ -168,9 +169,9 @@ public class PTNParser extends PNMLParser {
                 if (null != net.getNodeById(item.getSource()) && null != net.getNodeById(item.getTarget()) && !item.getId().isEmpty()) {
                     net.addArc(new PTNArc(item.getId(), net.getNodeById(item.getSource()), net.getNodeById(item.getTarget())));
                 } else {
-                    throw new PTNNodeConstructionException("Fehlerhafte Kante" + item.getId() + " in der Datei vorhanden");
+                    throw new PTNNetContructionException("Fehlerhafte Kante in der Datei vorhanden");
                 }
-            } catch (PTNNodeConstructionException e) {
+            } catch (PTNNetContructionException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
@@ -180,7 +181,7 @@ public class PTNParser extends PNMLParser {
     }
 
     /**
-     * This inner class is used as data sorage object. We will save arcs we have
+     * This inner class is used as data storage object. We will save arcs we have
      * to generate in it. At the end of the parsing process the arc objects can
      * be instantiated with the help of the arc item list.
      * 

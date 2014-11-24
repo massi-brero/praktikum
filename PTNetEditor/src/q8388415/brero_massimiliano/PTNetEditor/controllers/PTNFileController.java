@@ -53,6 +53,10 @@ public class PTNFileController implements PTNIFileListener {
     /**
      * Calls read method in file model. So views do not really have to know the
      * file model. And we don not need to make a model a listener.
+     * If there was an error while reading the method will stop the reading
+     * process.
+     * 
+     * @return void
      * 
      */
     public void readFromFile(PTNNet net) {
@@ -64,16 +68,15 @@ public class PTNFileController implements PTNIFileListener {
         try {
             if (null != lastChosenReadFile) {
                 net.reset();
-
                 readModel.readFromFile(lastChosenReadFile, net);
-
             }
+            
+            desktop.init();
+            desktop.setSize(readModel.getDesktopSize());
+            
         } catch (PTNNetContructionException e) {
             this.callNetContructionWarning(e.getMessage());
         }
-
-        desktop.init();
-        desktop.setSize(readModel.getDesktopSize());
 
 
     }

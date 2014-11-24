@@ -104,13 +104,16 @@ public class PNMLParser {
                 xmlParser = factory.createXMLEventReader(dateiEingabeStrom);
 
             } catch (XMLStreamException e) {
+                String message = "XML Verarbeitungsfehler: " + e.getMessage();
                 System.err
-                        .println("XML Verarbeitungsfehler: " + e.getMessage());
+                        .println(message);
                 e.printStackTrace();
+                throw new PTNNetContructionException(message);
             }
         } catch (FileNotFoundException e) {
-            System.err.println("Die Datei wurde nicht gefunden! "
-                    + e.getMessage());
+            String message = "Die Datei wurde nicht gefunden! " + e.getMessage();
+            System.err.println(message);
+            throw new PTNNetContructionException(message);
         }
     }
 
@@ -231,7 +234,7 @@ public class PNMLParser {
         if (x != null && y != null && lastId != null) {
             setPosition(lastId, x, y);
         } else {
-            String message = "Unvollst√§ndige Position wurde verworfen!";
+            String message = "Unvollst‰ndige Position wurde verworfen!";
             System.err.println(message);
             throw new PTNNetContructionException(message);
         }
@@ -254,11 +257,12 @@ public class PNMLParser {
                 break;
             }
         }
-        if (transitionId != null) {
+        if (transitionId != null && !transitionId.equals("")) {
             newTransition(transitionId);
             lastId = transitionId;
         } else {
-            String message = "Transition ohne id wurde verworfen!";
+            System.out.println(lastId);
+            String message = "Transition ohne id wurde verworfen! Einlesen wurde gestoppt.";
             System.err.println(message);
             lastId = null;
             throw new PTNNetContructionException(message);
@@ -282,11 +286,11 @@ public class PNMLParser {
                 break;
             }
         }
-        if (placeId != null) {
+        if (placeId != null && !placeId.equals("")) {
             newPlace(placeId);
             lastId = placeId;
         } else {
-            String message = "Stelle ohne id wurde verworfen!";
+            String message = "Stelle ohne id wurde gefunden! Einlesen wurde gestoppt.";
             System.err.println(message);
             lastId = null;
             throw new PTNNetContructionException(message);
@@ -315,10 +319,12 @@ public class PNMLParser {
                 target = attr.getValue();
             }
         }
-        if (arcId != null && source != null && target != null) {
+        if (arcId != null && !arcId.equals("") 
+                && source != null && !source.equals("")
+                    && target != null && !target.equals("")) {
             newArc(arcId, source, target);
         } else {
-            String message = "Unvollst‰ndige Kante wurde verworfen!";
+            String message = "Unvollst‰ndige Kante wurde verworfen! Das Einlesen wurde gestoppt!";
             System.err.println(message);
             throw new PTNNetContructionException(message);
         }
