@@ -40,39 +40,64 @@ public class PTNParser extends PNMLParser {
      */
     ArrayList<ArcInformationListItem> arcList;
 
+    /**
+     * This class attributes are used to check if we have multiple ids.
+     */
+    ArrayList<String> usedIdNodes;
+    ArrayList<String> usedIdArcs;
+
+    /**
+     * 
+     * @param pnm
+     * @param net
+     */
     public PTNParser(File pnm, PTNNet net) {
         super(pnm);
+        usedIdNodes = new ArrayList<String>();
+        usedIdArcs = new ArrayList<String>();
         arcList = new ArrayList<ArcInformationListItem>();
         this.net = net;
     }
 
     @Override
-    public void newPlace(final String id) {
+    public void newPlace(final String id) throws PTNNodeConstructionException {
 
-        try {
             PTNPlace place = new PTNPlace(id);
-            net.addNode(place);
-        } catch (PTNNodeConstructionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+            if (!usedIdNodes.contains(id)) {
+                usedIdNodes.add(id);
+                net.addNode(place);
+            } else {
+                throw new PTNNodeConstructionException("Die Knoten-ID " + id + " wurde mehrfach vergeben");
+            }
+
 
     }
 
     @Override
-    public void newTransition(String id) {
-        try {
+    public void newTransition(String id) throws PTNNodeConstructionException{
+
             PTNTransition transition = new PTNTransition(id);
-            net.addNode(transition);
-        } catch (PTNNodeConstructionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+            if (!usedIdNodes.contains(id)) {
+                usedIdNodes.add(id);
+                net.addNode(transition);
+            } else {
+                throw new PTNNodeConstructionException("Die Knoten-ID " + id + " wurde mehrfach vergeben");
+            }
+
     }
 
     @Override
-    public void newArc(final String id, final String source, final String target) {
-         arcList.add(new ArcInformationListItem(id, source, target));
+    public void newArc(final String id, final String source, final String target) throws PTNNetContructionException {
+        /**
+         * TODO Abfangen von zwei Kanten mit gleicher Start/Ziel-Kombi.
+         */
+        if (!usedIdArcs.contains(id)) {
+            usedIdArcs.add(id);
+            arcList.add(new ArcInformationListItem(id, source, target));
+        } else {
+            throw new PTNNetContructionException("Die Kanten-ID " + id + " wurde mehrfach vergeben");
+        }
+
     }
 
     @Override
@@ -106,20 +131,21 @@ public class PTNParser extends PNMLParser {
         net.getNodeById(id).setName(name);
     }
 
+    /**
+     * Checks if the token fulfills our constraints. We simply ignore the token
+     * attribute for a node that is not a place.
+     * 
+     */
     @Override
-    public void setMarking(final String id, final String marking) {
+    public void setMarking(final String id, final String marking) throws PTNNodeConstructionException {
         PTNNode node = net.getNodeById(id);
 
-        try {
-            int token = Integer.parseInt(marking);
-            if (node.getType() == PTNNodeTypes.place)
-                ((PTNPlace) node).setToken(token);
-        } catch (NumberFormatException e) {
-            // TODO Fehlermeldung falsches Format
-            e.printStackTrace();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (!PTNNetValidator.isValidToken(marking)) {
+            throw new PTNNodeConstructionException("Als Token sind nur Zahlen von 0-999 zugelassen");
+        } else if (node.getType() != PTNNodeTypes.place) {
+            ((PTNPlace) node).setToken(Integer.parseInt(marking));
+        } else {
+            // Do nothing.
         }
 
     }
@@ -151,29 +177,26 @@ public class PTNParser extends PNMLParser {
 
         maxHeight = pos.getY() > maxHeight ? pos.getY() : maxHeight;
         maxWidth = pos.getX() > maxWidth ? pos.getX() : maxWidth;
-        
+
     }
 
     /**
      * Generates arcs after parsing finished. Here we check if the 2 nodes
      * needed for our arc really exists. Otherwise an Exception will be thrown.
+     * @throws PTNNetContructionException 
      */
-    public void handleParsingFinished() {
+    public void handleParsingFinished() throws PTNNetContructionException {
 
         Iterator<ArcInformationListItem> it = arcList.iterator();
         ArcInformationListItem item;
-        
+
         while (it.hasNext()) {
             item = it.next();
-            try {
-                if (null != net.getNodeById(item.getSource()) && null != net.getNodeById(item.getTarget()) && !item.getId().isEmpty()) {
-                    net.addArc(new PTNArc(item.getId(), net.getNodeById(item.getSource()), net.getNodeById(item.getTarget())));
-                } else {
-                    throw new PTNNetContructionException("Fehlerhafte Kante in der Datei vorhanden");
-                }
-            } catch (PTNNetContructionException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+
+            if (null != net.getNodeById(item.getSource()) && null != net.getNodeById(item.getTarget()) && !item.getId().isEmpty()) {
+                net.addArc(new PTNArc(item.getId(), net.getNodeById(item.getSource()), net.getNodeById(item.getTarget())));
+            } else {
+                throw new PTNNetContructionException("Fehlerhafte Kante in der Datei vorhanden");
             }
 
         }
@@ -181,9 +204,9 @@ public class PTNParser extends PNMLParser {
     }
 
     /**
-     * This inner class is used as data storage object. We will save arcs we have
-     * to generate in it. At the end of the parsing process the arc objects can
-     * be instantiated with the help of the arc item list.
+     * This inner class is used as data storage object. We will save arcs we
+     * have to generate in it. At the end of the parsing process the arc objects
+     * can be instantiated with the help of the arc item list.
      * 
      * @author brero
      *

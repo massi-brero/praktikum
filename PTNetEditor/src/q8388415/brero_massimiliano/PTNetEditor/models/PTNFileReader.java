@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.io.File;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNetContructionException;
+import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNParser;
 
 /**
@@ -34,8 +35,9 @@ public class PTNFileReader {
      * @param net
      *            Net model which practically all classes work with.
      * @throws PTNNetContructionException 
+     * @throws PTNNodeConstructionException 
      */
-    public void readFromFile(File pnm, PTNNet net) throws PTNNetContructionException {
+    public void readFromFile(File pnm, PTNNet net) throws PTNNetContructionException, PTNNodeConstructionException {
 
         parser = new PTNParser(pnm, net);
         parser = new PTNParser(pnm, net);

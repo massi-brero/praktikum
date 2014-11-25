@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
+import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNetValidator;
 
 public class NewNodeWindow extends JDialog implements ActionListener {
 
@@ -112,27 +113,14 @@ public class NewNodeWindow extends JDialog implements ActionListener {
          * 
          */
         if (e.getActionCommand().equals("Abspeichern")) {
-            try {
-                if (types.getSelectedItem() == PTNNodeTypes.place) {
-                    
-                    if (token.getText().equals("")) {
-                        JOptionPane.showConfirmDialog(this, "Ein leeres Token Feld ist nicht möglich.", "Token Fehler", JOptionPane.PLAIN_MESSAGE);
-                    } else if (Integer.parseInt(token.getText()) > 999 || Integer.parseInt(token.getText()) < 0) {
+
+                if (PTNNetValidator.isValidToken(token.getText())) {
                         JOptionPane.showConfirmDialog(this, "Bitte geben Sie eine Zahl zwischen 0-999 ein.", "Token Fehler", JOptionPane.PLAIN_MESSAGE);
-                    } else {
-                        isInformationToBeSent = true;
-                        this.dispose();
-                    }
-                    
                 } else {
                     isInformationToBeSent = true;
-                    this.dispose();
-                    
+                    this.dispose();                 
                 }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showConfirmDialog(this, "Bitte geben Sie eine Zahl ein.", "Token Fehler", JOptionPane.PLAIN_MESSAGE);
 
-            }
         } else {
             this.dispose();
         }

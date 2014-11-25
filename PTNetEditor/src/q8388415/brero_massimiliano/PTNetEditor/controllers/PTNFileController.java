@@ -5,6 +5,7 @@ import java.io.File;
 import javax.swing.JOptionPane;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNetContructionException;
+import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNFileReader;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIFileListener;
@@ -75,6 +76,8 @@ public class PTNFileController implements PTNIFileListener {
             desktop.setSize(readModel.getDesktopSize());
             
         } catch (PTNNetContructionException e) {
+            this.callNetContructionWarning(e.getMessage());
+        } catch (PTNNodeConstructionException e) {
             this.callNetContructionWarning(e.getMessage());
         }
 

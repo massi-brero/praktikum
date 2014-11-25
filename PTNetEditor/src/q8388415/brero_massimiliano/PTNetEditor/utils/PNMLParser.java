@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.net.NetPermission;
 import java.util.Iterator;
 
 import javax.xml.stream.XMLEventReader;
@@ -17,6 +16,7 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNetContructionException;
+import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
 
 /**
  * Diese Klasse implementiert die Grundlage für einen einfachen PNML Parser.
@@ -31,8 +31,9 @@ public class PNMLParser {
      * @param args
      *      Die Konsolen Parameter, mit denen das Programm aufgerufen wird.
      * @throws PTNNetContructionException 
+     * @throws PTNNodeConstructionException 
      */
-    public static void main(final String[] args) throws PTNNetContructionException {
+    public static void main(final String[] args) throws PTNNetContructionException, PTNNodeConstructionException {
         if (args.length > 0) {
             File pnmlDatei = new File(args[0]);
             if (pnmlDatei.exists()) {
@@ -121,8 +122,9 @@ public class PNMLParser {
      * Diese Methode liest die XML Datei und delegiert die 
      * gefundenen XML Elemente an die entsprechenden Methoden.
      * @throws PTNNetContructionException 
+     * @throws PTNNodeConstructionException 
      */
-    public final void parse() throws PTNNetContructionException {
+    public final void parse() throws PTNNetContructionException, PTNNodeConstructionException {
         while (xmlParser.hasNext()) {
             try {
                 XMLEvent event = xmlParser.nextEvent();
@@ -166,8 +168,9 @@ public class PNMLParser {
     
     /**
      *  Added hook for final works when XML was successfully parsed.
+     * @throws PTNNetContructionException 
      */
-    public void handleParsingFinished() {}
+    public void handleParsingFinished() throws PTNNetContructionException {}
 
     /**
      * Diese Methode behandelt den Start neuer XML Elemente, in dem der Name des
@@ -177,8 +180,9 @@ public class PNMLParser {
      * @param event
      *            {@link XMLEvent}
      * @throws PTNNetContructionException 
+     * @throws PTNNodeConstructionException 
      */
-    private void handleStartEvent(final XMLEvent event) throws PTNNetContructionException {
+    private void handleStartEvent(final XMLEvent event) throws PTNNetContructionException, PTNNodeConstructionException {
         StartElement element = event.asStartElement();
         if (element.getName().toString().toLowerCase().equals("transition")) {
             handleTransition(element);
@@ -203,8 +207,9 @@ public class PNMLParser {
      * 
      * @param value
      *      Der gelesene Text als String
+     * @throws PTNNodeConstructionException 
      */
-    private void handleValue(final String value) {
+    private void handleValue(final String value) throws PTNNodeConstructionException {
         if (isName) {
             setName(lastId, value);
         } else if (isToken) {
@@ -246,8 +251,9 @@ public class PNMLParser {
      * @param element
      *      das Transitionselement
      * @throws PTNNetContructionException 
+     * @throws PTNNodeConstructionException 
      */
-    private void handleTransition(final StartElement element) throws PTNNetContructionException {
+    private void handleTransition(final StartElement element) throws PTNNetContructionException, PTNNodeConstructionException {
         String transitionId = null;
         Iterator<?> attributes = element.getAttributes();
         while (attributes.hasNext()) {
@@ -275,8 +281,9 @@ public class PNMLParser {
      * @param element
      *      das Stellenelement
      * @throws PTNNetContructionException 
+     * @throws PTNNodeConstructionException 
      */
-    private void handlePlace(final StartElement element) throws PTNNetContructionException {
+    private void handlePlace(final StartElement element) throws PTNNetContructionException, PTNNodeConstructionException {
         String placeId = null;
         Iterator<?> attributes = element.getAttributes();
         while (attributes.hasNext()) {
@@ -337,8 +344,9 @@ public class PNMLParser {
      * 
      * @param id
      *      Identifikationstext der Transition
+     * @throws PTNNodeConstructionException 
      */
-    public void newTransition(final String id) {
+    public void newTransition(final String id) throws PTNNodeConstructionException {
         System.out.println("Transition mit id " + id + " wurde gefunden.");
     }
 
@@ -347,8 +355,9 @@ public class PNMLParser {
      * 
      * @param id
      *      Identifikationstext der Stelle
+     * @throws PTNNodeConstructionException 
      */
-    public void newPlace(final String id) {
+    public void newPlace(final String id) throws PTNNodeConstructionException {
         System.out.println("Stelle mit id " + id + " wurde gefunden.");
     }
 
@@ -361,8 +370,9 @@ public class PNMLParser {
      *      Identifikationstext des Startelements der Kante
      * @param target
      *      Identifikationstext des Endelements der Kante     
+     * @throws PTNNetContructionException 
      */
-    public void newArc(final String id, final String source, final String target) {
+    public void newArc(final String id, final String source, final String target) throws PTNNetContructionException {
         System.out.println("Kante mit id " + id + " von " + source + " nach "
                 + target + " wurde gefunden.");
     }
@@ -405,8 +415,9 @@ public class PNMLParser {
      *      Identifikationstext des Elements
      * @param marking
      *      Markierung des Elements
+     * @throws PTNNodeConstructionException 
      */
-    public void setMarking(final String id, final String marking) {
+    public void setMarking(final String id, final String marking) throws PTNNodeConstructionException {
         System.out.println("Setze die Markierung des Elements " + id + " auf "
                 + marking);
     }

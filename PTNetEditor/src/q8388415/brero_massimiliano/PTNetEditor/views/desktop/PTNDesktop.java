@@ -127,9 +127,7 @@ public class PTNDesktop extends JLayeredPane {
      */
     @Override
     public void setSize(Dimension size) {
-
         this.setSize((int)size.getWidth(), (int)size.getHeight());
-
     }
 
     @Override
