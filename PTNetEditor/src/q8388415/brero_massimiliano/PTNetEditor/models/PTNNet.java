@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNArcDirections;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
 public class PTNNet {
 	
@@ -164,13 +165,56 @@ public class PTNNet {
 	}
 	
 	/**
-	 * 
+	 * When we add a new arc and the target is a transition node we have to
+	 * check if activation status of that node must be changed.
 	 * @param PTNArc a
 	 */
 	public void addArc(PTNArc a) {
+		
+		if (a.getTarget().getType() == PTNNodeTypes.transition)
+			this.updateActivation(a, (PTNTransition)a.getTarget());
+		
 		arcs.put(a.getId(), a);
 	}
-	
+
+	/**
+	 * When we add a new arc and the target is a transition node we have to
+	 * check if activation status of that node must be changed.
+	 * Thus:
+	 * 1. Method checks if target is a transition.
+	 * 2. If transition is not activated the new source will not change that, so we'll do
+	 *    nothing. Exception: the new source is the first node connected with the transition.
+	 *    Then the transition will be activated depending in the token number of the
+	 *    source.
+	 * 3. If the transition is activated and the source node has at least one token we 
+	 *    will leave the transition status activated. If the source node has no tokens 
+	 *    we have to set the activation status to false.
+	 * @param a 
+	 * 
+	 * @param transition
+	 */
+	private void updateActivation(PTNArc arc, PTNTransition transition) {
+
+		PTNPlace place = (PTNPlace)arc.getSource();
+		
+		if (transition.isActivated()) {
+			
+			if (0 <= place.getToken()) 
+				transition.setActivated(true);
+			else
+				transition.setActivated(false);
+			
+		} else {
+			/**
+			 * Check if we connect the transition with its first predecessor.
+			 */
+			if (0 < this.getPredecessors(transition.getId()).size() && 0 <= place.getToken())
+				transition.setActivated(true);				
+			
+		}
+		
+	}
+
 	/**
 	 * 
 	 * @param PTNNode n

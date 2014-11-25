@@ -7,9 +7,8 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
 public class PTNTransition extends PTNNode {
 	
-	private Boolean activated;
-	private Boolean hasMarking = false;
-	
+	private Boolean isActivated = false;
+
 	public PTNTransition(String name, String id, Point pos) throws PTNNodeConstructionException {
 		super(name, id, pos);
 	}
@@ -22,22 +21,15 @@ public class PTNTransition extends PTNNode {
 		this.setType(PTNNodeTypes.transition);
 	}
 
-	public Boolean getActivated() {
-		return activated;
+	public Boolean isActivated() {
+		return isActivated;
 	}
 
 	public void setActivated(Boolean activated) {
-		this.activated = activated;
+		this.isActivated = activated;
 	}
 
-	public Boolean getHasMarking() {
-		return hasMarking;
-	}
-
-	public void setHasMarking(Boolean hasMarking) {
-		this.hasMarking = hasMarking;
-	}
-
+	
 	@Override
 	public String getNodeName() {
 		return this.getName();

@@ -1,36 +1,40 @@
 package q8388415.brero_massimiliano.PTNetEditor.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.Point;
-import java.util.Hashtable;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
+import q8388415.brero_massimiliano.PTNetEditor.PTNBootstrap;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
-import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNPlace;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
-public class PTNNetHandlerTest {
+public class PTNSimulationTest {
 	
 	private PTNNet net;
-	private PTNNode node1, node2, node3, node4;
+	private PTNPlace node1, node4;
+	private PTNTransition node2, node3;
 	private PTNArc arc1, arc2, arc3;
 	private PTNNetController netHandler;
 
 	@Before
 	public void setUp() throws Exception {
+		(new PTNBootstrap()).init();
 		net = new PTNNet();
 		node1 = new PTNPlace("node1", "n1", new Point(100, 100));
+		node1.setToken(1);
 		node2 = new PTNTransition("node2", "n2", new Point(10, 10));
 		node3 = new PTNTransition("node3", "n3", new Point(20, 20));
-		node4 = new PTNPlace("node4", "n4", new Point(200, 200));
+		node4 = new PTNPlace("node4", "n4", new Point(120, 120));
+		node4.setToken(1);
 		arc1 = new PTNArc("a1", node1, node2);
 		arc2 = new PTNArc("a2", node1, node3);
 		arc3 = new PTNArc("a3", node4, node2);
@@ -43,14 +47,19 @@ public class PTNNetHandlerTest {
 		net.addArc(arc3);
 		PTNDesktop desktop  = new PTNDesktop(new PTNAppController(), net);
 		netHandler = new PTNNetController(net, desktop);
+		netHandler.setUpNodeViews();
+		 netHandler.setUpArcs();
 	}
 	
 	@Test 
-	public void setUpNodesTest() {
-		netHandler.setUpNodeViews();
-		assertEquals(3, net.getNumberOfNodes());
+	public void checkActivationTrueTest() {
+		assertTrue(node2.isActivated());
 	}
 	
-
+	@Test 
+	public void checkActivationFalseTest() {
+		assertTrue(node2.isActivated());
+	}
+	
 
 }
