@@ -196,20 +196,20 @@ public class PTNNet {
 	private void updateActivation(PTNArc arc, PTNTransition transition) {
 
 		PTNPlace place = (PTNPlace)arc.getSource();
-		
+
 		if (transition.isActivated()) {
 			
 			if (0 <= place.getToken()) 
-				transition.setActivated(true);
+				transition.setIsActivated(true);
 			else
-				transition.setActivated(false);
+				transition.setIsActivated(false);
 			
 		} else {
 			/**
 			 * Check if we connect the transition with its first predecessor.
 			 */
-			if (0 < this.getPredecessors(transition.getId()).size() && 0 <= place.getToken())
-				transition.setActivated(true);				
+			if (0 == this.getPredecessors(transition.getId()).size() && 0 < place.getToken())
+				transition.setIsActivated(true);	
 			
 		}
 		

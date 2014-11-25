@@ -114,7 +114,7 @@ public class NewNodeWindow extends JDialog implements ActionListener {
          */
         if (e.getActionCommand().equals("Abspeichern")) {
 
-                if (PTNNetValidator.isValidToken(token.getText())) {
+                if (!PTNNetValidator.isValidToken(token.getText())) {
                         JOptionPane.showConfirmDialog(this, "Bitte geben Sie eine Zahl zwischen 0-999 ein.", "Token Fehler", JOptionPane.PLAIN_MESSAGE);
                 } else {
                     isInformationToBeSent = true;

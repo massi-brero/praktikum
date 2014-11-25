@@ -25,7 +25,7 @@ public class PTNTransition extends PTNNode {
 		return isActivated;
 	}
 
-	public void setActivated(Boolean activated) {
+	public void setIsActivated(Boolean activated) {
 		this.isActivated = activated;
 	}
 

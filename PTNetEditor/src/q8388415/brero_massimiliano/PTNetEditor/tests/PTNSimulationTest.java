@@ -20,9 +20,9 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 public class PTNSimulationTest {
 	
 	private PTNNet net;
-	private PTNPlace node1, node4;
+	private PTNPlace node1, node4, node5;
 	private PTNTransition node2, node3;
-	private PTNArc arc1, arc2, arc3;
+	private PTNArc arc1, arc2, arc3, arc4;
 	private PTNNetController netHandler;
 
 	@Before
@@ -35,20 +35,24 @@ public class PTNSimulationTest {
 		node3 = new PTNTransition("node3", "n3", new Point(20, 20));
 		node4 = new PTNPlace("node4", "n4", new Point(120, 120));
 		node4.setToken(1);
+		node5 = new PTNPlace("node4", "n4", new Point(120, 120));
+		node5.setToken(0);
 		arc1 = new PTNArc("a1", node1, node2);
 		arc2 = new PTNArc("a2", node1, node3);
 		arc3 = new PTNArc("a3", node4, node2);
+		arc4 = new PTNArc("a3", node5, node3);
 		net.addNode(node1);
 		net.addNode(node2);
 		net.addNode(node3);
 		net.addNode(node4);
+		net.addNode(node5);
 		net.addArc(arc1);
 		net.addArc(arc2);
 		net.addArc(arc3);
 		PTNDesktop desktop  = new PTNDesktop(new PTNAppController(), net);
 		netHandler = new PTNNetController(net, desktop);
 		netHandler.setUpNodeViews();
-		 netHandler.setUpArcs();
+		netHandler.setUpArcs();
 	}
 	
 	@Test 
@@ -58,7 +62,7 @@ public class PTNSimulationTest {
 	
 	@Test 
 	public void checkActivationFalseTest() {
-		assertTrue(node2.isActivated());
+		assertFalse(node3.isActivated());
 	}
 	
 

@@ -71,6 +71,7 @@ public class PTNNetController implements Runnable {
             } else if (type == PTNNodeTypes.transition) {
 
                 nodeView = new TransitionView(node.getId());
+                ((TransitionView)nodeView).setIsActivated(((PTNTransition)node).isActivated());
                 nodeHelper.addTransitionListener((TransitionView) nodeView);
 
             }

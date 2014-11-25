@@ -174,11 +174,21 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 		int height = this.getIcon().getIconHeight();
 		
 		// by reseting the icon we won't loose on quality due to scaling fractions when we have repeated scaling operations
-		this.setIcon(this.isSelected() ? iconSelected : iconStandard);
+		this.updateIcon();
 
 		Image image = ((ImageIcon) this.getIcon()).getImage();
 		image = image.getScaledInstance(width + CHANGE_WIDTH * factor, height + CHANGE_HEIGHT * factor, Image.SCALE_SMOOTH);
 		this.setIcon(new ImageIcon(image));
+	}
+
+	/**
+	 * Updates Icon depending on node state. Should be overwritten if a
+	 * node can have more than 2 states (like transition nodes):
+	 */
+	protected void updateIcon() {
+	   
+	    setIcon(this.isSelected() ? iconSelected : iconStandard);
+	    
 	}
 
 	public float getScale() {
