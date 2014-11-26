@@ -236,9 +236,7 @@ public class PTNNetController implements Runnable {
         } else {
 
             net.addArc(new PTNArc(id, source, target));
-            ArcView arcView = new ArcView(id, normalizedSourceLocation, normalizedTargetLocation, this);
-            arcHelper.addArcListener(arcView);
-            desktop.updateArcs(arcView);
+            arcHelper.initArcView(id, normalizedSourceLocation, normalizedTargetLocation, this);
 
         }
     }

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
@@ -103,6 +104,17 @@ public class PTNArcHelper {
 				"Schon vorhanden.", JOptionPane.PLAIN_MESSAGE);
 		
 	}
+
+	    /**
+     * @param id
+     * @param normalizedSourceLocation
+     * @param normalizedTargetLocation
+     */
+    public void initArcView(String id, Point normalizedSourceLocation, Point normalizedTargetLocation, PTNNetController netControl) {
+	ArcView arcView = new ArcView(id, normalizedSourceLocation, normalizedTargetLocation, netControl);
+	this.addArcListener(arcView);
+	desktop.updateArcs(arcView);
+    }
 
 
 }
