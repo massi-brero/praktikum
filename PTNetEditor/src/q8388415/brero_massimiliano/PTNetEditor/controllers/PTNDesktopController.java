@@ -31,7 +31,6 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 public class PTNDesktopController implements MouseMotionListener, MouseListener, ActionListener, Runnable {
 
 	private PTNDesktop desktop;
-	private PTNArcHelper arcHelper;
 	private PTNNodeHelper nodeHelper;
 	private volatile Point oldLocation;
 	static boolean isDragged = false;
@@ -39,7 +38,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	public PTNDesktopController(PTNDesktop dt) {
 
 		this.desktop = dt;
-		arcHelper = new PTNArcHelper(desktop);
 		nodeHelper = new PTNNodeHelper(desktop);
 		oldLocation = new Point(-1, -1);
 

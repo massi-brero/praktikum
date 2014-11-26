@@ -22,7 +22,6 @@ public class PTNMenu extends JMenuBar {
     private PTNDesktop desktop;
     private PTNNet net;
     private PTNAppController appControl;
-    private File readFile = new File("src\\snippet\\Kaffee.pnml");
     public static final int HEIGHT = 20;
     public static final int WIDTH = 500;
 
@@ -100,8 +99,15 @@ public class PTNMenu extends JMenuBar {
         item1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println((fileListener));
                 fileListener.readFromFile(net);
+            }
+        });
+        
+        item1.setIcon(new ImageIcon("icons/open-document.png"));
+        item1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fileListener.writeToFile(net);
             }
         });
 

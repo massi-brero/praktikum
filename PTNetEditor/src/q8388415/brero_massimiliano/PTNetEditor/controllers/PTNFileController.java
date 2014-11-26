@@ -1,14 +1,21 @@
 package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNetContructionException;
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNFileReader;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIFileListener;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
+import q8388415.brero_massimiliano.PTNetEditor.utils.PNMLWriter;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
@@ -29,7 +36,9 @@ public class PTNFileController implements PTNIFileListener {
     private PTNDesktop desktop = null;
     private PTNNet net;
     private PTNFileReader readModel;
+    private PNMLWriter xmlWriter;
     private static File lastChosenReadFile = null;
+    private File destinationFile = null;
 
     /**
      * 
@@ -48,6 +57,33 @@ public class PTNFileController implements PTNIFileListener {
      */
     @Override
     public int writeToFile(PTNNet net) {
+    	
+    	this.writeFileDialog();
+    	xmlWriter = new PNMLWriter(destinationFile);
+        xmlWriter.startXMLDocument();
+        PTNNode node;
+        PTNArc arc;
+        HashMap<String, PTNNode> nodes = net.getNodes();
+        HashMap<String, PTNArc> arcs = net.getArcs();
+        Iterator<Map.Entry<String, PTNNode>> it_n = nodes.entrySet().iterator();
+        Iterator<Map.Entry<String, PTNArc>> it_a = arcs.entrySet().iterator();
+        
+        while (it_n.hasNext()) {
+        	node = it_n.next().getValue();
+        	
+        	/**
+        	 * This is the place to extend if we have more node types
+        	 */
+        	if (node.getType() == PTNNodeTypes.place) {
+        		
+        	}
+        	
+        }
+        
+        while (it_a.hasNext()) {
+        	arc = it_a.next().getValue();
+        }
+        
         return 0;
     }
 
@@ -60,6 +96,7 @@ public class PTNFileController implements PTNIFileListener {
      * @return void
      * 
      */
+    @Override
     public void readFromFile(PTNNet net) {
         
         PlaceView.resetSize();
@@ -95,6 +132,21 @@ public class PTNFileController implements PTNIFileListener {
      * window will display that folder next time when it's opened.
      */
     private void openFileDialog() {
+
+        PTNFileChooser fileDialog = new PTNFileChooser(lastChosenReadFile.getParent());
+        int val = fileDialog.showDialog(desktop, "Netz-Datei wählen");
+
+        if (0 == val) {
+            lastChosenReadFile = fileDialog.getSelectedFile();
+        }
+
+    }
+    
+    /**
+     * Let's the user choose a file and store last chosen file path so the
+     * window will display that folder next time when it's opened.
+     */
+    private void writeFileDialog() {
 
         PTNFileChooser fileDialog = new PTNFileChooser(lastChosenReadFile.getParent());
         int val = fileDialog.showDialog(desktop, "Netz-Datei wählen");

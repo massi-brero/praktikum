@@ -8,13 +8,13 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
+import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNControlPanel;
@@ -110,27 +110,25 @@ public class PTNArcHelper {
 	}
 
     /**
-     * Prepares arc to be shown in view. This method will also activate the target node view
-     * if the corresponding model node is activated.
-     * @param id
-     * @param normalizedSourceLocation
-     * @param normalizedTargetLocation
-     * @param netControl
-     */
-    public void initArcView(String id, Point normalizedSourceLocation, Point normalizedTargetLocation, PTNNetController netControl) {
-	
-	PTNNode targetModel = net.getNodeById(id);
-	ArcView arcView = new ArcView(id, normalizedSourceLocation, normalizedTargetLocation, netControl);
-	
-	if (targetModel.getType() == PTNNodeTypes.transition) {
-	    
-	    //TransitionView transitionView = desktop.getNodeViews().get;
-	    
+	 * Prepares arc to be shown in view. This method will also activate the
+	 * target node view if the corresponding model node is activated.
+	 * 
+	 * @param id
+	 * @param normalizedSourceLocation
+	 * @param normalizedTargetLocation
+	 * @param netControl
+	 */
+	public void initArcView(ArcView arcView, PTNNode targetModel, NodeView targetView) {
+
+		if (targetModel.getType() == PTNNodeTypes.transition) {
+
+			((TransitionView)targetView).setIsActivated(((PTNTransition)targetModel).isActivated());
+
+		}
+
+		this.addArcListener(arcView);
+		desktop.updateArcs(arcView);
 	}
-	
-	this.addArcListener(arcView);
-	desktop.updateArcs(arcView);
-    }
 
 
 }

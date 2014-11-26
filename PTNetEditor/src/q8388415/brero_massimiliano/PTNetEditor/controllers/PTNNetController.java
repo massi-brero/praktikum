@@ -236,7 +236,8 @@ public class PTNNetController implements Runnable {
         } else {
 
             net.addArc(new PTNArc(id, source, target));
-            arcHelper.initArcView(id, normalizedSourceLocation, normalizedTargetLocation, this);
+            ArcView arcView = new ArcView(id, normalizedSourceLocation, normalizedTargetLocation, this);
+            arcHelper.initArcView(arcView, target, targetView);
 
         }
     }
@@ -269,8 +270,10 @@ public class PTNNetController implements Runnable {
 
             try {
                 if (type == PTNNodeTypes.place) {
-
-                    net.addNode(new PTNPlace(name, id, nodeLocation));
+                	
+                	PTNPlace place = new PTNPlace(name, id, nodeLocation);
+                	place.setToken(token);
+                    net.addNode(place);
 
                     nodeView = new PlaceView(id, token);
                     nodeHelper.addPlaceListener((PlaceView) nodeView);
@@ -328,7 +331,7 @@ public class PTNNetController implements Runnable {
              * increasement/decreasement of nodes
              */
             if (PTNAppController.redrawArcs) {
-                System.out.println("redraw_listener");
+
                 HashMap<String, PTNArc> arcs = net.getArcs();
                 ArcView arcView = null;
                 Hashtable<String, ArcView> arcViewList = desktop.getArcViews();

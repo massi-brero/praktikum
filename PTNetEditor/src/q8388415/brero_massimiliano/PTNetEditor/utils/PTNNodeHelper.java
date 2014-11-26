@@ -112,7 +112,7 @@ public class PTNNodeHelper implements ActionListener {
 	}
 
     /**
-     * Prepares a node view so it my be diplayed on the desktop.
+     * Prepares a node view so it my be displayed on the desktop.
      * 
      * @param name
      * @param nodeView
@@ -124,6 +124,15 @@ public class PTNNodeHelper implements ActionListener {
         desktop.addListenertoNode(nodeView);
         desktop.getNodeViews().add(nodeView);
         desktop.add(nodeView);
+    }
+    
+    /**
+     * When the token attribute of a place has been changed, we have to check
+     * if we have to update the state of succeeding transitions.
+     * 
+     */
+    public void updateSuccessors(/* PTNNode/NodeView */) {
+    	
     }
 
 
