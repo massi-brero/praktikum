@@ -42,7 +42,7 @@ public class PTNNetController implements Runnable {
     public PTNNetController(PTNNet net, PTNDesktop desktop) {
         this.net = net;
         this.desktop = desktop;
-        this.arcHelper = new PTNArcHelper(desktop);
+        this.arcHelper = new PTNArcHelper(desktop, net);
         this.nodeHelper = new PTNNodeHelper(desktop);
     }
 
