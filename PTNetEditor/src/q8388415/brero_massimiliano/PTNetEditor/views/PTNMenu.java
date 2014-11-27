@@ -103,8 +103,8 @@ public class PTNMenu extends JMenuBar {
             }
         });
         
-        item1.setIcon(new ImageIcon("icons/open-document.png"));
-        item1.addActionListener(new ActionListener() {
+        item2.setIcon(new ImageIcon("icons/open-document.png"));
+        item2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 fileListener.writeToFile(net);

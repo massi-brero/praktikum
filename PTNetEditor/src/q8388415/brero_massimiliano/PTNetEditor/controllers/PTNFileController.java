@@ -1,20 +1,15 @@
 package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNetContructionException;
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
-import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNFileReader;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
-import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIFileListener;
-import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PNMLWriter;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
@@ -37,7 +32,8 @@ public class PTNFileController implements PTNIFileListener {
     private PTNNet net;
     private PTNFileReader readModel;
     private PNMLWriter xmlWriter;
-    private static File lastChosenReadFile = null;
+    private static File lastOpenedFile = null;
+    private static File lastSavedFile = null;
     private File destinationFile = null;
 
     /**
@@ -47,7 +43,7 @@ public class PTNFileController implements PTNIFileListener {
      */
     public PTNFileController(PTNDesktop desktop, PTNNet net) {
         readModel = new PTNFileReader();
-        lastChosenReadFile = new File("");
+        lastOpenedFile = new File("");
         this.desktop = desktop;
         this.net = net;
     }
@@ -59,30 +55,31 @@ public class PTNFileController implements PTNIFileListener {
     public int writeToFile(PTNNet net) {
     	
     	this.writeFileDialog();
-    	xmlWriter = new PNMLWriter(destinationFile);
-        xmlWriter.startXMLDocument();
-        PTNNode node;
-        PTNArc arc;
-        HashMap<String, PTNNode> nodes = net.getNodes();
-        HashMap<String, PTNArc> arcs = net.getArcs();
-        Iterator<Map.Entry<String, PTNNode>> it_n = nodes.entrySet().iterator();
-        Iterator<Map.Entry<String, PTNArc>> it_a = arcs.entrySet().iterator();
-        
-        while (it_n.hasNext()) {
-        	node = it_n.next().getValue();
-        	
-        	/**
-        	 * This is the place to extend if we have more node types
-        	 */
-        	if (node.getType() == PTNNodeTypes.place) {
-        		
-        	}
-        	
-        }
-        
-        while (it_a.hasNext()) {
-        	arc = it_a.next().getValue();
-        }
+
+    	//    	xmlWriter = new PNMLWriter(destinationFile);
+//        xmlWriter.startXMLDocument();
+//        PTNNode node;
+//        PTNArc arc;
+//        HashMap<String, PTNNode> nodes = net.getNodes();
+//        HashMap<String, PTNArc> arcs = net.getArcs();
+//        Iterator<Map.Entry<String, PTNNode>> it_n = nodes.entrySet().iterator();
+//        Iterator<Map.Entry<String, PTNArc>> it_a = arcs.entrySet().iterator();
+//        
+//        while (it_n.hasNext()) {
+//        	node = it_n.next().getValue();
+//        	
+//        	/**
+//        	 * This is the place to extend if we have more node types
+//        	 */
+//        	if (node.getType() == PTNNodeTypes.place) {
+//        		
+//        	}
+//        	
+//        }
+//        
+//        while (it_a.hasNext()) {
+//        	arc = it_a.next().getValue();
+//        }
         
         return 0;
     }
@@ -104,9 +101,10 @@ public class PTNFileController implements PTNIFileListener {
         this.openFileDialog();
 
         try {
-            if (null != lastChosenReadFile) {
+        	
+            if (null != lastOpenedFile) {
                 net.reset();
-                readModel.readFromFile(lastChosenReadFile, net);
+                readModel.readFromFile(lastOpenedFile, net);
             }
             
             desktop.init();
@@ -133,28 +131,59 @@ public class PTNFileController implements PTNIFileListener {
      */
     private void openFileDialog() {
 
-        PTNFileChooser fileDialog = new PTNFileChooser(lastChosenReadFile.getParent());
+        PTNFileChooser fileDialog = new PTNFileChooser(lastOpenedFile.getParent());
         int val = fileDialog.showDialog(desktop, "Netz-Datei wählen");
 
         if (0 == val) {
-            lastChosenReadFile = fileDialog.getSelectedFile();
+            lastOpenedFile = fileDialog.getSelectedFile();
         }
 
     }
     
     /**
-     * Let's the user choose a file and store last chosen file path so the
-     * window will display that folder next time when it's opened.
+     * Let's the user choose a directory and a filename. Those two will be stored.
      */
     private void writeFileDialog() {
 
-        PTNFileChooser fileDialog = new PTNFileChooser(lastChosenReadFile.getParent());
-        int val = fileDialog.showDialog(desktop, "Netz-Datei wählen");
+        JFileChooser fileDialog = new JFileChooser();
+        fileDialog.setCurrentDirectory(lastSavedFile);
+
+        int val = fileDialog.showSaveDialog(desktop);
 
         if (0 == val) {
-            lastChosenReadFile = fileDialog.getSelectedFile();
+            lastSavedFile = fileDialog.getSelectedFile();
+            
+            if (confirmSave(lastSavedFile)) {
+            	//attach missing suffix
+            	//save
+            }
+            
         }
 
     }
+    
+    /**
+     * Check if user really wants to overwrite an existing file;
+     * @param file
+     * @return
+     */
+    private Boolean confirmSave(File file) {
+    	
+    	if (file.exists()) {
+    		
+    		int val = JOptionPane.showConfirmDialog(desktop, "Wollen Sie die bestehende Datei überschreiben?", "Datei exitiert bereits.", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);  
+    		
+    		if (val == JOptionPane.OK_OPTION) {
+    			System.out.println(("write!"));
+    			return true;
+    		}
+    		
+    	}
+    	System.out.println(("do not write!"));
+    	return false;
+    	
+    }
+    
+     
 
 }
