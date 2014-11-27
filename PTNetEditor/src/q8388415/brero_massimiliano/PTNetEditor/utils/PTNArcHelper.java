@@ -38,6 +38,8 @@ public class PTNArcHelper {
 	}
 	
 	/**
+	 * Sets start and end points right in the middle of the source and target node.
+	 * If you want to change that, this is the place to change.
 	 * 
 	 * @param location
 	 * @return Dimension now in the center of our NodeView
@@ -74,6 +76,13 @@ public class PTNArcHelper {
 		
 	}
 	
+	/**
+	 * Check if there's already such an arc with identical start and end points.
+	 * 
+	 * @param start
+	 * @param end
+	 * @return
+	 */
 	public Boolean isAlreadyOnDesktop(Point start, Point end) {
 		Hashtable<String, ArcView> arcViews = desktop.getArcViews();
 		Iterator<Map.Entry<String, ArcView>> it = arcViews.entrySet().iterator();
