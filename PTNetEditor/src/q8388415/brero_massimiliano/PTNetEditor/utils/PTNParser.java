@@ -102,7 +102,7 @@ public class PTNParser extends PNMLParser {
 
     @Override
     /**
-     * If no doe with the given id was found we choose to throw an error,
+     * If no node with the given id was found we choose to throw an error,
      * because something definitely went wrong.
      */
     public void setPosition(final String id, final String x, final String y) {

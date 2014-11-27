@@ -52,15 +52,18 @@ public class PTNMenu extends JMenuBar {
         JMenu menu = new JMenu("Bearbeiten");
         menu.setMnemonic('B');
         JMenuItem item1 = new JMenuItem("Markierung aufheben");
-        JMenuItem item2 = new JMenuItem("Markierte Knoten löschen");
+        JMenuItem item2 = new JMenuItem("Markierte Knoten lÃ¶schen");
         JMenuItem item3 = new JMenuItem("Neuer Knoten");
-        JMenuItem item4 = new JMenuItem("Desktop löschen");
+        JMenuItem item4 = new JMenuItem("Desktop lÃ¶schen");
 
         // add listeners
+        item1.setIcon(new ImageIcon("icons/unselect.png"));
         item1.addActionListener(appControl);
-
+        
+        item2.setIcon(new ImageIcon("icons/remove-node.png"));
         item2.addActionListener(appControl);
 
+        item3.setIcon(new ImageIcon("icons/add-node.png"));
         item3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,6 +71,7 @@ public class PTNMenu extends JMenuBar {
             }
         });
         
+        item4.setIcon(new ImageIcon("icons/broom-desktop.png"));
         item4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -92,10 +96,10 @@ public class PTNMenu extends JMenuBar {
         final PTNFileController fileListener = new PTNFileController(desktop, net);
         JMenu menu = new JMenu("Datei");
         menu.setMnemonic('D');
-        JMenuItem item1 = new JMenuItem("Datei öffnen");
+        JMenuItem item1 = new JMenuItem("Datei Ã¶ffnen");
         JMenuItem item2 = new JMenuItem("Datei speichern");
 
-        item1.setIcon(new ImageIcon("icons/open-document.png"));
+        item1.setIcon(new ImageIcon("icons/open-file.png"));
         item1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -103,7 +107,7 @@ public class PTNMenu extends JMenuBar {
             }
         });
         
-        item2.setIcon(new ImageIcon("icons/open-document.png"));
+        item2.setIcon(new ImageIcon("icons/save-file.png"));
         item2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -123,8 +127,11 @@ public class PTNMenu extends JMenuBar {
         JMenu menu = new JMenu("Modus");
         menu.setMnemonic('M');
         JMenuItem item1 = new JRadioButtonMenuItem("Editor Modus");
+        
         item1.setSelected(true);
+        item1.setIcon(new ImageIcon("icons/editor-mode.png"));
         JMenuItem item2 = new JRadioButtonMenuItem("Simulationsmodus");
+        item2.setIcon(new ImageIcon("icons/sim-mode.png"));
 
         menu.add(item1);
         menu.add(item2);

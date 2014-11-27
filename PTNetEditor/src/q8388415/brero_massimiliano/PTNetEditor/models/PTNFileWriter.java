@@ -40,10 +40,8 @@ public class PTNFileWriter {
 	    PTNArc arc;
 	    HashMap<String, PTNNode> nodes = net.getNodes();
 	    HashMap<String, PTNArc> arcs = net.getArcs();
-	    Iterator<Map.Entry<String, PTNNode>> it_n = nodes.entrySet()
-		    .iterator();
-	    Iterator<Map.Entry<String, PTNArc>> it_a = arcs.entrySet()
-		    .iterator();
+	    Iterator<Map.Entry<String, PTNNode>> it_n = nodes.entrySet().iterator();
+	    Iterator<Map.Entry<String, PTNArc>> it_a = arcs.entrySet().iterator();
 
 	    while (it_n.hasNext()) {
 		node = it_n.next().getValue();
@@ -53,13 +51,13 @@ public class PTNFileWriter {
 		 */
 		if (node.getType() == PTNNodeTypes.place) {
 		    pnmlWriter.addPlace(node.getId(), node.getName(),
-			    String.valueOf(node.getLocation().getX()),
-			    String.valueOf(node.getLocation().getY()),
+			    String.valueOf(node.getLocation().x),
+			    String.valueOf(node.getLocation().y),
 			    String.valueOf(((PTNPlace) node).getToken()));
-		} else if (node.getType() == PTNNodeTypes.place) {
+		} else if (node.getType() == PTNNodeTypes.transition) {
 		    pnmlWriter.addTransition(node.getId(), node.getName(),
-			    String.valueOf(node.getLocation().getX()),
-			    String.valueOf(node.getLocation().getY()));
+			    String.valueOf(node.getLocation().x),
+			    String.valueOf(node.getLocation().y));
 		} else {
 		    // add further node types
 		}

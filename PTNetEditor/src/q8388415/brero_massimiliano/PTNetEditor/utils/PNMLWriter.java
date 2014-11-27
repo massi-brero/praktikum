@@ -68,7 +68,6 @@ public final class PNMLWriter {
      */
     public PNMLWriter(final File pnml) {
         super();
-
         pnmlDatei = pnml;
     }
 
@@ -77,6 +76,7 @@ public final class PNMLWriter {
      * XML Writer für diese Datei.
      */
     public void startXMLDocument() {
+	System.out.println(pnmlDatei);
         try {
             FileOutputStream fos = new FileOutputStream(pnmlDatei);
             XMLOutputFactory factory = XMLOutputFactory.newInstance();

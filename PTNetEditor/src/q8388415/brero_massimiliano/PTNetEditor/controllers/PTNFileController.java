@@ -108,7 +108,7 @@ public class PTNFileController implements PTNIFileListener {
 
 	PTNFileChooser fileDialog = new PTNFileChooser(
 		lastOpenedFile.getParent());
-	int val = fileDialog.showDialog(desktop, "Netz-Datei wählen");
+	int val = fileDialog.showDialog(desktop, "Netz-Datei wÃ¤hlen");
 
 	if (0 == val) {
 	    lastOpenedFile = fileDialog.getSelectedFile();
@@ -133,7 +133,7 @@ public class PTNFileController implements PTNIFileListener {
 	    //
 	    if (null != lastSavedFile) {
 		this.correctPNMLExtension(lastSavedFile);
-		System.out.println(lastSavedFile.getAbsolutePath());
+		//System.out.println(lastSavedFile.getAbsolutePath());
 		if (confirmSave(lastSavedFile)) {
 		    PTNFileWriter writeModel = new PTNFileWriter(net);
 		    writeModel.writePNMLFile(lastSavedFile);
@@ -156,8 +156,7 @@ public class PTNFileController implements PTNIFileListener {
 	filePath.ensureCapacity(filePath.length() + pnmlExtension.length());
 	
 	if (-1 == filePath.lastIndexOf(".pnml")) {
-	    
-	    int index = -1 == filePath.lastIndexOf(".") ? filePath.length()-1 : filePath.lastIndexOf(".") ;
+	    int index = -1 == filePath.lastIndexOf(".") ? filePath.length() : filePath.lastIndexOf(".") ;
 	    lastSavedFile = new File(filePath.substring(0, index) + pnmlExtension);
 	}
 	
@@ -174,7 +173,7 @@ public class PTNFileController implements PTNIFileListener {
 	if (file.exists()) {
 
 	    int val = JOptionPane.showConfirmDialog(desktop,
-		    "Wollen Sie die bestehende Datei überschreiben?",
+		    "Wollen Sie die bestehende Datei Ã¼berschreiben?",
 		    "Datei exitiert bereits.", JOptionPane.YES_NO_OPTION,
 		    JOptionPane.WARNING_MESSAGE);
 
@@ -184,7 +183,7 @@ public class PTNFileController implements PTNIFileListener {
 
 	}
 
-	return false;
+	return true;
 
     }
 
