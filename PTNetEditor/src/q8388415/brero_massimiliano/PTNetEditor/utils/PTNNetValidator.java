@@ -25,7 +25,6 @@ public class PTNNetValidator {
            isValid = false;
         }
         
-        System.out.println(isValid);
         return isValid;
 
     }

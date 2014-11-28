@@ -8,11 +8,15 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNWriteException;
+
 /**
  * Diese Klasse implementiert eine einfache XML Ausgabe für
  * PNML Dateien.
  */
 public final class PNMLWriter {
+	
+	private String errorMsg = "Die Datei konnte nicht geschrieben werden";
 
     /**
      * Mit dieser Main Methode kann der PNMLWriter zum Testen
@@ -22,8 +26,9 @@ public final class PNMLWriter {
      * 
      * @param args
      *      Die Konsolen Parameter, mit denen das Programm aufgerufen wird.
+     * @throws PTNWriteException 
      */
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws PTNWriteException {
         if (args.length > 0) {
             File pnmlDatei = new File(args[0]);
             PNMLWriter pnmlWriter = new PNMLWriter(pnmlDatei);
@@ -74,8 +79,9 @@ public final class PNMLWriter {
     /**
      * Diese Methode beginnt ein neues XML Dokument und initialisiert den
      * XML Writer für diese Datei.
+     * @throws PTNWriteException 
      */
-    public void startXMLDocument() {
+    public void startXMLDocument() throws PTNWriteException {
 	System.out.println(pnmlDatei);
         try {
             FileOutputStream fos = new FileOutputStream(pnmlDatei);
@@ -89,16 +95,19 @@ public final class PNMLWriter {
             System.err.println("Die Datei " + pnmlDatei.getAbsolutePath()
                     + " kann nicht geschrieben werden! " + e.getMessage());
             e.printStackTrace();
+        	throw new PTNWriteException(errorMsg);
         } catch (XMLStreamException e) {
             System.err.println("XML Fehler: " + e.getMessage());
             e.printStackTrace();
+        	throw new PTNWriteException(errorMsg + " Es gab einen allgemeinen XML-Fehler");
         }
     }
 
     /**
      * Diese Methode beendet das Schreiben eines Petrinetzes als XML Datei.
+     * @throws PTNWriteException 
      */
-    public void finishXMLDocument() {
+    public void finishXMLDocument() throws PTNWriteException {
         if (writer != null) {
             try {
                 writer.writeEndElement();
@@ -108,6 +117,7 @@ public final class PNMLWriter {
             } catch (XMLStreamException e) {
                 System.err.println("XML Fehler: " + e.getMessage());
                 e.printStackTrace();
+                throw new PTNWriteException(errorMsg + " Es gab einen allgemeinen XML-Fehler");
             }
         } else {
             System.err.println("Das Dokument wurde noch nicht gestartet!");
@@ -126,9 +136,10 @@ public final class PNMLWriter {
      *      x Position der Transition
      * @param yPosition
      *      y Position der Transition
+     * @throws PTNWriteException 
      */
     public void addTransition(final String id, final String label,
-            final String xPosition, final String yPosition) {
+            final String xPosition, final String yPosition) throws PTNWriteException {
         if (writer != null) {
             try {
                 writer.writeStartElement("", "transition", "");
@@ -154,6 +165,7 @@ public final class PNMLWriter {
                                 + " konnte nicht geschrieben werden! "
                                 + e.getMessage());
                 e.printStackTrace();
+                throw new PTNWriteException(errorMsg + " Eine Transition konnte nicht geschrieben werden");
             }
 
         } else {
@@ -175,10 +187,11 @@ public final class PNMLWriter {
      *      y Position der Stelle
      * @param initialMarking
      *      Anfangsmarkierung der Stelle
+     * @throws PTNWriteException 
      */
     public void addPlace(final String id, final String label,
             final String xPosition, final String yPosition,
-            final String initialMarking) {
+            final String initialMarking) throws PTNWriteException {
         if (writer != null) {
             try {
                 writer.writeStartElement("", "place", "");
@@ -212,6 +225,7 @@ public final class PNMLWriter {
                                 + " konnte nicht geschrieben werden! "
                                 + e.getMessage());
                 e.printStackTrace();
+                throw new PTNWriteException(errorMsg + " Eine Stelle konnte nicht geschrieben werden");
             }
 
         } else {
@@ -229,8 +243,9 @@ public final class PNMLWriter {
      *      Indentifikationstext des Startelements der Kante
      * @param target
      *      Indentifikationstext der Endelements der Kante
+     * @throws PTNWriteException 
      */
-    public void addArc(final String id, final String source, final String target) {
+    public void addArc(final String id, final String source, final String target) throws PTNWriteException {
         if (writer != null) {
             try {
                 writer.writeStartElement("", "arc", "");
@@ -244,6 +259,7 @@ public final class PNMLWriter {
                                 + " konnte nicht geschrieben werden! "
                                 + e.getMessage());
                 e.printStackTrace();
+                throw new PTNWriteException(errorMsg + " Eine Kante konnte nicht geschrieben werden");
             }
 
         } else {

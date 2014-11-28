@@ -316,7 +316,7 @@ public class PTNDesktop extends JLayeredPane {
                 NodeView node = (NodeView) it.next();
                 if (node.isSelected()) {
                     nodesToRemove.add(node);
-                    // TODO richtig löschen!?
+                    // TODO richtig lï¿½schen!?
                     node.setVisible(false);
                 }
             }
@@ -419,7 +419,7 @@ public class PTNDesktop extends JLayeredPane {
         HashMap<String, PTNArc> arcsToDelete = popUp.sendArcsToDelete();
 
         if (0 < arcsToDelete.size())
-            if (0 == (JOptionPane.showConfirmDialog(this, "Wollen Sie die Kanten wirklich löschen?", "Löschen?", JOptionPane.WARNING_MESSAGE)))
+            if (0 == (JOptionPane.showConfirmDialog(this, "Wollen Sie die Kanten wirklich lÃ¶schen?", "LÃ¶schen", JOptionPane.WARNING_MESSAGE)))
                 netController.removeArcsFromNetAndDesktop(arcsToDelete);
 
     }

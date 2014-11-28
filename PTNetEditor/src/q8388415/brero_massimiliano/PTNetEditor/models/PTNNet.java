@@ -196,9 +196,6 @@ public class PTNNet {
 	private void updateActivation(PTNArc arc, PTNTransition transition) {
 
 		PTNPlace place = (PTNPlace)arc.getSource();
-		System.out.println("tr:" + transition.isActivated());
-		System.out.println("tr:" + this.getPredecessors(transition.getId()).size());
-		System.out.println("tr:" + place.getToken());
 		
 		if (transition.isActivated()) {
 			

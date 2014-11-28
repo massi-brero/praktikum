@@ -12,8 +12,8 @@ import java.util.Iterator;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
-import q8388415.brero_massimiliano.PTNetEditor.utils.PTNArcHelper;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PTNMenu;
@@ -204,7 +204,8 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 				desktop.deselectNodes();
 				PTNAppController.deselectAll = false;
 			} else if (PTNAppController.deleteSelection) {
-				desktop.deleteSelected();
+				if (JOptionPane.OK_OPTION == (JOptionPane.showConfirmDialog(desktop, "Wollen Sie die Knoten wirklich löschen?", "Löschen", JOptionPane.WARNING_MESSAGE)))
+					desktop.deleteSelected();
 				PTNAppController.deleteSelection = false;
 			}
 			

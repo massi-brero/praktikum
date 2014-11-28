@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -124,15 +125,20 @@ public class PTNMenu extends JMenuBar {
 
     private JMenu initModusMenu() {
 
+    	ButtonGroup group = new ButtonGroup();
         JMenu menu = new JMenu("Modus");
         menu.setMnemonic('M');
-        JMenuItem item1 = new JRadioButtonMenuItem("Editor Modus");
+        JMenuItem item1 = new JRadioButtonMenuItem("Editor");
         
         item1.setSelected(true);
         item1.setIcon(new ImageIcon("icons/editor-mode.png"));
-        JMenuItem item2 = new JRadioButtonMenuItem("Simulationsmodus");
+        item1.addActionListener(appControl);
+        JMenuItem item2 = new JRadioButtonMenuItem("Simulation");
         item2.setIcon(new ImageIcon("icons/sim-mode.png"));
+        item2.addActionListener(appControl);
 
+        group.add(item1);
+        group.add(item2);
         menu.add(item1);
         menu.add(item2);
 

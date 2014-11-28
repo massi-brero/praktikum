@@ -31,7 +31,7 @@ public class PTNFileFilter extends javax.swing.filechooser.FileFilter {
 
     @Override
     public String getDescription() {
-        return "Allowed types for importing a net.";
+        return "Zulässige Dateitypen";
     }
 
 }
