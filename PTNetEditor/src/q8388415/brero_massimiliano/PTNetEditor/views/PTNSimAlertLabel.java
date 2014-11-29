@@ -2,10 +2,8 @@ package q8388415.brero_massimiliano.PTNetEditor.views;
 
 import java.awt.Dimension;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 public class PTNSimAlertLabel extends JLabel {
 	

@@ -12,11 +12,22 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
 /**
  * This class features some basic state variables that can be checked by other
  * components.
+ * For the drawing process static variables are used. Because: 
+ * 1. The app controller does not have to know any other class instances. 
+ * 2. We can use them in Threads an do not have to set up a listener for each event
+ * (select, draw etc.).
+ * 3. Only the desktop controller needs to know about those variables.
+ * 
+ * But we will use listener for changing between editor and simulation mode. 
+ * Here more classes are involved and we do not want them to meddle with static variables.
+ * 
+ * The AppController 
  * 
  * @author Laptop
  * 
  */
 public class PTNAppController implements KeyListener, PTNIScaleListener {
+
 
 	public static boolean isDrawing = false;
 	public static boolean deleteSelection = false;
@@ -139,7 +150,8 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 	}
 
 	/**
-	 * Notify all listeners that it's time to start the simulation mode preparations.
+	 * Notify all listeners that it's time to start the simulation mode
+	 * preparations.
 	 */
 	private void startSimulationMode() {
 
@@ -148,12 +160,12 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 		while (it.hasNext()) {
 			it.next().startSimulationMode();
 		}
-		
 
 	}
 
 	/**
-	 * Notify all listeners that it's time to start the editor mode preparations..
+	 * Notify all listeners that it's time to start the editor mode
+	 * preparations..
 	 */
 	private void startEditorMode() {
 		Iterator<PTNIModeListener> it = modeListeners.iterator();
@@ -161,7 +173,7 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 		while (it.hasNext()) {
 			it.next().startEditorMode();
 		}
-		
+
 	}
 
 }
