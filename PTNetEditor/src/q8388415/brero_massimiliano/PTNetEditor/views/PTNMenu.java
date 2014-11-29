@@ -19,131 +19,178 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 public class PTNMenu extends JMenuBar {
 
-    private JMenu standard;
-    private PTNDesktop desktop;
-    private PTNNet net;
-    private PTNAppController appControl;
-    public static final int HEIGHT = 20;
-    public static final int WIDTH = 500;
+	private PTNDesktop desktop;
+	private PTNNet net;
+	private PTNAppController appControl;
+	public static final int HEIGHT = 20;
+	public static final int WIDTH = 500;
+	private JMenu standardMenu;
+	private JMenu fileMenu;
+	private JMenu modusMenu;
 
-    public PTNMenu(PTNDesktop desktop, PTNAppController appC, PTNNet net) {
+	public PTNMenu(PTNDesktop desktop, PTNAppController appC, PTNNet net) {
 
-        this.desktop = desktop;
-        this.net = net;
-        this.appControl = appC;
-        this.init();
+		this.desktop = desktop;
+		this.net = net;
+		this.appControl = appC;
+		this.init();
 
-    }
+	}
 
-    private void init() {
+	private void init() {
 
-        JMenu standard = this.initStandardMenu();
-        JMenu file = this.initFileMenu();
-        JMenu modus = this.initModusMenu();
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		standardMenu = this.initStandardMenu();
+		fileMenu = this.initFileMenu();
+		modusMenu = this.initModusMenu();
+		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
-        this.add(standard);
-        this.add(file);
-        this.add(modus);
+		this.add(standardMenu);
+		this.add(fileMenu);
+		this.add(modusMenu);
 
-    }
+	}
 
-    private JMenu initStandardMenu() {
+	private JMenu initStandardMenu() {
 
-        JMenu menu = new JMenu("Bearbeiten");
-        menu.setMnemonic('B');
-        JMenuItem item1 = new JMenuItem("Markierung aufheben");
-        JMenuItem item2 = new JMenuItem("Markierte Knoten löschen");
-        JMenuItem item3 = new JMenuItem("Neuer Knoten");
-        JMenuItem item4 = new JMenuItem("Desktop löschen");
+		JMenu menu = new JMenu("Bearbeiten");
+		menu.setMnemonic('B');
+		JMenuItem item1 = new JMenuItem("Markierung aufheben");
+		JMenuItem item2 = new JMenuItem("Markierte Knoten löschen");
+		JMenuItem item3 = new JMenuItem("Neuer Knoten");
+		JMenuItem item4 = new JMenuItem("Desktop löschen");
 
-        // add listeners
-        item1.setIcon(new ImageIcon("icons/unselect.png"));
-        item1.addActionListener(appControl);
-        
-        item2.setIcon(new ImageIcon("icons/remove-node.png"));
-        item2.addActionListener(appControl);
+		// add listeners
+		item1.setIcon(new ImageIcon("icons/unselect.png"));
+		item1.addActionListener(appControl);
 
-        item3.setIcon(new ImageIcon("icons/add-node.png"));
-        item3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                desktop.callNewNodeDialog();
-            }
-        });
-        
-        item4.setIcon(new ImageIcon("icons/broom-desktop.png"));
-        item4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                net.reset();
-                PlaceView.resetSize();
-                TransitionView.resetSize();
-                desktop.init();
-            }
-        });
+		item2.setIcon(new ImageIcon("icons/remove-node.png"));
+		item2.addActionListener(appControl);
 
-        menu.add(item1);
-        menu.add(item2);
-        menu.add(item3);
-        menu.addSeparator();
-        menu.add(item4);
+		item3.setIcon(new ImageIcon("icons/add-node.png"));
+		item3.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				desktop.callNewNodeDialog();
+			}
+		});
 
-        return menu;
+		item4.setIcon(new ImageIcon("icons/broom-desktop.png"));
+		item4.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				net.reset();
+				PlaceView.resetSize();
+				TransitionView.resetSize();
+				desktop.init();
+			}
+		});
 
-    }
+		menu.add(item1);
+		menu.add(item2);
+		menu.add(item3);
+		menu.addSeparator();
+		menu.add(item4);
 
-    private JMenu initFileMenu() {
-        final PTNFileController fileListener = new PTNFileController(desktop, net);
-        JMenu menu = new JMenu("Datei");
-        menu.setMnemonic('D');
-        JMenuItem item1 = new JMenuItem("Datei öffnen");
-        JMenuItem item2 = new JMenuItem("Datei speichern");
+		return menu;
 
-        item1.setIcon(new ImageIcon("icons/open-file.png"));
-        item1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                fileListener.readFromFile(net);
-            }
-        });
-        
-        item2.setIcon(new ImageIcon("icons/save-file.png"));
-        item2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                fileListener.writeToFile(net);
-            }
-        });
+	}
 
-        menu.add(item1);
-        menu.add(item2);
+	private JMenu initFileMenu() {
+		final PTNFileController fileListener = new PTNFileController(desktop,
+				net);
+		JMenu menu = new JMenu("Datei");
+		menu.setMnemonic('D');
+		JMenuItem item1 = new JMenuItem("Datei öffnen");
+		JMenuItem item2 = new JMenuItem("Datei speichern");
 
-        return menu;
+		item1.setIcon(new ImageIcon("icons/open-file.png"));
+		item1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fileListener.readFromFile(net);
+			}
+		});
 
-    }
+		item2.setIcon(new ImageIcon("icons/save-file.png"));
+		item2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fileListener.writeToFile(net);
+			}
+		});
 
-    private JMenu initModusMenu() {
+		menu.add(item1);
+		menu.add(item2);
 
-    	ButtonGroup group = new ButtonGroup();
-        JMenu menu = new JMenu("Modus");
-        menu.setMnemonic('M');
-        JMenuItem item1 = new JRadioButtonMenuItem("Editor");
-        
-        item1.setSelected(true);
-        item1.setIcon(new ImageIcon("icons/editor-mode.png"));
-        item1.addActionListener(appControl);
-        JMenuItem item2 = new JRadioButtonMenuItem("Simulation");
-        item2.setIcon(new ImageIcon("icons/sim-mode.png"));
-        item2.addActionListener(appControl);
+		return menu;
 
-        group.add(item1);
-        group.add(item2);
-        menu.add(item1);
-        menu.add(item2);
+	}
 
-        return menu;
+	private JMenu initModusMenu() {
 
-    }
+		ButtonGroup group = new ButtonGroup();
+		JMenu menu = new JMenu("Modus");
+		menu.setMnemonic('M');
+		JMenuItem item1 = new JRadioButtonMenuItem("Editor");
+
+		item1.setSelected(true);
+		item1.setIcon(new ImageIcon("icons/editor-mode.png"));
+		item1.addActionListener(appControl);
+		JMenuItem item2 = new JRadioButtonMenuItem("Simulation");
+		item2.setIcon(new ImageIcon("icons/sim-mode.png"));
+		item2.addActionListener(appControl);
+
+		group.add(item1);
+		group.add(item2);
+		menu.add(item1);
+		menu.add(item2);
+
+		return menu;
+
+	}
+
+	/**
+	 * Makes the standard menu visible.
+	 */
+	public void switchOnStandardMenu() {
+		standardMenu.setVisible(true);
+	}
+
+	/**
+	 * Removes the standard menu. This way we can ensure that the net is not
+	 * changed in an modus we do not want it to be manipulated.
+	 */
+	public void switchOffStandardMenu() {
+		standardMenu.setVisible(false);
+	}
+
+	/**
+	 * Makes the file menu visible.
+	 */
+	public void switchOnFileMenu() {
+		fileMenu.setVisible(true);
+	}
+
+	/**
+	 * Removes the file menu. This way we can ensure that the net is not changed
+	 * by loading a new one in an modus we do not want it to be manipulated.
+	 */
+	public void switchOffFileMenu() {
+		fileMenu.setVisible(false);
+	}
+
+	/**
+	 * Makes the modus menu visible.
+	 */
+	public void switchOnModusMenu() {
+		modusMenu.setVisible(true);
+	}
+
+	/**
+	 * Turns off the modus menu.
+	 */
+	public void switchOffModusMenu() {
+		modusMenu.setVisible(false);
+	}
 
 }

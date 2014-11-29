@@ -1,7 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.desktop;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
@@ -9,8 +8,6 @@ import javax.swing.JPanel;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationException;
-import q8388415.brero_massimiliano.PTNetEditor.types.PTNIModeListener;
-import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
@@ -25,7 +22,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.partials.PTNEnlargementPane
  * @author Laptop
  *
  */
-public class PTNControlPanel extends JPanel implements PTNIModeListener {
+public class PTNControlPanel extends JPanel {
 
 	private JPanel controllerPanel;
 	private PTNDesktop desktop = null;
@@ -119,19 +116,6 @@ public class PTNControlPanel extends JPanel implements PTNIModeListener {
 		} else {
 			throw new PTNInitializationException();
 		}
-	}
-
-	@Override
-	public void startSimulationMode() {
-		
-		this.controllerPanel.setVisible(false);
-		this.setBackground(Color.RED);
-		
-	}
-
-	@Override
-	public void startEditorMode() {
-
 	}
 
 }

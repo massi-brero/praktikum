@@ -19,6 +19,7 @@ import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNIModeListener;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
@@ -43,7 +44,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.NewNodeWindow;
  * @author q8388415
  *
  */
-public class PTNDesktop extends JLayeredPane {
+public class PTNDesktop extends JLayeredPane implements PTNIModeListener {
 
     private final int DEFAULT_HEIGHT = 300;
     private final int DEFAULT_WIDTH = 600;
@@ -423,5 +424,16 @@ public class PTNDesktop extends JLayeredPane {
                 netController.removeArcsFromNetAndDesktop(arcsToDelete);
 
     }
+
+	@Override
+	public void startSimulationMode() {
+		
+	}
+
+	@Override
+	public void startEditorMode() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

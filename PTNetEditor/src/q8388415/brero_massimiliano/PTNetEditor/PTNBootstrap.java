@@ -48,7 +48,7 @@ public class PTNBootstrap {
         /**
          * Initialize controllers for drawing and basic control operations.
          */
-        PTNAppController appControl = new PTNAppController();
+        final PTNAppController appControl = new PTNAppController();
         final PTNDesktop desktop = new PTNDesktop(appControl, net);
         final PTNControlPanel controlPanel = PTNControlPanel.getInstance();
         controlPanel.initialize(desktop, appControl);
@@ -58,7 +58,9 @@ public class PTNBootstrap {
         
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame(desktop, controlPanel, menu);
+            	MainFrame mainframe = new MainFrame(desktop, controlPanel, menu);
+            	appControl.addSimulationListener(mainframe);
+            	appControl.addSimulationListener(desktop);
             }
         });
 
