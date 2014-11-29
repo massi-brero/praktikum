@@ -92,6 +92,7 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 			break;
 		case "Editor":
 			this.startEditorMode();
+			break;
 		case "Simulation":
 			this.startSimulationMode();
 			break;
@@ -137,6 +138,9 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 		modeListeners.remove(listener);
 	}
 
+	/**
+	 * Notify all listeners that it's time to start the simulation mode preparations.
+	 */
 	private void startSimulationMode() {
 
 		Iterator<PTNIModeListener> it = modeListeners.iterator();
@@ -144,15 +148,20 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 		while (it.hasNext()) {
 			it.next().startSimulationMode();
 		}
+		
 
 	}
 
+	/**
+	 * Notify all listeners that it's time to start the editor mode preparations..
+	 */
 	private void startEditorMode() {
 		Iterator<PTNIModeListener> it = modeListeners.iterator();
 
 		while (it.hasNext()) {
 			it.next().startEditorMode();
 		}
+		
 	}
 
 }
