@@ -70,7 +70,7 @@ public class MainFrame extends JFrame implements PTNIModeListener {
 		menu.setBackground(Color.RED);
 		menu.add(simLabel);
 		
-		menu.switchOffStandardMenu();
+		menu.switchOffNodeMenu();
 		menu.switchOffFileMenu();
 
 	}
@@ -80,12 +80,12 @@ public class MainFrame extends JFrame implements PTNIModeListener {
 	 */
 	@Override
 	public void startEditorMode() {
-		System.out.println("edit");
+
 		controlPanel.setVisible(true);
 		
 		menu.setBackground(null);
 		menu.remove(simLabel);
-		menu.switchOnStandardMenu();
+		menu.switchOnNodeMenu();
 		menu.switchOnFileMenu();
 		
 

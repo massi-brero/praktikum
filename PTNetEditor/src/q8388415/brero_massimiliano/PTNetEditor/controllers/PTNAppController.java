@@ -13,10 +13,10 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
  * This class features some basic state variables that can be checked by other
  * components.
  * For the drawing process static variables are used. Because: 
- * 1. The app controller does not have to know any other class instances. 
- * 2. We can use them in Threads an do not have to set up a listener for each event
+ * 1. They're kind of global variables 
+ * 2. The application controller does not have to know any other class instances and vice versa. 
+ * 3. We can use them in Threads an do not have to set up a listener for each event
  * (select, draw etc.).
- * 3. Only the desktop controller needs to know about those variables.
  * 
  * But we will use listener for changing between editor and simulation mode. 
  * Here more classes are involved and we do not want them to meddle with static variables.
@@ -29,7 +29,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
 public class PTNAppController implements KeyListener, PTNIScaleListener {
 
 
-	public static boolean isDrawing = false;
+	public static boolean moveNodes = false;
 	public static boolean deleteSelection = false;
 	public static boolean deselectAll = false;
 	public static boolean selectMode = false;
@@ -45,7 +45,7 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_CONTROL:
-			setDrawLine(true);
+			setMoveNodes(true);
 			break;
 		case KeyEvent.VK_SHIFT:
 			setSelectMode(true);
@@ -60,7 +60,7 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_CONTROL:
-			setDrawLine(false);
+			setMoveNodes(false);
 			break;
 		case KeyEvent.VK_SHIFT:
 			setSelectMode(false);
@@ -70,9 +70,9 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 		}
 	}
 
-	public static void setDrawLine(boolean b) {
+	public static void setMoveNodes(boolean b) {
 
-		PTNAppController.isDrawing = b;
+		PTNAppController.moveNodes = b;
 
 	}
 
@@ -130,16 +130,6 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 	public void decreaseScale() {
 		redrawArcs = true;
 	}
-
-	/**
-	 * Works like a mutex variable for our two modes
-	 */
-	// private void updateMode() {
-	// PTNAppController.editMode = !PTNAppController.editMode;
-	// PTNAppController.simMode = !PTNAppController.simMode;
-	// System.out.println(PTNAppController.editMode);
-	// System.out.println(PTNAppController.simMode);
-	// }
 
 	public void addSimulationListener(PTNIModeListener listener) {
 		modeListeners.add(listener);

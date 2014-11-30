@@ -25,11 +25,11 @@ import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
-import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.DeleteArcWindow;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.NewArcWindow;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.NewNodeWindow;
+import q8388415.brero_massimiliano.PTNetEditor.views.windows.ResizeDesktopWindow;
 
 /**
  * When we set up the desktop we'll translate our net structure into node views.
@@ -129,22 +129,6 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener {
     @Override
     public void setSize(Dimension size) {
         this.setSize((int)size.getWidth(), (int)size.getHeight());
-    }
-
-    @Override
-    public void setSize(int width, int height) {
-        if (null != PlaceView.currentSize && null != TransitionView.currentSize) {
-
-            double x_padding = PlaceView.currentSize.getWidth() > TransitionView.currentSize.getWidth() ? 
-                                    PlaceView.currentSize.getWidth() : TransitionView.currentSize.getWidth();
-
-            double y_padding = PlaceView.currentSize.getHeight() > TransitionView.currentSize.getHeight() ? 
-                                    PlaceView.currentSize.getHeight() : TransitionView.currentSize.getHeight();
-
-            super.setSize((int) (width + x_padding), (int) (height + y_padding));
-        } else {
-            super.setSize(width, height);
-        }
     }
 
     /**
@@ -369,7 +353,6 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener {
         popUp.setVisible(true);
 
         String id = popUp.sendId();
-        
         if (null != id)
             netController.addNewArcFromDialog(id, source, target);
 
@@ -402,6 +385,26 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener {
                 this.repaint();
             }
             
+        }
+
+    }
+    
+    public void callResizeDesktopDialog() {
+
+        ResizeDesktopWindow popUp = new ResizeDesktopWindow(this.getPreferredSize());
+        popUp.setModal(true);
+        popUp.setVisible(true);
+
+        Dimension newSize = popUp.sendSize();
+        
+        /**
+         * We just allow a unique id per node regardless if it' a place or a
+         * transition
+         */
+        if (null != newSize) {
+
+        	this.setPreferredSize(newSize);
+        	this.revalidate();
         }
 
     }

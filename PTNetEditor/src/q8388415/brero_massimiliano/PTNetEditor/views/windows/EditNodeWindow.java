@@ -27,6 +27,7 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	
 	public EditNodeWindow(NodeView node) {
 
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		panel = new JPanel();
 		panel.setSize(100, 200);
 		panel.setLayout(new GridLayout(0,2));
@@ -52,7 +53,7 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 		
 		if (node instanceof PlaceView) {
 			String tokenNumber = this.getSourceNode().getText();
-			tokenNumber = tokenNumber == PlaceView.DOT_SIGN ? "1" : 
+			tokenNumber = tokenNumber == ((PlaceView)node).getDOTSign() ? "1" : 
 							(tokenNumber == "" ? "0" : this.getSourceNode().getText());
 			token = new JTextField(tokenNumber, 20);
 			this.addToPanel(new JLabel("Tokens"));

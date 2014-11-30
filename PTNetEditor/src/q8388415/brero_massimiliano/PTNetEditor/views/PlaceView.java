@@ -7,14 +7,14 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
 public class PlaceView extends NodeView {
 
-    final static String sourceIconStandard = "circle.png";
-    final static String sourceIconSelected = "circle_selected.png";
-    final static Dimension DEFAULT_SIZE = new Dimension(70, 70);
+    final private static String sourceIconStandard = "circle.png";
+    final private static String sourceIconSelected = "circle_selected.png";
+    final private static Dimension DEFAULT_SIZE = new Dimension(70, 70);
     private int token = 0;
     // we need a global scale variable e. g. for creating new nodes of this type
-    public static int currentPlaceScale = 1;
-    public static Dimension currentSize = null;
-    public final static String DOT_SIGN = "\u2022";
+    private static int currentPlaceScale = 1;
+    private static Dimension currentSize = null;
+    private final String DOT_SIGN = "\u2022";
 
     public PlaceView(String id, int token) {
         super(id, sourceIconStandard, sourceIconSelected);
@@ -29,10 +29,10 @@ public class PlaceView extends NodeView {
      */
     private void init() {
 
-        this.setSize(PlaceView.DEFAULT_SIZE);
-        currentSize = currentSize == null ? PlaceView.DEFAULT_SIZE : currentSize;
-        if (1 < currentPlaceScale)
-            this.updateSize(currentPlaceScale - 1);
+        this.setSize(DEFAULT_SIZE);
+        PlaceView.currentSize = PlaceView.currentSize == null ? DEFAULT_SIZE : PlaceView.currentSize;
+        if (1 < PlaceView.currentPlaceScale)
+            this.updateSize(PlaceView.currentPlaceScale - 1);
         this.setType(PTNNodeTypes.place);
         nameLabel.setVerticalTextPosition(JLabel.NORTH);
 
@@ -49,8 +49,8 @@ public class PlaceView extends NodeView {
         Font tokenFont = this.getFont();
         this.setFont(new Font(tokenFont.getFontName(), Font.PLAIN, (int) (tokenFont.getSize() + addSize)));
         super.updateSize(factor);
-        currentPlaceScale = scale;
-        currentSize = this.getSize();
+        PlaceView.currentPlaceScale = scale;
+        PlaceView.currentSize = this.getSize();
 
     }
 
@@ -88,8 +88,26 @@ public class PlaceView extends NodeView {
      * @ return void
      */
     public static void resetSize() {
-        currentSize = PlaceView.DEFAULT_SIZE;
-        currentPlaceScale = 1;
+    	PlaceView.currentSize = DEFAULT_SIZE;
+    	PlaceView.currentPlaceScale = 1;
     }
+    
+    /**
+     * 
+     * @return
+     * 		Dot sign as unicode code.
+     */
+    public String getDOTSign() {
+    	return DOT_SIGN;
+    }
+    
+    /**
+     * 
+     * @return
+     * 		Dimension size of this node type.
+     */
+	public static Dimension getCurrentSize() {
+		return currentSize;
+	}
 
 }

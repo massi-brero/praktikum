@@ -1,5 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.utils;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -56,12 +57,12 @@ public class PTNNodeHelper implements ActionListener {
 	
 	public int showErrorPaneIdExists() {
 		return JOptionPane.showConfirmDialog(desktop, "Diese Knoten-ID ist bereits vergeben.", 
-				"Ungültige ID", JOptionPane.WARNING_MESSAGE);
+				"Ungï¿½ltige ID", JOptionPane.WARNING_MESSAGE);
 	}
 	
 	public int showErrorPaneEmptyId() {
-		return JOptionPane.showConfirmDialog(desktop, "Sie müssen eine Knoten-ID mit mind. einem Zeichen eingeben.", 
-				"Ungültige ID", JOptionPane.WARNING_MESSAGE);
+		return JOptionPane.showConfirmDialog(desktop, "Sie mï¿½ssen eine Knoten-ID mit mind. einem Zeichen eingeben.", 
+				"Ungï¿½ltige ID", JOptionPane.WARNING_MESSAGE);
 	}
 	
 	/**
@@ -79,10 +80,10 @@ public class PTNNodeHelper implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		switch (e.getActionCommand()) {
-		case "Attribute ändern":
+		case "Attribute ï¿½ndern":
 			this.handleChangeAttributes();
 			break;
-		case "Kanten löschen":
+		case "Kanten lï¿½schen":
 			this.handleDeleteArcsDialog();
 			break;
 		default:

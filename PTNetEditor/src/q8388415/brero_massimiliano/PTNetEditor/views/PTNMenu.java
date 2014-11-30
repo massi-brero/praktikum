@@ -24,7 +24,8 @@ public class PTNMenu extends JMenuBar {
 	private PTNAppController appControl;
 	public static final int HEIGHT = 20;
 	public static final int WIDTH = 500;
-	private JMenu standardMenu;
+	private JMenu desktopMenu;
+	private JMenu nodeMenu;
 	private JMenu fileMenu;
 	private JMenu modusMenu;
 
@@ -39,15 +40,52 @@ public class PTNMenu extends JMenuBar {
 
 	private void init() {
 
-		standardMenu = this.initStandardMenu();
+		desktopMenu = this.initDesktopMenu();
+		nodeMenu = this.initStandardMenu();
 		fileMenu = this.initFileMenu();
 		modusMenu = this.initModusMenu();
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
-		this.add(standardMenu);
+		this.add(desktopMenu);
+		this.add(nodeMenu);
 		this.add(fileMenu);
 		this.add(modusMenu);
 
+	}
+
+	private JMenu initDesktopMenu() {
+		
+		JMenu menu = new JMenu("Schreibtisch");
+		menu.setMnemonic('D');
+		JMenuItem item1 = new JMenuItem("Schreibtischgr vergrößern");
+		JMenuItem item2 = new JMenuItem("Schreibtisch löschen");
+		
+		
+		item1.setIcon(new ImageIcon("icons/desktop-size.png"));
+		item1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				desktop.callResizeDesktopDialog();
+			}
+		});
+
+		
+		item2.setIcon(new ImageIcon("icons/broom-desktop.png"));
+		item2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				net.reset();
+				PlaceView.resetSize();
+				TransitionView.resetSize();
+				desktop.init();
+			}
+		});
+		
+		
+		menu.add(item1);
+		menu.add(item2);
+		
+		return menu;
 	}
 
 	private JMenu initStandardMenu() {
@@ -57,7 +95,7 @@ public class PTNMenu extends JMenuBar {
 		JMenuItem item1 = new JMenuItem("Markierung aufheben");
 		JMenuItem item2 = new JMenuItem("Markierte Knoten löschen");
 		JMenuItem item3 = new JMenuItem("Neuer Knoten");
-		JMenuItem item4 = new JMenuItem("Desktop löschen");
+
 
 		// add listeners
 		item1.setIcon(new ImageIcon("icons/unselect.png"));
@@ -74,22 +112,9 @@ public class PTNMenu extends JMenuBar {
 			}
 		});
 
-		item4.setIcon(new ImageIcon("icons/broom-desktop.png"));
-		item4.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				net.reset();
-				PlaceView.resetSize();
-				TransitionView.resetSize();
-				desktop.init();
-			}
-		});
-
 		menu.add(item1);
 		menu.add(item2);
 		menu.add(item3);
-		menu.addSeparator();
-		menu.add(item4);
 
 		return menu;
 
@@ -148,20 +173,35 @@ public class PTNMenu extends JMenuBar {
 		return menu;
 
 	}
-
+	
 	/**
 	 * Makes the standard menu visible.
 	 */
-	public void switchOnStandardMenu() {
-		standardMenu.setVisible(true);
+	public void switchOnDesktopMenu() {
+		desktopMenu.setVisible(true);
 	}
 
 	/**
 	 * Removes the standard menu. This way we can ensure that the net is not
 	 * changed in an modus we do not want it to be manipulated.
 	 */
-	public void switchOffStandardMenu() {
-		standardMenu.setVisible(false);
+	public void switchOffDesktopMenu() {
+		desktopMenu.setVisible(false);
+	}
+
+	/**
+	 * Makes the standard menu visible.
+	 */
+	public void switchOnNodeMenu() {
+		nodeMenu.setVisible(true);
+	}
+
+	/**
+	 * Removes the standard menu. This way we can ensure that the net is not
+	 * changed in an modus we do not want it to be manipulated.
+	 */
+	public void switchOffNodeMenu() {
+		nodeMenu.setVisible(false);
 	}
 
 	/**

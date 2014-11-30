@@ -34,7 +34,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	private PTNNodeHelper nodeHelper;
 	private volatile Point oldLocation;
 	static boolean isDragged = false;
-	private Boolean isInSimulationMode;
+	private Boolean isInSimulationMode = false;
 
 	public PTNDesktopController(PTNDesktop dt) {
 
@@ -56,8 +56,8 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		e.translatePoint(source.getX(), source.getY());
 
 		// here we are drawing an arc
-		if (PTNAppController.isDrawing) {
-
+		if (!PTNAppController.moveNodes) {
+			
 			Point start = new Point(source.getLocation().x + source.getWidth() / 2, source.getLocation().y + source.getHeight() / 2);
 			Point end = new Point(e.getX(), e.getY());
 			desktop.updateArcs("", start, end);
@@ -97,13 +97,28 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	/**
 	 * Resets location when moving a node for the moved node
 	 * and all arcs attached to it.
+	 * We do not allow to move the node over the top and left boundaries,
+	 * so no negative coordinates are allowed;
 	 * 
 	 * @param diffX
 	 * @param diffY
 	 * @param node
 	 */
 	private void moveNode(int diffX, int diffY, NodeView node) {
-		node.setLocation(node.getX() + diffX, node.getY() + diffY);
+		int moveToX = node.getX();
+		int moveToY = node.getY();
+		
+		if (node.getLocation().x < 0)
+			moveToX = 0;
+		else 
+			moveToX = moveToX + diffX;
+		
+		if (node.getLocation().y < 0)
+			moveToY = 0;
+		else
+			moveToY = moveToY + diffY;
+			
+		node.setLocation(moveToX, moveToY);
 		desktop.redrawArcs((NodeView) node);
 	}
 
@@ -139,20 +154,19 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) || (source instanceof TransitionView && target instanceof PlaceView);
 
-		if (isDragged) {
+		if (PTNAppController.moveNodes && isDragged) {
 			// Dragging is over so reset moving variables.
 			isDragged = false;
 			oldLocation.setLocation(-1, -1);
-		} else if (PTNAppController.isDrawing && isAllowedTarget) {
+		} else if (isAllowedTarget) {
 			// We can cast safely to node view since we now know that we have a
 			// NodeView type under the mouse pointer.
 			this.drawTempEdge(source, target);
 			desktop.callNewArcDialog(source, (NodeView) target);
-			PTNAppController.isDrawing = false;
-
+			PTNAppController.moveNodes = false;
 		}
 
-		// delete all temporary arcs that may have be lingering on the desktop.
+		// delete all temporary or id-less arcs that may have be lingering on the desktop.
 		desktop.removeArc("");
 		desktop.requestFocus();
 
@@ -160,7 +174,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 	// Draws an arc that is displayed until user inputs an correct id.
 	private void drawTempEdge(JComponent source, JComponent target) {
-
 		Point start = new Point(source.getLocation().x + source.getWidth() / 2, source.getLocation().y + source.getHeight() / 2);
 		Point end = new Point(target.getLocation().x + target.getWidth() / 2, target.getLocation().y + target.getHeight() / 2);
 		desktop.updateArcs("", start, end);

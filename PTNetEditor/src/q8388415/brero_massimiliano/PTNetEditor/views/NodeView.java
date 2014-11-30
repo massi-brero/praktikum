@@ -160,7 +160,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 		//We have to increase height by factor 2 so our node label text will keep its distance from the icon.
 		this.setSize(this.getWidth() + CHANGE_WIDTH * factor, this.getHeight() + CHANGE_HEIGHT * 2 * factor);
 		this.updateLabelTextSize(factor);
-		this.repaint();
+		//this.repaint();
 		
 	}
 	

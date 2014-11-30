@@ -51,9 +51,9 @@ public class PTNArcHelper {
 		Point normalizedLocation = null;
 		
 		if (type == PTNNodeTypes.place)
-			size = PlaceView.currentSize;
+			size = PlaceView.getCurrentSize();
 		else if (type == PTNNodeTypes.transition)
-			size = TransitionView.currentSize;
+			size = TransitionView.getCurrentSize();
 		
 		normalizedLocation = new Point(node.getLocation().x + (int)size.getWidth()/2, 
 		                            node.getLocation().y + (int)size.getHeight()/2);
@@ -104,16 +104,16 @@ public class PTNArcHelper {
 	
 	public int showErrorPaneIdExists() {
 		return JOptionPane.showConfirmDialog(desktop, "Diese ID ist bereits vergeben.", 
-				"Ungültige ID", JOptionPane.WARNING_MESSAGE);
+				"Ungï¿½ltige ID", JOptionPane.WARNING_MESSAGE);
 	}
 	
 	public int showErrorPaneEmptyId() {
-		return JOptionPane.showConfirmDialog(desktop, "Sie müssen eine ID mit mind. einem Zeichen eingeben.", 
-				"Ungültige ID", JOptionPane.WARNING_MESSAGE);
+		return JOptionPane.showConfirmDialog(desktop, "Sie mï¿½ssen eine ID mit mind. einem Zeichen eingeben.", 
+				"Ungï¿½ltige ID", JOptionPane.WARNING_MESSAGE);
 	}
 
 	public void showErrorPaneDoubleArc() {
-		JOptionPane.showConfirmDialog(desktop, "Diese Kante existiert bereits oder sie überlappt sich exakt mit einer existierenden!", 
+		JOptionPane.showConfirmDialog(desktop, "Diese Kante existiert bereits oder sie ï¿½berlappt sich exakt mit einer existierenden!", 
 				"Schon vorhanden.", JOptionPane.PLAIN_MESSAGE);
 		
 	}

@@ -30,7 +30,7 @@ public class NewArcWindow extends JDialog implements ActionListener {
         /**
          * Do nothing because we could still have incorrect data in some of the fields.
          */
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		initializeDialog();
 		add(panel);
@@ -48,7 +48,7 @@ public class NewArcWindow extends JDialog implements ActionListener {
 		this.addToPanel(new JLabel("Kanten ID"));
 		this.addToPanel(idField);
 		
-		JButton okButton = new JButton("OK");
+		JButton okButton = new JButton("Kante anlegen");
 		okButton.addActionListener(this);
 		this.addToPanel(okButton);
 		
@@ -70,10 +70,9 @@ public class NewArcWindow extends JDialog implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-	    if (e.getActionCommand().equals("OK"))
+	    if (e.getActionCommand().equals("Kante anlegen"))
 	        isInformationToBeSent = true;
-	
-	        
+
 		this.sendId();
 		this.dispose();
 	}

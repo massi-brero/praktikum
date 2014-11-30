@@ -39,7 +39,7 @@ public class NewNodeWindow extends JDialog implements ActionListener {
         /**
          * Do nothing because we could still have incorrect data in some of the fields.
          */
-        //this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         initializeDialog();
         add(panel);
@@ -107,6 +107,7 @@ public class NewNodeWindow extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+    	
         /**
          * First check if we have a valid token. We'll check that in this window
          * because we need no further information for this check.
@@ -122,7 +123,7 @@ public class NewNodeWindow extends JDialog implements ActionListener {
                 }
 
         } else {
-            this.dispose();
+        	this.dispose();
         }
     
     }
