@@ -7,7 +7,11 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
 /**
  * Represents the view of a place node.
- * 
+ * PlaceView#currentTransitionScale and PlaceView#currentSize are used to keep track of the 
+ * actual size an scaling factor of this node type, e g. for other classes who need to know about the current size of
+ * node an his icon. The attribute scale inherited
+ * from NodeView is used for internal scaling process.
+ * Thus those two are synchronized in each from NodeView derived class.
  * @author Laptop
  *
  */
@@ -17,8 +21,13 @@ public class PlaceView extends NodeView {
     final private static String sourceIconSelected = "circle_selected.png";
     final private static Dimension DEFAULT_SIZE = new Dimension(70, 70);
     private int token = 0;
-    // we need a global scale variable e. g. for creating new nodes of this type
-    private static int currentPlaceScale = 1;
+    /**
+	 * Current scaling factor for nodes' components.
+	 */
+    private static int currentPlaceScale = 0;
+	/**
+	 * Current size of this node family
+	 */
     private static Dimension currentSize = null;
     private final String DOT_SIGN = "\u2022";
 
@@ -42,8 +51,8 @@ public class PlaceView extends NodeView {
         scale = PlaceView.currentPlaceScale;
         
         //now we scale our other components like icon etc.
-        if (1 < PlaceView.currentPlaceScale)
-            this.updateSize(PlaceView.currentPlaceScale - 1);    
+        if (0 < PlaceView.currentPlaceScale)
+            this.updateSize(PlaceView.currentPlaceScale);    
         this.setType(PTNNodeTypes.place);
         nameLabel.setVerticalTextPosition(JLabel.NORTH);
 

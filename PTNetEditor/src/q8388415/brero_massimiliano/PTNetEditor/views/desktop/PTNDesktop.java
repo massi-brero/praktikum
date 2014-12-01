@@ -228,15 +228,6 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener {
 
     }
 
-    private void updateNodeAttributes(NodeView paintedNode, PTNINodeDTO nodeUpdate) {
-
-        if (paintedNode instanceof PlaceView)
-            ((PlaceView) paintedNode).updateToken(nodeUpdate.getToken());
-
-        paintedNode.setName(nodeUpdate.getNodeName());
-
-    }
-
     public ArrayList<NodeView> getNodeViews() {
         return this.nodes;
     }
@@ -339,7 +330,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener {
         popUp.setVisible(true);
 
         PTNINodeDTO nodeUpdate = popUp.sendUpdatedNode();
-        this.updateNodeAttributes(source, nodeUpdate);
+        netController.updateNodeAttributes(source, nodeUpdate);
 
         // so our arcs won't be obscured
         this.paintImmediately(this.getBounds());

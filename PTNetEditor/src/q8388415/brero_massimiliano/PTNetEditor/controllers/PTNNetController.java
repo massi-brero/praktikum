@@ -110,16 +110,53 @@ public class PTNNetController implements Runnable {
 
             }
         } catch (PTNArcConstructionException e) {
-            // TODO Fehler-Dialog öffnen
+            // TODO Fehler-Dialog ï¿½ffnen
             System.out.println(e.getMessage());
         } catch (Exception e) {
-            // TODO Fehler-Dialog öffnen
+            // TODO Fehler-Dialog ï¿½ffnen
             System.out.println(e.getMessage());
         }
 
         return arcViewList;
 
     }
+    
+    
+    
+    /**
+     * Updates node attributes after an update Window was closed.
+     * 
+     * @param sourceView
+     * @param nodeUpdate
+     */
+    public void updateNodeAttributes(NodeView sourceView, PTNINodeDTO nodeUpdate) {
+    	
+    	String name = nodeUpdate.getNodeName();
+    	PTNNode nodeModel = net.getNodeById(sourceView.getId());
+    	
+    	/**
+    	 * update view and model information
+    	 */
+        if (sourceView instanceof PlaceView) {
+        	int token = nodeUpdate.getToken();
+        	((PlaceView) sourceView).updateToken(token);
+        	((PTNPlace) nodeModel).setToken(token);
+        }
+
+        sourceView.setName(name);
+        nodeModel.setName(name);
+        
+    }
+    
+    /**
+     * 
+     * @param sourceView
+     */
+    public void updateNodeModelLocation(NodeView sourceView) {
+    	PTNNode nodeModel = net.getNodeById(sourceView.getId());
+    	nodeModel.setLocation(sourceView.getLocation());
+    }
+    
 
     /**
      * Handles redrawing all incoming and outgoing arcs for a node that has been
@@ -306,7 +343,7 @@ public class PTNNetController implements Runnable {
      */
     private Point determineNodeLocation(PTNINodeDTO nodeInformation) {
 
-        if (nodeInformation instanceof PTNNode)
+        if (nodeInformation instanceof PTNINodeDTO)
             return ((PTNNode) nodeInformation).getLocation();
         else
             return START_LOCATION_NEW_NODE;

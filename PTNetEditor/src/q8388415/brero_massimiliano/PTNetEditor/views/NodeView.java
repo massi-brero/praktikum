@@ -23,8 +23,8 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  */
 public abstract class NodeView extends JLabel implements PTNIScaleListener {
 	
-	private final int SCALE_MAX = 5;
-	private final int SCALE_MIN = 1;
+	private final int SCALE_MAX = 4;
+	private final int SCALE_MIN = 0;
 	// number of pixels the icon will change on scaling operations
 	private final int CHANGE_WIDTH = 4;
 	private final int CHANGE_HEIGHT = 4;
@@ -104,7 +104,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener {
 		else
 			setIcon(iconStandard);
 		//@todo Warum funktioniert scale - 1 besser als scale?
-		this.updateIconSize(scale-1);
+		this.updateIconSize(scale);
 	}
 
 

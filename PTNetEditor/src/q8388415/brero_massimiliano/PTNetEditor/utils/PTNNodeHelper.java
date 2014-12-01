@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationException;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;

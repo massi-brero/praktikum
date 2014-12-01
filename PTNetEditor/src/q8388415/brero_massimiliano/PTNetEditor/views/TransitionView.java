@@ -8,6 +8,17 @@ import javax.swing.ImageIcon;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
+/**
+ * Represents the view of a transition node.
+ * TransitionView#currentTransitionScale and TransitionView#currentSize are used to keep track of the 
+ * actual size an scaling factor of this node type, e g. for other classes who need to know about the current size of
+ * node an his icon. The attribute scale inherited
+ * from NodeView is used for internal scaling process.
+ * Thus those two are synchronized in each from NodeView derived class.
+ * 
+ * @author Laptop
+ *
+ */
 public class TransitionView extends NodeView {
 
 	PTNDesktopController listener;
@@ -16,9 +27,13 @@ public class TransitionView extends NodeView {
 	final private String sourceIconActivated = "rectangle_activated.png";
 	private Icon iconActivated;
 	private Boolean isActivated = false;
-
-	// we need a global scale variable e. g. for creating new nodes of this type
-	protected static int currentTransitionScale = 1;
+	/**
+	 * Current scaling factor for nodes' components
+	 */
+	protected static int currentTransitionScale = 0;
+	/**
+	 * Current size of this node family
+	 */
 	protected static Dimension currentSize = null;
 
 	private final static Dimension DEFAULT_SIZE = new Dimension(70, 70);
@@ -33,8 +48,11 @@ public class TransitionView extends NodeView {
 		
 		setSize(DEFAULT_SIZE);
 		TransitionView.currentSize = TransitionView.currentSize == null ? DEFAULT_SIZE : TransitionView.currentSize;
-		if (1 < TransitionView.currentTransitionScale)
-			this.updateSize(TransitionView.currentTransitionScale -1);
+        scale = TransitionView.currentTransitionScale;
+        
+        //now we scale our other components like icon etc.
+		if (0 < TransitionView.currentTransitionScale)
+			this.updateSize(TransitionView.currentTransitionScale);
 		System.out.println("init scale: " + scale);
 		System.out.println("init: cscale" + TransitionView.currentTransitionScale);
 		this.setType(PTNNodeTypes.transition);
@@ -61,7 +79,7 @@ public class TransitionView extends NodeView {
 	 */
 	public static void resetSize() {
 		TransitionView.currentSize = DEFAULT_SIZE;
-		TransitionView.currentTransitionScale = 1;
+		TransitionView.currentTransitionScale = 0;
 	}
 
 	public Boolean isActivated() {
@@ -71,10 +89,10 @@ public class TransitionView extends NodeView {
 	public void setIsActivated(Boolean isActivated) {
 
 		this.isActivated = isActivated;
-		//this.updateIcon();
+		this.updateIcon();
 		// @todo Warum funktioniert scale - 1 besser als scale?
 		System.out.println(currentTransitionScale);
-		this.updateIconSize(TransitionView.currentTransitionScale - 1);
+		this.updateIconSize(TransitionView.currentTransitionScale);
 	}
 
 	/**

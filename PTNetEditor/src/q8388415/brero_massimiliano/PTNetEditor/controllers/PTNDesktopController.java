@@ -120,6 +120,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			
 		node.setLocation(moveToX, moveToY);
 		desktop.redrawArcs((NodeView) node);
+	
 	}
 
 	@Override
