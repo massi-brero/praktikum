@@ -72,7 +72,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener {
 
         this.net = net;
         this.netController = new PTNNetController(net, this);
-        nodeHelper = new PTNNodeHelper(this);
+        nodeHelper = new PTNNodeHelper(this, net);
         setFocusable(true);
         this.setOpaque(false);
         addKeyListener(appControl);
@@ -90,7 +90,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener {
         maxSize = getSize();
         netController.setUpNodeViews();
         arcs = netController.setUpArcs();
-        desktopController = new PTNDesktopController(this);
+        desktopController = new PTNDesktopController(this, net);
 
         this.setBackground(Color.WHITE);
         // start controller threads

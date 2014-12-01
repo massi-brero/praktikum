@@ -12,6 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIModeListener;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
@@ -36,10 +37,10 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	static boolean isDragged = false;
 	private Boolean isInSimulationMode = false;
 
-	public PTNDesktopController(PTNDesktop dt) {
+	public PTNDesktopController(PTNDesktop dt, PTNNet net) {
 
 		this.desktop = dt;
-		nodeHelper = new PTNNodeHelper(desktop);
+		nodeHelper = new PTNNodeHelper(desktop, net);
 		oldLocation = new Point(-1, -1);
 
 	}
@@ -102,24 +103,25 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	 * 
 	 * @param diffX
 	 * @param diffY
-	 * @param node
+	 * @param nodeView
 	 */
-	private void moveNode(int diffX, int diffY, NodeView node) {
-		int moveToX = node.getX();
-		int moveToY = node.getY();
+	private void moveNode(int diffX, int diffY, NodeView nodeView) {
+		int moveToX = nodeView.getX();
+		int moveToY = nodeView.getY();
 		
-		if (node.getLocation().x < 0)
+		if (nodeView.getLocation().x < 0)
 			moveToX = 0;
 		else 
 			moveToX = moveToX + diffX;
 		
-		if (node.getLocation().y < 0)
+		if (nodeView.getLocation().y < 0)
 			moveToY = 0;
 		else
 			moveToY = moveToY + diffY;
 			
-		node.setLocation(moveToX, moveToY);
-		desktop.redrawArcs((NodeView) node);
+		nodeView.setLocation(moveToX, moveToY);
+		nodeHelper.updateNodeModelLocation(nodeView);
+		desktop.redrawArcs((NodeView) nodeView);
 	
 	}
 

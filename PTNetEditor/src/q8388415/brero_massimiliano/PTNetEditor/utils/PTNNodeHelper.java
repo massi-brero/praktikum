@@ -1,6 +1,5 @@
 package q8388415.brero_massimiliano.PTNetEditor.utils;
 
-import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationException;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
@@ -26,11 +26,13 @@ public class PTNNodeHelper implements ActionListener {
 	
 	private PTNControlPanel controlPanel;
 	private PTNDesktop desktop;
+	private PTNNet net = null;
 	private NodeView sourceView = null;
 	private ContextMenuNodeWindow cMenu = null;
 	
-	public PTNNodeHelper(PTNDesktop desktop) {
+	public PTNNodeHelper(PTNDesktop desktop, PTNNet net) {
 		this.desktop = desktop;
+		this.net = net;
 		controlPanel = PTNControlPanel.getInstance();
 	}
 	
@@ -126,6 +128,11 @@ public class PTNNodeHelper implements ActionListener {
         desktop.addListenertoNode(nodeView);
         desktop.getNodeViews().add(nodeView);
         desktop.add(nodeView);
+    }
+    
+    public void updateNodeModelLocation(NodeView nodeView) {
+    	PTNNode nodeModel = net.getNodeById(nodeView.getId());
+    	nodeModel.setLocation(nodeView.getLocation());
     }
     
     /**

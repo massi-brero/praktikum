@@ -43,7 +43,7 @@ public class PTNNetController implements Runnable {
         this.net = net;
         this.desktop = desktop;
         this.arcHelper = new PTNArcHelper(desktop, net);
-        this.nodeHelper = new PTNNodeHelper(desktop);
+        this.nodeHelper = new PTNNodeHelper(desktop, net);
     }
 
     /**
@@ -289,7 +289,7 @@ public class PTNNetController implements Runnable {
      * @param type
      */
     public void addNewNodeFromDialog(PTNINodeDTO nodeInformation) {
-    	System.out.println(("add"));
+    	
         String id = nodeInformation.getId();
         String name = nodeInformation.getNodeName();
         PTNNodeTypes type = nodeInformation.getType();

@@ -53,10 +53,9 @@ public class TransitionView extends NodeView {
         //now we scale our other components like icon etc.
 		if (0 < TransitionView.currentTransitionScale)
 			this.updateSize(TransitionView.currentTransitionScale);
-		System.out.println("init scale: " + scale);
-		System.out.println("init: cscale" + TransitionView.currentTransitionScale);
 		this.setType(PTNNodeTypes.transition);
 		nameLabel.setBounds(+500, -5, 10, 20);
+		
 	}
 
 	/**
@@ -68,8 +67,6 @@ public class TransitionView extends NodeView {
 		super.updateSize(factor);
 		TransitionView.currentTransitionScale = scale;
 		TransitionView.currentSize = this.getSize();
-		System.out.println("update scale: " + scale);
-		System.out.println("update: cscale" + TransitionView.currentTransitionScale);
 
 	}
 
@@ -90,9 +87,9 @@ public class TransitionView extends NodeView {
 
 		this.isActivated = isActivated;
 		this.updateIcon();
-		// @todo Warum funktioniert scale - 1 besser als scale?
 		System.out.println(currentTransitionScale);
 		this.updateIconSize(TransitionView.currentTransitionScale);
+		
 	}
 
 	/**
