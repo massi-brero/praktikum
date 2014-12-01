@@ -289,7 +289,7 @@ public class PTNNetController implements Runnable {
      * @param type
      */
     public void addNewNodeFromDialog(PTNINodeDTO nodeInformation) {
-
+    	System.out.println(("add"));
         String id = nodeInformation.getId();
         String name = nodeInformation.getNodeName();
         PTNNodeTypes type = nodeInformation.getType();
@@ -343,7 +343,7 @@ public class PTNNetController implements Runnable {
      */
     private Point determineNodeLocation(PTNINodeDTO nodeInformation) {
 
-        if (nodeInformation instanceof PTNINodeDTO)
+        if (nodeInformation instanceof PTNNode)
             return ((PTNNode) nodeInformation).getLocation();
         else
             return START_LOCATION_NEW_NODE;
