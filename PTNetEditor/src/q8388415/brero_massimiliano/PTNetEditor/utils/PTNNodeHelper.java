@@ -3,12 +3,17 @@ package q8388415.brero_massimiliano.PTNetEditor.utils;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationException;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNPlace;
+import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
@@ -136,11 +141,29 @@ public class PTNNodeHelper implements ActionListener {
     }
     
     /**
-     * When the token attribute of a place has been changed, we have to check
-     * if we have to update the state of succeeding transitions.
+     * When the token attribute of a place has been changed, this methods checks
+     * if the state of succeeding transitions must be updated.
+     * @param sourceView2 
      * 
      */
-    public void updateSuccessors(/* PTNNode/NodeView */) {
+    public void updateAdjacentTransitions(PlaceView sourceView) {
+    	
+    	/**
+    	 * We get the transitions by following the outgoing arcs.
+    	 * This way we have all the parameters needed for PTNNet#
+    	 */
+    	PTNPlace source = (PTNPlace)net.getNodeById(sourceView.getId());
+    	Iterator<Map.Entry<String, PTNArc>> it = net.getArcsBySource(source).entrySet().iterator();
+    	
+    	while (it.hasNext()) {
+    		PTNArc arc = (PTNArc)it.next().getValue();
+    		/**
+    		 * Since the source is a place the target of the arc really must be a transition.
+    		 * Casting is one more time safe. 
+    		 */
+    		//net.updateActivationAfterAddingNewPredessor(arc, (PTNTransition)arc.getTarget());
+
+    	}
     	
     }
 

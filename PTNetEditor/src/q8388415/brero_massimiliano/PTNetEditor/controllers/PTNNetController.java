@@ -140,7 +140,9 @@ public class PTNNetController implements Runnable {
         if (sourceView instanceof PlaceView) {
         	int token = nodeUpdate.getToken();
         	((PlaceView) sourceView).updateToken(token);
+        	// check if any transitions must be activated
         	((PTNPlace) nodeModel).setToken(token);
+        	nodeHelper.updateAdjacentTransitions((PlaceView) sourceView);
         }
 
         sourceView.setName(name);
