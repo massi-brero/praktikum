@@ -18,8 +18,8 @@ public class TransitionView extends NodeView {
 	private Boolean isActivated = false;
 
 	// we need a global scale variable e. g. for creating new nodes of this type
-	private static int currentPlaceScale = 1;
-	private static Dimension currentSize = null;
+	protected static int currentTransitionScale = 1;
+	protected static Dimension currentSize = null;
 
 	private final static Dimension DEFAULT_SIZE = new Dimension(70, 70);
 
@@ -33,24 +33,25 @@ public class TransitionView extends NodeView {
 		
 		setSize(DEFAULT_SIZE);
 		TransitionView.currentSize = TransitionView.currentSize == null ? DEFAULT_SIZE : TransitionView.currentSize;
-
-		if (1 < TransitionView.currentPlaceScale)
-			this.updateSize(TransitionView.currentPlaceScale - 1);
-
+		if (1 < TransitionView.currentTransitionScale)
+			this.updateSize(TransitionView.currentTransitionScale -1);
+		System.out.println("init scale: " + scale);
+		System.out.println("init: cscale" + TransitionView.currentTransitionScale);
 		this.setType(PTNNodeTypes.transition);
 		nameLabel.setBounds(+500, -5, 10, 20);
 	}
 
 	/**
-	 * Adopts token label to scale and updates global scale info for this node
-	 * type.
+	 * Updates global scale info for this node type.
 	 */
 	@Override
 	public void updateSize(int factor) {
-
+		
 		super.updateSize(factor);
-		TransitionView.currentPlaceScale = scale;
+		TransitionView.currentTransitionScale = scale;
 		TransitionView.currentSize = this.getSize();
+		System.out.println("update scale: " + scale);
+		System.out.println("update: cscale" + TransitionView.currentTransitionScale);
 
 	}
 
@@ -60,7 +61,7 @@ public class TransitionView extends NodeView {
 	 */
 	public static void resetSize() {
 		TransitionView.currentSize = DEFAULT_SIZE;
-		TransitionView.currentPlaceScale = 1;
+		TransitionView.currentTransitionScale = 1;
 	}
 
 	public Boolean isActivated() {
@@ -70,10 +71,10 @@ public class TransitionView extends NodeView {
 	public void setIsActivated(Boolean isActivated) {
 
 		this.isActivated = isActivated;
-		this.updateIcon();
+		//this.updateIcon();
 		// @todo Warum funktioniert scale - 1 besser als scale?
-		System.out.println(currentPlaceScale);
-		this.updateIconSize(TransitionView.currentPlaceScale - 1);
+		System.out.println(currentTransitionScale);
+		this.updateIconSize(TransitionView.currentTransitionScale - 1);
 	}
 
 	/**

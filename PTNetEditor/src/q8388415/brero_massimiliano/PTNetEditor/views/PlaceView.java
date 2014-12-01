@@ -5,6 +5,12 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
+/**
+ * Represents the view of a place node.
+ * 
+ * @author Laptop
+ *
+ */
 public class PlaceView extends NodeView {
 
     final private static String sourceIconStandard = "circle.png";
@@ -24,15 +30,20 @@ public class PlaceView extends NodeView {
 
     /**
      * Initializes this component's size and elements.
+     * If scale is > 1 then init() will resize all components 
+     * of the node.
      * 
      * @return void
      */
     private void init() {
 
-        this.setSize(DEFAULT_SIZE);
+    	this.setSize(DEFAULT_SIZE);
         PlaceView.currentSize = PlaceView.currentSize == null ? DEFAULT_SIZE : PlaceView.currentSize;
+        scale = PlaceView.currentPlaceScale;
+        
+        //now we scale our other components like icon etc.
         if (1 < PlaceView.currentPlaceScale)
-            this.updateSize(PlaceView.currentPlaceScale - 1);
+            this.updateSize(PlaceView.currentPlaceScale - 1);    
         this.setType(PTNNodeTypes.place);
         nameLabel.setVerticalTextPosition(JLabel.NORTH);
 
