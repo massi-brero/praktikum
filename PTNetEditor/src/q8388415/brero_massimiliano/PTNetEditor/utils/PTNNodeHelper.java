@@ -1,5 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.utils;
 
+import java.awt.Desktop;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -152,20 +153,21 @@ public class PTNNodeHelper implements ActionListener {
     	 * We get the transitions by following the outgoing arcs.
     	 * This way we have all the parameters needed for PTNNet#
     	 */
-    	PTNPlace source = (PTNPlace)net.getNodeById(sourceView.getId());
-    	Iterator<Map.Entry<String, PTNArc>> it = net.getArcsBySource(source).entrySet().iterator();
+    	Iterator<Map.Entry<String, PTNNode>> it = net.getSuccessors(sourceView.getId()).entrySet().iterator();
     	
     	while (it.hasNext()) {
-    		PTNArc arc = (PTNArc)it.next().getValue();
+    		
     		/**
     		 * Since the source is a place the target of the arc really must be a transition.
     		 * Casting is one more time safe. 
     		 */
-    		//net.updateActivationAfterAddingNewPredessor(arc, (PTNTransition)arc.getTarget());
+    		PTNTransition transitionModel = (PTNTransition)it.next().getValue();
+    		// Update the transitionView
+    		NodeView transitionView = desktop.getNodeViewById(transitionModel.getId());
+    		((TransitionView)transitionView).setIsActivated(net.activateTransition(transitionModel));
 
     	}
     	
     }
-
 
 }

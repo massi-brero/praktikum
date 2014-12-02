@@ -259,9 +259,12 @@ public class PTNNet {
 	
 	/**
 	 * Delegate method for getArcsBySource(PTNNode source) and getArcsByTarget(PTNNode source).
-	 * 
+	 * (Ok, we could put that into two methods. But since the code would be almsot identical
+	 * it seemed apt to use the switch isSource)
+	 *
 	 * @param node
 	 * @param isSource
+	 * 		Boolean source or target given?
 	 * @return
 	 */
 	private HashMap<String, PTNArc> getArcsBySourceOrTarget(PTNNode node, Boolean isSource) {
@@ -287,15 +290,56 @@ public class PTNNet {
 		
 	}
 
+	/**
+	 * 
+	 * @param node
+	 */
 	public void removeNode(PTNNode node) {
 		
 		this.getNodes().remove(node.getId());
 		
 	}
 
+	/**
+	 * Empties nodes and arcs lists.
+	 */
     public void reset() {
         nodes = new HashMap<String,PTNNode>();
         arcs = new HashMap<String,PTNArc>();      
     }
+
+    
+    /**
+     * 
+     * @param transition
+     * @return Boolean
+     * 		True if transition is now activated, else false.
+     */
+	public Boolean activateTransition(PTNTransition transition) {
+		
+		Boolean isActivated = true;
+		HashMap<String, PTNNode> places =  this.getPredecessors(transition.getId());
+		Iterator<Map.Entry<String, PTNNode>> it = places.entrySet().iterator();
+
+		if (!places.isEmpty()) {
+			while(it.hasNext()) {
+				
+				PTNPlace place = (PTNPlace)it.next().getValue();
+				isActivated = place.getToken() > 0;
+				
+				if (!isActivated)
+					break;
+				
+			}
+			
+		} else {
+			isActivated = false;
+		}
+
+		transition.setIsActivated(isActivated);
+		
+		return isActivated;
+		
+	}
 
 }

@@ -418,6 +418,23 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener {
                 netController.removeArcsFromNetAndDesktop(arcsToDelete);
 
     }
+    
+    public NodeView getNodeViewById(String id) {
+    	
+    	Iterator<NodeView> it = this.getNodeViews().iterator();
+    	
+    	while (it.hasNext()) {
+    		NodeView nodeView = it.next();
+    		
+    		if (nodeView.getId().equals(id))
+    			return nodeView;
+    		
+    	}
+    	
+    	return null;
+    	
+    	
+    }
 
 	@Override
 	public void startSimulationMode() {
