@@ -1,5 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
+import java.awt.Component;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -153,7 +154,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
 		mouseLocation = new Point(mouseLocation.x, mouseLocation.y - 2 * PTNMenu.HEIGHT);
 		NodeView source = (NodeView) e.getComponent();
-		JComponent target = (JComponent) desktop.getComponentAt(mouseLocation);
+		JComponent target =  this.getComponentAtMouseLocation(mouseLocation);
 
 		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) || (source instanceof TransitionView && target instanceof PlaceView);
 
@@ -174,6 +175,26 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		desktop.requestFocus();
 
 	}
+	
+	/**
+	 * This method is used instead of Container#getComponentAt(Point p)
+	 * because that one did not always work correctly with lightweight JLabel
+	 * Components.
+	 * 
+	 * @param mouseLocation
+	 * @return JComponent
+	 * 		A node or the desktop.
+	 */
+	private JComponent getComponentAtMouseLocation(Point mouseLocation) {
+		
+		for (Component component : desktop.getComponents()) {
+			if (component.getBounds().contains(mouseLocation))
+				return (JComponent)component;
+		}
+		
+		return null;
+	}
+
 
 	// Draws an arc that is displayed until user inputs an correct id.
 	private void drawTempEdge(JComponent source, JComponent target) {
