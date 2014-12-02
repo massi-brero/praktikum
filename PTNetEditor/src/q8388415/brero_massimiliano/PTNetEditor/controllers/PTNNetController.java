@@ -142,7 +142,7 @@ public class PTNNetController implements Runnable {
         	((PlaceView) sourceView).updateToken(token);
         	// check if any transitions must be activated
         	((PTNPlace) nodeModel).setToken(token);
-        	nodeHelper.updateAdjacentTransitions((PlaceView) sourceView);
+        	nodeHelper.updateAdjacentTransitionsState((PlaceView) sourceView);
         }
 
         sourceView.setName(name);
@@ -220,6 +220,9 @@ public class PTNNetController implements Runnable {
 
     /**
      * Removes one arc both from the view and the net model.
+     * This method will also update the activation status of a 
+     * transition regardless if it's the source or the target of
+     * the given arc.
      * 
      * @param arc
      *            PTNArc
@@ -228,6 +231,16 @@ public class PTNNetController implements Runnable {
         arc = (PTNArc) arc;
         desktop.removeArc(arc.getId());
         net.getArcs().remove(arc.getId());
+        
+        //Check which transition status have to be updated
+        if (arc.getSource() != null && arc.getSource().getType() == PTNNodeTypes.place) {
+        	PlaceView sourceView = (PlaceView)desktop.getNodeViewById(arc.getSource().getId());
+        	nodeHelper.updateAdjacentTransitionsState(sourceView);
+        } else if (arc.getTarget() != null && arc.getTarget().getType() == PTNNodeTypes.transition) {
+        	TransitionView sourceView = (TransitionView)desktop.getNodeViewById(arc.getSource().getId());
+        	nodeHelper.updateTransitionState(sourceView);
+        }
+        
     }
 
     /**
