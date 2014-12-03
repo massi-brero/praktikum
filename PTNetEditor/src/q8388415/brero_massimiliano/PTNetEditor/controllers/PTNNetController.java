@@ -206,14 +206,15 @@ public class PTNNetController implements Runnable {
         Iterator<Map.Entry<String, PTNArc>> it_s = arcsToRemoveBySource.entrySet().iterator();
         Iterator<Map.Entry<String, PTNArc>> it_t = arcsToRemoveByTarget.entrySet().iterator();
 
-        net.removeNode(node);
-        desktop.getNodeViews().remove(nodeView);
-
         while (it_s.hasNext())
             this.removeArcFromNetAndDesktop(it_s.next().getValue());
 
         while (it_t.hasNext())
             this.removeArcFromNetAndDesktop(it_t.next().getValue());
+        
+        net.removeNode(node);
+        desktop.getNodeViews().remove(nodeView);
+
 
         desktop.paintImmediately(desktop.getBounds());
     }
@@ -229,17 +230,16 @@ public class PTNNetController implements Runnable {
      */
     private void removeArcFromNetAndDesktop(PTNArc arc) {
         arc = (PTNArc) arc;
+        
         desktop.removeArc(arc.getId());
         net.getArcs().remove(arc.getId());
         
         //Check which transition status have to be updated
-        if (arc.getSource() != null && arc.getSource().getType() == PTNNodeTypes.place) {
-        	PlaceView sourceView = (PlaceView)desktop.getNodeViewById(arc.getSource().getId());
-        	nodeHelper.updateAdjacentTransitionsState(sourceView);
-        } else if (arc.getTarget() != null && arc.getTarget().getType() == PTNNodeTypes.transition) {
-        	TransitionView sourceView = (TransitionView)desktop.getNodeViewById(arc.getSource().getId());
-        	nodeHelper.updateTransitionState(sourceView);
+        if (arc.getTarget() != null && arc.getTarget().getType() == PTNNodeTypes.transition) {
+        	nodeHelper.updateTransitionState((PTNTransition)arc.getTarget());
         }
+        
+
         
     }
 

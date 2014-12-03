@@ -134,6 +134,7 @@ public class PTNNodeHelper implements ActionListener {
         desktop.addListenertoNode(nodeView);
         desktop.getNodeViews().add(nodeView);
         desktop.add(nodeView);
+        desktop.repaint();
     }
     
     public void updateNodeModelLocation(NodeView nodeView) {
@@ -163,12 +164,6 @@ public class PTNNodeHelper implements ActionListener {
     	}
     	
     }
-    
-    public void updateTransitionState(TransitionView transitionView) {
-    	if (null != transitionView) {
-    		this.updateTransitionState((PTNTransition)net.getNodeById(transitionView.getId()));
-    	}
-    }
 
     /**
      * This method checks if the transitions activation state has to be
@@ -183,7 +178,6 @@ public class PTNNodeHelper implements ActionListener {
     		 * Since the source is a place the target of the arc really must be a transition.
     		 * Casting is one more time safe. 
     		 */
-    		
     		// Update the transitionView
     		NodeView transitionView = desktop.getNodeViewById(transitionModel.getId());
     		((TransitionView)transitionView).setIsActivated(net.activateTransition(transitionModel));
@@ -191,8 +185,14 @@ public class PTNNodeHelper implements ActionListener {
 		
 	}
     
-    
-    
-    
+//	/**
+//	 * 
+//	 * @param transitionView
+//	 */
+//    public void updateTransitionState(TransitionView transitionView) {
+//    	if (null != transitionView) {
+//    		this.updateTransitionState((PTNTransition)net.getNodeById(transitionView.getId()));
+//    	}
+//    }
 
 }
