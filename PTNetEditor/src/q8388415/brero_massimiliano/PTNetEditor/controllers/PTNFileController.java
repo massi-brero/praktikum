@@ -183,7 +183,7 @@ public class PTNFileController implements PTNIFileListener {
 
 		}
 
-		return true;
+		return false;
 
 	}
 	

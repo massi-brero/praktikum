@@ -1,5 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -28,7 +29,11 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
  */
 public class PTNAppController implements KeyListener, PTNIScaleListener {
 
-
+	/*
+	 * Global values needed by other classes
+	 */
+	public static final String DEFAULT_TOKEN_NUMBER = "0";
+	public static final Point DEFAULT_NODE_LOCATION = new Point(0, 0);
 	public static boolean moveNodes = false;
 	public static boolean deleteSelection = false;
 	public static boolean deselectAll = false;

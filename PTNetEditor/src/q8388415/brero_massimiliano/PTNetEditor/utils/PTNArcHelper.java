@@ -30,6 +30,7 @@ public class PTNArcHelper {
 	private PTNControlPanel controlPanel;
 	private PTNDesktop desktop;
 	private PTNNet net;
+	final private String PREFIX_ID = "PTNArc_";
 	
 	public PTNArcHelper(PTNDesktop desktop, PTNNet net) {
 		this.desktop = desktop;
@@ -102,16 +103,6 @@ public class PTNArcHelper {
 		
 	}
 	
-	public int showErrorPaneIdExists() {
-		return JOptionPane.showConfirmDialog(desktop, "Diese ID ist bereits vergeben.", 
-				"Ung�ltige ID", JOptionPane.WARNING_MESSAGE);
-	}
-	
-	public int showErrorPaneEmptyId() {
-		return JOptionPane.showConfirmDialog(desktop, "Sie m�ssen eine ID mit mind. einem Zeichen eingeben.", 
-				"Ung�ltige ID", JOptionPane.WARNING_MESSAGE);
-	}
-
 	public void showErrorPaneDoubleArc() {
 		JOptionPane.showConfirmDialog(desktop, "Diese Kante existiert bereits oder sie �berlappt sich exakt mit einer existierenden!", 
 				"Schon vorhanden.", JOptionPane.PLAIN_MESSAGE);
@@ -137,6 +128,17 @@ public class PTNArcHelper {
 
 		this.addArcListener(arcView);
 		desktop.updateArcs(arcView);
+	}
+
+	/**
+	 * Generates a unique id concatenating id prefix and number of arcs 
+	 * added so far +1.
+	 * 
+	 * @return
+	 * 		String new id for an arc
+	 */
+	public String generateId() {
+		return PREFIX_ID.concat(String.valueOf(net.getNumberOfArcs()+1));
 	}
 
 

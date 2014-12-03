@@ -1,6 +1,7 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.windows;
 
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNetValidator;
@@ -26,10 +28,15 @@ public class NewNodeWindow extends JDialog implements ActionListener {
     private JComboBox types;
     JLabel tokenLabel;
     private JTextField nameLabel;
-    private JTextField idLabel;
     private JTextField token;
     private Boolean isInformationToBeSent = false;
+    private Point nodeLocation = PTNAppController.DEFAULT_NODE_LOCATION;
 
+    public NewNodeWindow(Point nodeLocation) {
+    	this();
+    	this.nodeLocation = nodeLocation;
+    }
+    
     public NewNodeWindow() {
 
         panel = new JPanel();
@@ -48,17 +55,18 @@ public class NewNodeWindow extends JDialog implements ActionListener {
     }
 
     /**
-     * @ToDo sanitize token input!
-     * @param node
+     * Prepares all the fields for the dialog window
      */
     private void initializeDialog() {
 
         this.addToPanel(new JLabel("Knoten-Typ"));
         types = this.initializeDropDown();
         this.addToPanel(types);
+        
         tokenLabel = new JLabel("Tokens");
+        //Token are initialized with 0
         this.addToPanel(tokenLabel);
-        token = new JTextField("", 20);
+        token = new JTextField(PTNAppController.DEFAULT_TOKEN_NUMBER, 20);
         this.addToPanel(token);
 
         types.addActionListener(new ActionListener() {
@@ -74,10 +82,6 @@ public class NewNodeWindow extends JDialog implements ActionListener {
                 }
             }
         });
-
-        idLabel = new JTextField("", 20);
-        this.addToPanel(new JLabel("Knoten-ID"));
-        this.addToPanel(idLabel);
 
         nameLabel = new JTextField("", 20);
         this.addToPanel(new JLabel("Knoten-Label"));
@@ -147,15 +151,23 @@ public class NewNodeWindow extends JDialog implements ActionListener {
                     return nameLabel.getText();
                 }
                 
+                /**
+                 * Id will be given later by automatic process.
+                 */
                 @Override
                 public String getId() {
-                    return idLabel.getText();
+                    return null;
                 }
                 
                 @Override
                 public PTNNodeTypes getType() {
                     return (PTNNodeTypes) types.getSelectedItem();
                 }
+
+				@Override
+				public Point getLocation() {
+					return nodeLocation;
+				}
             };
             
         }

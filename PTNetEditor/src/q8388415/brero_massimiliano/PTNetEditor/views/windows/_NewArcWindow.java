@@ -13,14 +13,14 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class NewArcWindow extends JDialog implements ActionListener {
+public class _NewArcWindow extends JDialog implements ActionListener {
 	
 	JMenuItem item;
 	private JPanel panel;
 	private JTextField idField;
 	private Boolean isInformationToBeSent = false;
 	
-	public NewArcWindow() {
+	public _NewArcWindow() {
 
 		panel = new JPanel();
 		panel.setSize(100, 200);

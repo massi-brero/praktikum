@@ -108,7 +108,7 @@ public class PTNMenu extends JMenuBar {
 		item3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				desktop.callNewNodeDialog();
+				desktop.callNewNodeDialog(PTNAppController.DEFAULT_NODE_LOCATION);
 			}
 		});
 

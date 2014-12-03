@@ -141,7 +141,8 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 	}
 
 	/**
-	 * A line of information about the arc, so the user may identify it.
+	 * A line of information about the arc, so the user may identify it
+	 * when arcs get entangled in an complex net.
 	 * If it's an incoming arc we display where its coming from, else 
 	 * we show where its target is.
 	 * 
@@ -151,10 +152,9 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 	 */
 	private String getArcInformationAsString(PTNArc arc, PTNArcDirections direction) {
 
-		String s = "Id: " + arc.getId() 
-				+ " - " + ((PTNArcDirections.incoming == direction) ? 
-							"von: "+ arc.getSource().getName() :
-								" => " + "nach: " + arc.getTarget().getName());
+		String s = ((PTNArcDirections.incoming == direction) ? 
+							"von Knoten: "+ arc.getSource().getName() :
+								"nach Knoten: " + arc.getTarget().getName());
 
 		return s;
 	}
@@ -176,7 +176,7 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 			else if (change == ItemEvent.DESELECTED)
 				arcsToDelete.remove(changedArc.getId());
 		} catch (Exception e1) {
-			JOptionPane.showMessageDialog(this, "Es gab einen internen Fehler beim Kanten l�schen.", "Fehler beim Kantenl�schen.", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Es gab einen internen Fehler beim Kanten löschen.", "Fehler beim Kantenlöschen.", JOptionPane.WARNING_MESSAGE);
 		}
 		
 	}

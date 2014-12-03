@@ -1,6 +1,7 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.windows;
 
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,6 +13,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
@@ -110,6 +112,11 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 			@Override
 			public PTNNodeTypes getType() {
 				return sourceNode.getType();
+			}
+			
+			@Override
+			public Point getLocation() {
+				return sourceNode.getLocation();
 			}
 		};
 	}

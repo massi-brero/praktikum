@@ -23,7 +23,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 /**
- * This controller handles basic actions occuring in the desktop like mouse
+ * This controller handles basic actions occurring in the desktop like mouse
  * dragging. It's also a thread since it will listen when it's time to delete
  * nodes.
  * 
@@ -49,7 +49,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	/**
 	 * 
 	 * @param e
-	 * 		MouseEvent
+	 *            MouseEvent
 	 */
 	@Override
 	public void mouseDragged(MouseEvent e) {
@@ -59,22 +59,23 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 		// here we are drawing an arc
 		if (!PTNAppController.moveNodes) {
-			
+
 			Point start = new Point(source.getLocation().x + source.getWidth() / 2, source.getLocation().y + source.getHeight() / 2);
 			Point end = new Point(e.getX(), e.getY());
 			desktop.updateArcs("", start, end);
 
 		} else {
 
-			if (!isDragged) { 
+			if (!isDragged) {
 				isDragged = true;
 			} else {
-				
-				//now somebody drags...!
+
+				// now somebody drags...!
 				int diffX = e.getX() - (int) oldLocation.getX();
 				int diffY = e.getY() - (int) oldLocation.getY();
 
-				if (desktop.hasSelected()) { //here we many have to move more than one element
+				if (desktop.hasSelected()) { // here we many have to move more
+												// than one element
 
 					ArrayList<NodeView> nodes = desktop.getNodeViews();
 					Iterator<NodeView> it = nodes.iterator();
@@ -85,7 +86,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 							moveNode(diffX, diffY, node);
 					}
 				} else { // ok it's just one node that is dragged
-					moveNode(diffX, diffY, (NodeView)source);
+					moveNode(diffX, diffY, (NodeView) source);
 				}
 
 			}
@@ -97,10 +98,9 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	}
 
 	/**
-	 * Resets location when moving a node for the moved node
-	 * and all arcs attached to it.
-	 * We do not allow to move the node over the top and left boundaries,
-	 * so no negative coordinates are allowed;
+	 * Resets location when moving a node for the moved node and all arcs
+	 * attached to it. We do not allow to move the node over the top and left
+	 * boundaries, so no negative coordinates are allowed;
 	 * 
 	 * @param diffX
 	 * @param diffY
@@ -109,21 +109,21 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	private void moveNode(int diffX, int diffY, NodeView nodeView) {
 		int moveToX = nodeView.getX();
 		int moveToY = nodeView.getY();
-		
+
 		if (nodeView.getLocation().x < 0)
 			moveToX = 0;
-		else 
+		else
 			moveToX = moveToX + diffX;
-		
+
 		if (nodeView.getLocation().y < 0)
 			moveToY = 0;
 		else
 			moveToY = moveToY + diffY;
-			
+
 		nodeView.setLocation(moveToX, moveToY);
 		nodeHelper.updateNodeModelLocation(nodeView);
 		desktop.redrawArcs((NodeView) nodeView);
-	
+
 	}
 
 	@Override
@@ -135,12 +135,12 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 		NodeView source = (NodeView) e.getComponent();
 
-		if (source instanceof JLabel && 3 == e.getButton())
+		if (source instanceof JLabel && 3 == e.getButton()) // context menu
 			nodeHelper.handleContextmenu(source);
-		else if (PTNAppController.selectMode)
+		else if (PTNAppController.selectMode) // select/deselect element
 			source.setSelected(!source.isSelected());
-		else if (isInSimulationMode) {}
-
+		else if (isInSimulationMode) {
+		}
 
 	}
 
@@ -154,7 +154,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
 		mouseLocation = new Point(mouseLocation.x, mouseLocation.y - 2 * PTNMenu.HEIGHT);
 		NodeView source = (NodeView) e.getComponent();
-		JComponent target =  this.getComponentAtMouseLocation(mouseLocation);
+		JComponent target = this.getComponentAtMouseLocation(mouseLocation);
 
 		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) || (source instanceof TransitionView && target instanceof PlaceView);
 
@@ -166,35 +166,32 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			// We can cast safely to node view since we now know that we have a
 			// NodeView type under the mouse pointer.
 			this.drawTempEdge(source, target);
-			desktop.callNewArcDialog(source, (NodeView) target);
+			desktop.addNewArc(source, (NodeView) target);
 			PTNAppController.moveNodes = false;
 		}
-
-		// delete all temporary or id-less arcs that may have be lingering on the desktop.
+		// delete all temporary or id-less arcs that may have be lingering on
+		// the desktop.
 		desktop.removeArc("");
 		desktop.requestFocus();
 
 	}
-	
+
 	/**
-	 * This method is used instead of Container#getComponentAt(Point p)
-	 * because that one did not always work correctly with lightweight JLabel
-	 * Components.
+	 * This method is used instead of Container#getComponentAt(Point p) because
+	 * that one will not always work correctly with lightweight components.
 	 * 
 	 * @param mouseLocation
-	 * @return JComponent
-	 * 		A node or the desktop.
+	 * @return JComponent A node or the desktop.
 	 */
 	private JComponent getComponentAtMouseLocation(Point mouseLocation) {
-		
+
 		for (Component component : desktop.getComponents()) {
 			if (component.getBounds().contains(mouseLocation))
-				return (JComponent)component;
+				return (JComponent) component;
 		}
-		
+
 		return null;
 	}
-
 
 	// Draws an arc that is displayed until user inputs an correct id.
 	private void drawTempEdge(JComponent source, JComponent target) {
@@ -222,7 +219,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			} else if (PTNAppController.deleteSelection) {
 				PTNAppController.deleteSelection = false;
 				if (JOptionPane.OK_OPTION == (JOptionPane.showConfirmDialog(desktop, "Wollen Sie die Knoten wirklich löschen?", "Löschen", JOptionPane.WARNING_MESSAGE)))
-					desktop.deleteSelected();	
+					desktop.deleteSelected();
 			}
 
 		}

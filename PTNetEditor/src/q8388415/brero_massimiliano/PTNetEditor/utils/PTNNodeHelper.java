@@ -35,6 +35,7 @@ public class PTNNodeHelper implements ActionListener {
 	private PTNNet net = null;
 	private NodeView sourceView = null;
 	private ContextMenuNodeWindow cMenu = null;
+	final private String PREFIX_ID = "PTNNode_";	
 	
 	public PTNNodeHelper(PTNDesktop desktop, PTNNet net) {
 		this.desktop = desktop;
@@ -62,16 +63,6 @@ public class PTNNodeHelper implements ActionListener {
 			e.printStackTrace();
 		}
 		
-	}
-	
-	public int showErrorPaneIdExists() {
-		return JOptionPane.showConfirmDialog(desktop, "Diese Knoten-ID ist bereits vergeben.", 
-				"Ung�ltige ID", JOptionPane.WARNING_MESSAGE);
-	}
-	
-	public int showErrorPaneEmptyId() {
-		return JOptionPane.showConfirmDialog(desktop, "Sie m�ssen eine Knoten-ID mit mind. einem Zeichen eingeben.", 
-				"Ung�ltige ID", JOptionPane.WARNING_MESSAGE);
 	}
 	
 	/**
@@ -185,15 +176,16 @@ public class PTNNodeHelper implements ActionListener {
 		}
 		
 	}
-    
-//	/**
-//	 * 
-//	 * @param transitionView
-//	 */
-//    public void updateTransitionState(TransitionView transitionView) {
-//    	if (null != transitionView) {
-//    		this.updateTransitionState((PTNTransition)net.getNodeById(transitionView.getId()));
-//    	}
-//    }
+	
+	/**
+	 * Generates a unique id concatenating id prefix and number of nodes 
+	 * added so far +1.
+	 * 
+	 * @return
+	 * 		String new id for an arc
+	 */
+	public String generateId() {
+		return PREFIX_ID.concat(String.valueOf(net.getNumberOfNodes()+1));
+	}
 
 }
