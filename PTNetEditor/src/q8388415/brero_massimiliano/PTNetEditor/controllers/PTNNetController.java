@@ -193,7 +193,7 @@ public class PTNNetController implements Runnable {
     }
 
     /**
-     * Removes node from net model an its view reprensatation. Removes also all
+     * Removes node from net model an its view representation. Removes also all
      * incoming and outgoing arcs of given node.
      * 
      * @param nodeView

@@ -292,7 +292,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener {
                 NodeView node = (NodeView) it.next();
                 if (node.isSelected()) {
                     nodesToRemove.add(node);
-                    // TODO richtig l�schen!?
+                    // TODO richtig löschen!?
                     node.setVisible(false);
                 }
             }

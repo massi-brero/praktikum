@@ -220,9 +220,9 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 				desktop.deselectNodes();
 				PTNAppController.deselectAll = false;
 			} else if (PTNAppController.deleteSelection) {
-				if (JOptionPane.OK_OPTION == (JOptionPane.showConfirmDialog(desktop, "Wollen Sie die Knoten wirklich löschen?", "Löschen", JOptionPane.WARNING_MESSAGE)))
-					desktop.deleteSelected();
 				PTNAppController.deleteSelection = false;
+				if (JOptionPane.OK_OPTION == (JOptionPane.showConfirmDialog(desktop, "Wollen Sie die Knoten wirklich löschen?", "Löschen", JOptionPane.WARNING_MESSAGE)))
+					desktop.deleteSelected();	
 			}
 
 		}

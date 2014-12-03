@@ -134,6 +134,7 @@ public class PTNNodeHelper implements ActionListener {
         desktop.addListenertoNode(nodeView);
         desktop.getNodeViews().add(nodeView);
         desktop.add(nodeView);
+        desktop.moveToFront(nodeView);
         desktop.repaint();
     }
     
