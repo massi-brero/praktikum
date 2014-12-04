@@ -205,8 +205,6 @@ public class PTNNodeHelper implements ActionListener {
 		else if (nodeInformation.getType() == PTNNodeTypes.transition)
 			size = TransitionView.getCurrentSize();
 		
-		System.out.println(nodeInformation.getType());
-		
 		location = new Point(inputLocation.x - (int)size.width/2, inputLocation.y - (int)size.height/2);
 		
 		//Correct if node would be places outside the desktop.
