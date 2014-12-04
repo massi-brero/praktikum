@@ -3,7 +3,6 @@ package q8388415.brero_massimiliano.PTNetEditor.views.desktop;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -14,6 +13,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.security.auth.login.AppConfigurationEntry;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -28,7 +28,6 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
-import q8388415.brero_massimiliano.PTNetEditor.views.PTNMenu;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.DeleteArcWindow;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.NewNodeWindow;
@@ -54,6 +53,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	private ArrayList<NodeView> nodes;
 	private PTNNetController netController;
 	private PTNDesktopController desktopController;
+	private PTNAppController appController;
 	private PTNNet net;
 	private PTNNodeHelper nodeHelper;
 	// Using a Hashtable instead of an ArrayList like nodes makes it easier to
@@ -71,14 +71,13 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	 * @param appControl
 	 * @param net
 	 */
-	public PTNDesktop(PTNAppController appControl, PTNNet net) {
+	public PTNDesktop(PTNAppController appController, PTNNet net) {
 
 		this.net = net;
-		this.netController = new PTNNetController(net, this);
-		nodeHelper = new PTNNodeHelper(this, net);
+		this.appController = appController;
 		setFocusable(true);
 		this.setOpaque(false);
-		addKeyListener(appControl);
+		addKeyListener(appController);
 		addMouseListener(this);
 		setDoubleBuffered(true);
 		this.setLayout(null);
@@ -90,14 +89,27 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	 * Set up the desktop and calls the set-up operations on the net controller
 	 */
 	public void init() {
+		
 		this.reset();
 		maxSize = getSize();
+		/**
+		 * initialize controllers and helpers
+		 */
+		this.netController = new PTNNetController(net, this);
 		netController.setUpNodeViews();
 		arcs = netController.setUpArcs();
 		desktopController = new PTNDesktopController(this, net);
-
+		appController.addSimulationListener(desktopController);
+		nodeHelper = new PTNNodeHelper(this, net);
+		
+		/**
+		 * basic panel work
+		 */
 		this.setBackground(Color.WHITE);
-		// start controller threads
+		
+		/**
+		 *  Start controllers as threads.
+		 */
 		Thread t1 = new Thread(desktopController);
 		t1.start();
 		Thread t2 = new Thread(netController);
