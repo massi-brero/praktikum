@@ -78,10 +78,10 @@ public class PTNNodeHelper implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		switch (e.getActionCommand()) {
-		case "Attribute �ndern":
+		case "Attribute ändern":
 			this.handleChangeAttributes();
 			break;
-		case "Kanten l�schen":
+		case "Kanten löschen":
 			this.handleDeleteArcsDialog();
 			break;
 		default:
