@@ -188,4 +188,18 @@ public class PTNNodeHelper implements ActionListener {
 		return PREFIX_ID.concat(String.valueOf(net.getNumberOfNodes()+1));
 	}
 
+	/**
+	 * Relocotes node so the node's icon enter is placed on the given location.
+	 * This way a new node is places after a double click where the user 
+	 * would expect it.
+	 * 
+	 * @param location
+	 * 		Point
+	 * @return
+	 */
+	public Point centerNodeLocation(Point location) {
+		// TODO Auto-generated method stub
+		return location;
+	}
+
 }

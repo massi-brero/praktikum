@@ -16,6 +16,7 @@ import java.util.Map;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
@@ -450,8 +451,10 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	public void mouseClicked(MouseEvent e) {
 		
 		if (e.getClickCount() == 2) {
-			Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-			mouseLocation = new Point(mouseLocation.x, mouseLocation.y - 2 * PTNMenu.HEIGHT);
+			e = SwingUtilities.convertMouseEvent(e.getComponent(), e, this);
+			Point mouseLocation = e.getPoint();
+			System.out.println(mouseLocation);
+			//mouseLocation = new Point(mouseLocation.x, mouseLocation.y);
 			this.callNewNodeDialog(mouseLocation);
 		}
 		

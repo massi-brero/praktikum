@@ -151,10 +151,14 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	@Override
 	public void mouseReleased(MouseEvent e) {
 
+		NodeView source = null;
 		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
 		mouseLocation = new Point(mouseLocation.x, mouseLocation.y - 2 * PTNMenu.HEIGHT);
-		NodeView source = (NodeView) e.getComponent();
 		JComponent target = this.getComponentAtMouseLocation(mouseLocation);
+
+		if (e.getComponent() instanceof PlaceView || e.getComponent()  instanceof TransitionView)
+			source = (NodeView) e.getComponent();
+
 
 		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) || (source instanceof TransitionView && target instanceof PlaceView);
 
