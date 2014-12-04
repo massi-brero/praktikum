@@ -453,7 +453,6 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		if (e.getClickCount() == 2) {
 			e = SwingUtilities.convertMouseEvent(e.getComponent(), e, this);
 			Point mouseLocation = e.getPoint();
-			System.out.println(mouseLocation);
 			//mouseLocation = new Point(mouseLocation.x, mouseLocation.y);
 			this.callNewNodeDialog(mouseLocation);
 		}

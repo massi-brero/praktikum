@@ -87,7 +87,6 @@ public class TransitionView extends NodeView {
 
 		this.isActivated = isActivated;
 		this.updateIcon();
-		System.out.println(currentTransitionScale);
 		this.updateIconSize(TransitionView.currentTransitionScale);
 		
 	}
