@@ -115,7 +115,11 @@ public class TransitionView extends NodeView {
      * 		Dimension size of this node type.
      */
 	public static Dimension getCurrentSize() {
-		return currentSize;
+		if (null == currentSize)
+			return DEFAULT_SIZE;
+		else
+			return currentSize;
 	}
+
 
 }

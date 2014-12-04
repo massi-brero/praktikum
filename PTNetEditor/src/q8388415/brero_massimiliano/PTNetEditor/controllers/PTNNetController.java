@@ -300,7 +300,7 @@ public class PTNNetController implements Runnable {
         PTNNodeTypes type = nodeInformation.getType();
         int token = nodeInformation.getToken();
         NodeView nodeView = null;
-        Point nodeLocation = nodeHelper.centerNodeLocation(nodeInformation.getLocation());
+        Point nodeLocation = nodeHelper.centerNodeLocation(nodeInformation);
 
             try {
                 if (type == PTNNodeTypes.place) {

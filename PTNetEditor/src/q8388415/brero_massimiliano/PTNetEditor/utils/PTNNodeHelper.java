@@ -1,20 +1,18 @@
 package q8388415.brero_massimiliano.PTNetEditor.utils;
 
-import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationException;
-import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
-import q8388415.brero_massimiliano.PTNetEditor.models.PTNPlace;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
@@ -189,7 +187,7 @@ public class PTNNodeHelper implements ActionListener {
 	}
 
 	/**
-	 * Relocotes node so the node's icon enter is placed on the given location.
+	 * Relocates node so the node's icon enter is placed on the given location.
 	 * This way a new node is places after a double click where the user 
 	 * would expect it.
 	 * 
@@ -197,8 +195,24 @@ public class PTNNodeHelper implements ActionListener {
 	 * 		Point
 	 * @return
 	 */
-	public Point centerNodeLocation(Point location) {
-		// TODO Auto-generated method stub
+	public Point centerNodeLocation(PTNINodeDTO nodeInformation) {
+		Dimension size = null;
+		Point location = null;
+		Point inputLocation = nodeInformation.getLocation();
+		
+		if (nodeInformation.getType() == PTNNodeTypes.place)
+			size = PlaceView.getCurrentSize();
+		else if (nodeInformation.getType() == PTNNodeTypes.transition)
+			size = TransitionView.getCurrentSize();
+		
+		System.out.println(nodeInformation.getType());
+		
+		location = new Point(inputLocation.x - (int)size.width/2, inputLocation.y - (int)size.height/2);
+		
+		//Correct if node would be places outside the desktop.
+		location.x = location.x < 0 ? 0 : location.x;
+		location.y = location.y < 0 ? 0 : location.y;
+		
 		return location;
 	}
 
