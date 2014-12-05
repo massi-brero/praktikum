@@ -1,7 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
 import java.awt.Component;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -19,7 +18,6 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIModeListener;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
-import q8388415.brero_massimiliano.PTNetEditor.views.PTNMenu;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
@@ -36,7 +34,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 	private PTNDesktop desktop;
 	private PTNNodeHelper nodeHelper;
-	private volatile Point oldLocation;
+	private volatile Point currentDraggingPosistion;
 	static boolean isDragged = false;
 	private Boolean isInSimulationMode = false;  
 	PTNSimulationInterpreter simInterpreter;
@@ -47,9 +45,9 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		nodeHelper = new PTNNodeHelper(desktop, net);
 		simInterpreter = new PTNSimulationInterpreter(desktop, net);
 		/**
-		 * Default point where to start new move operations.
+		 * Position of mouse when dragging.
 		 */
-		oldLocation = new Point(-1, -1);
+		currentDraggingPosistion = new Point(-1, -1);
 
 	}
 
@@ -82,8 +80,8 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 				} else {
 					
 					// now somebody drags...!
-					int diffX = e.getX() - (int) oldLocation.getX();
-					int diffY = e.getY() - (int) oldLocation.getY();
+					int diffX = e.getX() - (int) currentDraggingPosistion.getX();
+					int diffY = e.getY() - (int) currentDraggingPosistion.getY();
 					
 					if (desktop.hasSelected()) { // here we many have to move more
 						// than one element
@@ -104,7 +102,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 				
 			}
 			
-			oldLocation = e.getPoint();
+			currentDraggingPosistion = e.getPoint();
 		}
 
 	}
@@ -170,8 +168,9 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	public void mouseReleased(MouseEvent e) {
 
 		NodeView source = null;
-		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-		mouseLocation = new Point(e.getX(), e.getY() - 2 * PTNMenu.HEIGHT);
+		System.out.println(currentDraggingPosistion);
+		Point mouseLocation = currentDraggingPosistion;
+		mouseLocation = new Point(currentDraggingPosistion.x, currentDraggingPosistion.y);
 		JComponent target = this.getComponentAtMouseLocation(mouseLocation);
 
 		if (e.getComponent() instanceof NodeView)
@@ -184,7 +183,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		if (PTNAppController.moveNodes && isDragged) {
 			// Dragging is over so reset moving variables.
 			isDragged = false;
-			oldLocation.setLocation(-1, -1);
+			currentDraggingPosistion.setLocation(-1, -1);
 		} else if (isAllowedTarget) {
 			// We can cast safely to node view since we now know that we have a
 			// NodeView type under the mouse pointer.
