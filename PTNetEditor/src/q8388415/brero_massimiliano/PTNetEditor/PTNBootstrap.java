@@ -2,6 +2,7 @@ package q8388415.brero_massimiliano.PTNetEditor;
 
 import java.io.File;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
@@ -23,14 +24,20 @@ public class PTNBootstrap {
     private static PTNBootstrap bootstrap;
     private PTNParser parser;
     private File sourceFile;
+    private static Boolean isRunning = false;
 
     public PTNBootstrap() {
     }
 
     public static void main(String[] args) {
-
-        bootstrap = new PTNBootstrap();
-        bootstrap.init();
+    	
+    	if (!isRunning) {    		
+    		isRunning = true;
+    		bootstrap = new PTNBootstrap();
+    		bootstrap.init();
+    	} else {
+    		JOptionPane.showConfirmDialog(null, "Instanz bereits vorhanden", "Schreibfehler", JOptionPane.WARNING_MESSAGE);
+    	}
 
     }
 

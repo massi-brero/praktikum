@@ -38,7 +38,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	private PTNNodeHelper nodeHelper;
 	private volatile Point oldLocation;
 	static boolean isDragged = false;
-	private Boolean isInSimulationMode = false;
+	private Boolean isInSimulationMode = false;  
 	PTNSimulationInterpreter simInterpreter;
 
 	public PTNDesktopController(PTNDesktop dt, PTNNet net) {
@@ -47,7 +47,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		nodeHelper = new PTNNodeHelper(desktop, net);
 		simInterpreter = new PTNSimulationInterpreter(desktop, net);
 		/**
-		 * Default to start new move operations.
+		 * Default point where to start new move operations.
 		 */
 		oldLocation = new Point(-1, -1);
 
@@ -171,14 +171,15 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 		NodeView source = null;
 		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-		mouseLocation = new Point(mouseLocation.x, mouseLocation.y - 2 * PTNMenu.HEIGHT);
+		mouseLocation = new Point(e.getX(), e.getY() - 2 * PTNMenu.HEIGHT);
 		JComponent target = this.getComponentAtMouseLocation(mouseLocation);
 
-		if (e.getComponent() instanceof PlaceView || e.getComponent()  instanceof TransitionView)
+		if (e.getComponent() instanceof NodeView)
 			source = (NodeView) e.getComponent();
 
 
 		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) || (source instanceof TransitionView && target instanceof PlaceView);
+		
 
 		if (PTNAppController.moveNodes && isDragged) {
 			// Dragging is over so reset moving variables.
