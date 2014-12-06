@@ -142,7 +142,7 @@ public class PTNParser extends PNMLParser {
 
         if (!PTNNetValidator.isValidToken(marking)) {
             throw new PTNNodeConstructionException("Als Token sind nur Zahlen von 0-999 zugelassen");
-        } else if (node.getType() == PTNNodeTypes.place) {
+        } else if (node.getType() == PTNNodeTypes.STELLE) {
             ((PTNPlace) node).setToken(Integer.parseInt(marking));
         } else {
             // Do nothing.

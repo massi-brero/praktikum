@@ -51,9 +51,9 @@ public class PTNArcHelper {
 		Dimension size = null;
 		Point normalizedLocation = null;
 		
-		if (type == PTNNodeTypes.place)
+		if (type == PTNNodeTypes.STELLE)
 			size = PlaceView.getCurrentSize();
-		else if (type == PTNNodeTypes.transition)
+		else if (type == PTNNodeTypes.TRANSITION)
 			size = TransitionView.getCurrentSize();
 		
 		normalizedLocation = new Point(node.getLocation().x + (int)size.getWidth()/2, 
@@ -104,7 +104,7 @@ public class PTNArcHelper {
 	}
 	
 	public void showErrorPaneDoubleArc() {
-		JOptionPane.showConfirmDialog(desktop, "Diese Kante existiert bereits oder sie �berlappt sich exakt mit einer existierenden!", 
+		JOptionPane.showConfirmDialog(desktop, "Diese Kante existiert bereits oder sie überlappt sich exakt mit einer existierenden!", 
 				"Schon vorhanden.", JOptionPane.PLAIN_MESSAGE);
 		
 	}
@@ -120,7 +120,7 @@ public class PTNArcHelper {
 	 */
 	public void initArcView(ArcView arcView, PTNNode targetModel, NodeView targetView) {
 
-		if (targetModel.getType() == PTNNodeTypes.transition) {
+		if (targetModel.getType() == PTNNodeTypes.TRANSITION) {
 
 			((TransitionView)targetView).setIsActivated(((PTNTransition)targetModel).isActivated());
 

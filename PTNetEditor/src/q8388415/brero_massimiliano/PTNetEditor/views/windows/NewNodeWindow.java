@@ -73,7 +73,7 @@ public class NewNodeWindow extends JDialog implements ActionListener {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (types.getSelectedItem() == PTNNodeTypes.transition) {
+                if (types.getSelectedItem() == PTNNodeTypes.TRANSITION) {
                     tokenLabel.setVisible(false);
                     token.setVisible(false);
                 } else {
@@ -119,7 +119,7 @@ public class NewNodeWindow extends JDialog implements ActionListener {
          */
         if (e.getActionCommand().equals("Abspeichern")) {
 
-                if (types.getSelectedItem() == PTNNodeTypes.place && !PTNNetValidator.isValidToken(token.getText())) {
+                if (types.getSelectedItem() == PTNNodeTypes.STELLE && !PTNNetValidator.isValidToken(token.getText())) {
                         JOptionPane.showConfirmDialog(this, "Bitte geben Sie eine Zahl zwischen 0-999 ein.", "Token Fehler", JOptionPane.PLAIN_MESSAGE);
                 } else {
                     isInformationToBeSent = true;

@@ -61,12 +61,12 @@ public class PTNNetController implements Runnable {
 
             PTNNodeTypes type = node.getType();
 
-            if (type == PTNNodeTypes.place) {
+            if (type == PTNNodeTypes.STELLE) {
 
                 nodeView = new PlaceView(node.getId(), node.getToken());
                 nodeHelper.addPlaceListener((PlaceView) nodeView);
 
-            } else if (type == PTNNodeTypes.transition) {
+            } else if (type == PTNNodeTypes.TRANSITION) {
 
                 nodeView = new TransitionView(node.getId());
                 ((TransitionView)nodeView).setIsActivated(((PTNTransition)node).isActivated());
@@ -233,7 +233,7 @@ public class PTNNetController implements Runnable {
         net.getArcs().remove(arc.getId());
         
         //Check which transition status have to be updated
-        if (arc.getTarget() != null && arc.getTarget().getType() == PTNNodeTypes.transition) {
+        if (arc.getTarget() != null && arc.getTarget().getType() == PTNNodeTypes.TRANSITION) {
         	nodeHelper.updateTransitionState((PTNTransition)arc.getTarget());
         }
         
@@ -303,7 +303,7 @@ public class PTNNetController implements Runnable {
         Point nodeLocation = nodeHelper.centerNodeLocation(nodeInformation);
 
             try {
-                if (type == PTNNodeTypes.place) {
+                if (type == PTNNodeTypes.STELLE) {
                 	
                 	PTNPlace place = new PTNPlace(name, id, nodeLocation);
                 	place.setToken(token);
@@ -312,7 +312,7 @@ public class PTNNetController implements Runnable {
                     nodeView = new PlaceView(id, token);
                     nodeHelper.addPlaceListener((PlaceView) nodeView);
 
-                } else if (type == PTNNodeTypes.transition) {
+                } else if (type == PTNNodeTypes.TRANSITION) {
 
                     net.addNode(new PTNTransition(name, id, nodeLocation));
 

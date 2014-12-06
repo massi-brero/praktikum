@@ -202,9 +202,9 @@ public class PTNNodeHelper implements ActionListener {
 		Point location = null;
 		Point inputLocation = nodeInformation.getLocation();
 		
-		if (nodeInformation.getType() == PTNNodeTypes.place)
+		if (nodeInformation.getType() == PTNNodeTypes.STELLE)
 			size = PlaceView.getCurrentSize();
-		else if (nodeInformation.getType() == PTNNodeTypes.transition)
+		else if (nodeInformation.getType() == PTNNodeTypes.TRANSITION)
 			size = TransitionView.getCurrentSize();
 		
 		location = new Point(inputLocation.x - (int)size.width/2, inputLocation.y - (int)size.height/2);

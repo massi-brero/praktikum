@@ -53,7 +53,7 @@ public class TransitionView extends NodeView {
         //now we scale our other components like icon etc.
 		if (0 < TransitionView.currentTransitionScale)
 			this.updateSize(TransitionView.currentTransitionScale);
-		this.setType(PTNNodeTypes.transition);
+		this.setType(PTNNodeTypes.TRANSITION);
 		nameLabel.setBounds(+500, -5, 10, 20);
 		
 	}

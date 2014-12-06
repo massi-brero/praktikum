@@ -54,12 +54,12 @@ public class PTNFileWriter {
 			/**
 			 * This is the place to extend if we have more node types
 			 */
-			if (node.getType() == PTNNodeTypes.place) {
+			if (node.getType() == PTNNodeTypes.STELLE) {
 				pnmlWriter.addPlace(node.getId(), node.getName(),
 						String.valueOf(node.getLocation().x),
 						String.valueOf(node.getLocation().y),
 						String.valueOf(((PTNPlace) node).getToken()));
-			} else if (node.getType() == PTNNodeTypes.transition) {
+			} else if (node.getType() == PTNNodeTypes.TRANSITION) {
 				pnmlWriter.addTransition(node.getId(), node.getName(),
 						String.valueOf(node.getLocation().x),
 						String.valueOf(node.getLocation().y));

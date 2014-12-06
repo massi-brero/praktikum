@@ -18,7 +18,7 @@ public class PTNPlace extends PTNNode {
 	}
 	
 	protected void init() {
-		this.setType(PTNNodeTypes.place);
+		this.setType(PTNNodeTypes.STELLE);
 	}
 
 	public int getToken() {

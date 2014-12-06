@@ -18,7 +18,7 @@ public class PTNTransition extends PTNNode {
 	}
 	
 	protected void init() {
-		this.setType(PTNNodeTypes.transition);
+		this.setType(PTNNodeTypes.TRANSITION);
 	}
 
 	public Boolean isActivated() {

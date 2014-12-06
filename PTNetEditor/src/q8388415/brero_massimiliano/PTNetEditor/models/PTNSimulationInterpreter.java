@@ -81,7 +81,7 @@ public class PTNSimulationInterpreter {
 			PTNNode node = it.next().getValue();
 
 			// We check if we really have a place now... just in case...
-			if (PTNNodeTypes.place == node.getType()) {
+			if (PTNNodeTypes.STELLE == node.getType()) {
 				int token = ((PTNPlace) node).getToken();
 
 				switch (operation) {
@@ -144,7 +144,7 @@ public class PTNSimulationInterpreter {
 			affectedPlaceModel = (PTNNode)it.next().getValue();
 			nodeInformation = backUpPlacesInformation.get(affectedPlaceModel.getId());
 
-			if (null != nodeInformation && PTNNodeTypes.place == nodeInformation.getType()) {
+			if (null != nodeInformation && PTNNodeTypes.STELLE == nodeInformation.getType()) {
 				int oldToken = nodeInformation.getToken();
 				// reset place model and view
 				((PTNPlace)affectedPlaceModel).setToken(oldToken);
@@ -174,7 +174,7 @@ public class PTNSimulationInterpreter {
 		while (it.hasNext()) {
 			final Map.Entry<String, PTNNode> nodeEntry = (Map.Entry<String, PTNNode>) it.next();
 
-			if (PTNNodeTypes.place == nodeEntry.getValue().getType()) {
+			if (PTNNodeTypes.STELLE == nodeEntry.getValue().getType()) {
 
 				backupEntry = new PTNINodeDTO() {
 					

@@ -171,7 +171,7 @@ public class PTNNet {
 	 */
 	public void addArc(PTNArc a) {
 		
-		if (a.getTarget().getType() == PTNNodeTypes.transition)
+		if (a.getTarget().getType() == PTNNodeTypes.TRANSITION)
 			this.updateActivationAfterAddingNewPredecessor(a, (PTNTransition)a.getTarget());
 		
 		arcs.put(a.getId(), a);

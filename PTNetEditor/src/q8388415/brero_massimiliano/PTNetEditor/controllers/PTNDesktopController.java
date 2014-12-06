@@ -154,7 +154,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			else if (PTNAppController.selectMode) // select/deselect element
 				source.setSelected(!source.isSelected());
 		} else {
-			if (source.getType() == PTNNodeTypes.transition && ((TransitionView)source).isActivated()) {
+			if (source.getType() == PTNNodeTypes.TRANSITION && ((TransitionView)source).isActivated()) {
 				try {
 					simInterpreter.handleClick((TransitionView) source);
 				} catch (PTNSimulationException e2) {
@@ -166,8 +166,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	}
 
 	/**
-	 * We got to correct the mouse location y value to take the height of menu
-	 * bar into account.
+	 * 
 	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
@@ -191,7 +190,9 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			// Dragging is over so reset moving variables.
 			isDragged = false;
 			currentDraggingPosistion.setLocation(-1, -1);
-		} else if (isAllowedTarget && !isInSimulationMode) {
+		} else if (isAllowedTarget 
+						&& !isInSimulationMode
+							&& e.getButton() == MouseEvent.BUTTON1) {
 			// We can cast safely to node view since we now know that we have a
 			// NodeView type under the mouse pointer.
 			this.drawTempEdge(source, target);

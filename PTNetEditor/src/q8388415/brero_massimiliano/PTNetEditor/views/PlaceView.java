@@ -53,7 +53,7 @@ public class PlaceView extends NodeView {
         //now we scale our other components like icon etc.
         if (0 < PlaceView.currentPlaceScale)
             this.updateSize(PlaceView.currentPlaceScale);    
-        this.setType(PTNNodeTypes.place);
+        this.setType(PTNNodeTypes.STELLE);
         nameLabel.setVerticalTextPosition(JLabel.NORTH);
 
     }
