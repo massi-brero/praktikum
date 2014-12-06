@@ -2,6 +2,8 @@ package q8388415.brero_massimiliano.PTNetEditor.utils;
 
 import javax.swing.JOptionPane;
 
+import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
+
 /**
  * offers some quick to apply static methods to ensure our net is consistent 
  * and does not violate any constraints.
@@ -25,7 +27,7 @@ public class PTNNetValidator {
         try {
             if (token.equals("")) {
                 isValid = false;
-            } else if (Integer.parseInt(token) > 999 || Integer.parseInt(token) < 0) {
+            } else if (Integer.parseInt(token) > PTNAppController.MAX_TOKEN || Integer.parseInt(token) < 0) {
                isValid = false;
             }
         } catch (NumberFormatException e) {

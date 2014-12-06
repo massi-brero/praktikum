@@ -12,6 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNSimulationException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNSimulationInterpreter;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIModeListener;
@@ -153,8 +154,12 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			else if (PTNAppController.selectMode) // select/deselect element
 				source.setSelected(!source.isSelected());
 		} else {
-			if (source.getType() == PTNNodeTypes.transition) {
-				simInterpreter.handleClick((TransitionView) source);
+			if (source.getType() == PTNNodeTypes.transition && ((TransitionView)source).isActivated()) {
+				try {
+					simInterpreter.handleClick((TransitionView) source);
+				} catch (PTNSimulationException e2) {
+					JOptionPane.showConfirmDialog(desktop, e2.getMessage(), "Simulationsstop", JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		}
 
@@ -168,7 +173,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	public void mouseReleased(MouseEvent e) {
 
 		NodeView source = null;
-		System.out.println(currentDraggingPosistion);
 		Point mouseLocation = currentDraggingPosistion;
 		mouseLocation = new Point(currentDraggingPosistion.x, currentDraggingPosistion.y);
 		JComponent target = this.getComponentAtMouseLocation(mouseLocation);
@@ -177,14 +181,17 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			source = (NodeView) e.getComponent();
 
 
-		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) || (source instanceof TransitionView && target instanceof PlaceView);
+		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) 
+										|| (source instanceof TransitionView && target instanceof PlaceView);
 		
 
-		if (PTNAppController.moveNodes && isDragged) {
+		if (PTNAppController.moveNodes 
+				&& isDragged
+					&& !isInSimulationMode) {
 			// Dragging is over so reset moving variables.
 			isDragged = false;
 			currentDraggingPosistion.setLocation(-1, -1);
-		} else if (isAllowedTarget) {
+		} else if (isAllowedTarget && !isInSimulationMode) {
 			// We can cast safely to node view since we now know that we have a
 			// NodeView type under the mouse pointer.
 			this.drawTempEdge(source, target);
