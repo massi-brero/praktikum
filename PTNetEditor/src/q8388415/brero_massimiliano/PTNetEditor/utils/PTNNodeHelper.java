@@ -72,6 +72,8 @@ public class PTNNodeHelper implements ActionListener {
 		cMenu = new ContextMenuNodeWindow(this);
 		cMenu.setLocation((int)sourceView.getLocation().getX() + 20, (int)sourceView.getLocation().getY() +20);
 		cMenu.setVisible(true);
+		desktop.addMouseListener(cMenu);
+		controlPanel.addMouseListener(cMenu);
 	}
 
 	@Override
