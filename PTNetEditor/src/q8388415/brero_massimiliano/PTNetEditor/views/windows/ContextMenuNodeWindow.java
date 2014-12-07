@@ -63,10 +63,5 @@ public class ContextMenuNodeWindow extends JPopupMenu implements MouseListener {
 	@Override
 	public void mouseExited(java.awt.event.MouseEvent e) {}
 
-
-	
-	
-	
-	
 	
 }

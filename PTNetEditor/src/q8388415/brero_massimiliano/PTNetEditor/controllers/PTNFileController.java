@@ -54,7 +54,7 @@ public class PTNFileController implements PTNIFileListener {
      */
 	@Override
 	public int writeToFile(PTNNet net) {
-
+		
 		this.writeFileDialog();
 
 		return 0;
@@ -177,13 +177,14 @@ public class PTNFileController implements PTNIFileListener {
 			int val = JOptionPane.showConfirmDialog(desktop, "Wollen Sie die bestehende Datei überschreiben?", 
 									"Datei exitiert bereits.", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
-			if (val == JOptionPane.OK_OPTION) {
+			if (val == JOptionPane.OK_OPTION)
 				return true;
-			}
+			else
+				return false;
 
 		}
 
-		return false;
+		return true;
 
 	}
 	

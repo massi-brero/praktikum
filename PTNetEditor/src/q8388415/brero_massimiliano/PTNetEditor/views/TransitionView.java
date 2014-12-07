@@ -6,6 +6,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
 /**
@@ -19,7 +20,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  * @author Laptop
  *
  */
-public class TransitionView extends NodeView {
+public class TransitionView extends NodeView implements PTNINodeDTO {
 
 	PTNDesktopController listener;
 	final private static String sourceIconStandard = "rectangle.png";
@@ -119,6 +120,16 @@ public class TransitionView extends NodeView {
 			return DEFAULT_SIZE;
 		else
 			return currentSize;
+	}
+
+	@Override
+	public String getNodeName() {
+		return this.getName();
+	}
+
+	@Override
+	public Integer getToken() {
+		return null;
 	}
 
 

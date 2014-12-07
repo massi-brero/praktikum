@@ -60,7 +60,7 @@ public class PTNParserTest {
     @Test
     public void testSetMarking() {
         PTNPlace place = (PTNPlace) net.getNodeById("place1");
-        assertEquals(0, place.getToken());
+        assertTrue(0 == place.getToken());
     }
 
     @Test

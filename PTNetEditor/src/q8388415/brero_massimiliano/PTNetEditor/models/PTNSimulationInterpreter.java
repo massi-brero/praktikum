@@ -12,15 +12,17 @@ import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNSimulationException
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNTokenOperations;
+import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 public class PTNSimulationInterpreter {
 
-	private PTNNet net;
-	private PTNDesktop desktop;
-	private Boolean simError = false;
+	protected PTNNet net;
+	protected PTNDesktop desktop;
+	protected Boolean simError = false;
+	protected PTNNodeHelper nodeHelper; 
 
 	public PTNSimulationInterpreter(PTNDesktop desktop, PTNNet net) {
 		this.net = net;
@@ -32,11 +34,14 @@ public class PTNSimulationInterpreter {
 	 * mode. If this method encounters an {@link PTNSimulationException} it will
 	 * reset the node tokens their their initial state and the exception; this
 	 * way the net is kept in an consistent state.
+	 * After a simulation state the affected transitions are updated.
 	 * 
 	 * @param transitionView
 	 * @throws PTNSimulationException
 	 */
 	public void handleClick(TransitionView transitionView) throws PTNSimulationException {
+		
+		nodeHelper = new PTNNodeHelper(desktop, net);
 		HashMap<String, PTNNode> precedingPlaces = net.getPredecessors(transitionView.getId());
 		HashMap<String, PTNNode> succeedingPlaces = net.getSuccessors(transitionView.getId());
 
@@ -53,7 +58,9 @@ public class PTNSimulationInterpreter {
 			if (!simError) {
 				this.updateTokenOfPlaces(precedingPlaces, PTNTokenOperations.DECREMENT);
 				this.updateTokenOfPlaces(succeedingPlaces, PTNTokenOperations.INCREMENT);
-				this.updateTransitions(succeedingPlaces, transitionView);
+				this.updateTransitions(succeedingPlaces, transitionView);			
+				this.updateTransitions(precedingPlaces, transitionView);
+				
 			}
 		} catch (PTNSimulationException e) {
 			simError = false;
@@ -92,7 +99,8 @@ public class PTNSimulationInterpreter {
 						((PlaceView) desktop.getNodeViewById(node.getId())).updateToken(token);
 					} else {
 						simError = true;
-						throw new PTNSimulationException("Dieser Simulationsschritt ist wg. Überschreitung der maximalen Token-Zahl nicht möglich");
+						throw new PTNSimulationException(
+								"Dieser Simulationsschritt ist wg. Überschreitung der maximalen Token-Zahl nicht möglich");
 					}
 					break;
 				case DECREMENT:
@@ -125,7 +133,21 @@ public class PTNSimulationInterpreter {
 	 * @param transition
 	 */
 	private void updateTransitions(HashMap<String, PTNNode> places, TransitionView transitionView) {
+		/**
+		 * If everything went well the transitions' activation states are updated.
+		 * We start with the transition that was clicked on.
+		 */
+		nodeHelper.updateTransitionState(transitionView);
 		Iterator<Map.Entry<String, PTNNode>> it = places.entrySet().iterator();
+		
+		while (it.hasNext()) {
+			PTNNode node = (PTNNode)it.next().getValue();
+			
+			if(null != node && PTNNodeTypes.STELLE == node.getType()) {
+				nodeHelper.updateAdjacentTransitionsState(node);
+			}
+			
+		}
 
 	}
 
@@ -190,7 +212,7 @@ public class PTNSimulationInterpreter {
 					}
 
 					@Override
-					public int getToken() {
+					public Integer getToken() {
 						return token;
 					}
 

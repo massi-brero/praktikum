@@ -2,7 +2,9 @@ package q8388415.brero_massimiliano.PTNetEditor.views;
 
 import java.awt.Dimension;
 import java.awt.Font;
+
 import javax.swing.JLabel;
+
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
 /**
@@ -131,6 +133,16 @@ public class PlaceView extends NodeView {
 			return DEFAULT_SIZE;
 		else
 			return currentSize;
+	}
+
+	@Override
+	public String getNodeName() {
+		return this.getName();
+	}
+
+	@Override
+	public Integer getToken() {
+		return token;
 	}
 
 }

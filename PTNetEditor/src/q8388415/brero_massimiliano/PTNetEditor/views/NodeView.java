@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 
 import org.hamcrest.core.SubstringMatcher;
 
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
@@ -21,7 +22,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  * @author brero
  *
  */
-public abstract class NodeView extends JLabel implements PTNIScaleListener {
+public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNINodeDTO {
 	
 	private final int SCALE_MAX = 4;
 	private final int SCALE_MIN = 0;

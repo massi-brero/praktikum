@@ -36,8 +36,8 @@ public class PTNTransition extends PTNNode {
 	}
 
 	@Override
-	public int getToken() {
-		return 0;
+	public Integer getToken() {
+		return null;
 	}
 	
 

@@ -17,7 +17,7 @@ public interface PTNINodeDTO {
 	String getId();
 	String getNodeName();
 	PTNNodeTypes getType();
-	int getToken();
+	Integer getToken();
 	Point getLocation();
 	
 }

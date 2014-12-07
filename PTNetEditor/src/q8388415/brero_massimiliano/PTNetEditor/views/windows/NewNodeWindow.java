@@ -142,7 +142,7 @@ public class NewNodeWindow extends JDialog implements ActionListener {
             
             return new PTNINodeDTO() {
                 @Override
-                public int getToken() {
+                public Integer getToken() {
                     return token.getText().equals("") || null == token.getText() ? 0 : Integer.parseInt(token.getText());
                 }
                 

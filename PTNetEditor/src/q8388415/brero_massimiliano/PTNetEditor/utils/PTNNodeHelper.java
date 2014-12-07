@@ -140,13 +140,13 @@ public class PTNNodeHelper implements ActionListener {
      * @param sourceView2 
      * 
      */
-    public void updateAdjacentTransitionsState(PlaceView sourceView) {
+    public void updateAdjacentTransitionsState(PTNINodeDTO source) {
     	
     	/**
     	 * We get the transitions by following the outgoing arcs.
     	 * This way we have all the parameters needed for PTNNet#
     	 */
-    	Iterator<Map.Entry<String, PTNNode>> it = net.getSuccessors(sourceView.getId()).entrySet().iterator();
+    	Iterator<Map.Entry<String, PTNNode>> it = net.getSuccessors(source.getId()).entrySet().iterator();
 
     	while (it.hasNext()) {
     		
@@ -158,19 +158,22 @@ public class PTNNodeHelper implements ActionListener {
     }
 
     /**
-     * This method checks if the transitions activation state has to be
+     * This method checks if the transition's activation state has to be
      * changed, e. g. after an arc has been deleted.
+     * Accepts either node views or node models.
      * 
      * @param sourceView2
+     * 		PTNINodeDTO ... So we may pass either a node view or a node model.
      */
-	public void updateTransitionState(PTNTransition transitionModel) {
+	public void updateTransitionState(PTNINodeDTO node) {
 		
-		if (null != transitionModel) {
+		if (null != node && PTNNodeTypes.TRANSITION == node.getType()) {
     		/**
     		 * Since the source is a place the target of the arc really must be a transition.
     		 * Casting is one more time safe. 
     		 */
     		// Update the transitionView
+			PTNTransition transitionModel = (PTNTransition)net.getNodeById(node.getId());
     		NodeView transitionView = desktop.getNodeViewById(transitionModel.getId());
     		((TransitionView)transitionView).setIsActivated(net.activateTransition(transitionModel));
 		}
