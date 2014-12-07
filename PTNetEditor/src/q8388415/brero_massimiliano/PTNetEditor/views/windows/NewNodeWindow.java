@@ -1,5 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.windows;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -9,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -20,6 +20,7 @@ import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNetValidator;
+import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 public class NewNodeWindow extends JDialog implements ActionListener {
 
@@ -31,17 +32,21 @@ public class NewNodeWindow extends JDialog implements ActionListener {
     private JTextField token;
     private Boolean isInformationToBeSent = false;
     private Point nodeLocation = PTNAppController.DEFAULT_NODE_LOCATION;
+    private PTNDesktop desktop;
+	private Dimension BUTTON_SIZE = new Dimension(50, 20);
+	private Dimension WINDOW_SIZE = new Dimension(200, 100);
 
-    public NewNodeWindow(Point nodeLocation) {
-    	this();
+    public NewNodeWindow(Point nodeLocation, PTNDesktop desktop) {
+    	this(desktop);
     	this.nodeLocation = nodeLocation;
     }
     
-    public NewNodeWindow() {
-
+    public NewNodeWindow(PTNDesktop desktop) {
+    	this.desktop = desktop;
         panel = new JPanel();
-        panel.setSize(100, 200);
+        panel.setPreferredSize(WINDOW_SIZE);
         panel.setLayout(new GridLayout(0, 2));
+        this.setAtDesktopDefaultPosition();
         this.setFocusable(false);
         /**
          * Do nothing because we could still have incorrect data in some of the fields.
@@ -54,7 +59,7 @@ public class NewNodeWindow extends JDialog implements ActionListener {
 
     }
 
-    /**
+	/**
      * Prepares all the fields for the dialog window
      */
     private void initializeDialog() {
@@ -89,10 +94,12 @@ public class NewNodeWindow extends JDialog implements ActionListener {
 
         JButton okButton = new JButton("Abspeichern");
         okButton.addActionListener(this);
+        okButton.setPreferredSize(BUTTON_SIZE);
         this.addToPanel(okButton);
         
         JButton cancelButton = new JButton("Abbrechen");
         cancelButton.addActionListener(this);
+        cancelButton.setPreferredSize(BUTTON_SIZE);
         this.addToPanel(cancelButton);
 
     }
@@ -143,7 +150,7 @@ public class NewNodeWindow extends JDialog implements ActionListener {
             return new PTNINodeDTO() {
                 @Override
                 public Integer getToken() {
-                    return token.getText().equals("") || null == token.getText() ? 0 : Integer.parseInt(token.getText());
+                    return Integer.parseInt(token.getText());
                 }
                 
                 @Override
@@ -175,4 +182,20 @@ public class NewNodeWindow extends JDialog implements ActionListener {
         return null;
         
     }
+    
+    /**
+     * Places this window always in the upper left corner of the desktop.
+     * 
+     * @return
+     */
+    private void setAtDesktopDefaultPosition() {
+		int offsetX = 10;
+		int offsetY = 10;
+		this.setLocationRelativeTo(desktop);
+		Point centerPosition = this.getLocation();
+		
+		this.setLocation((int)(centerPosition.getX() - (desktop.getWidth() / 2) + offsetX), 
+							(int)(centerPosition.getY() - (int)(desktop.getHeight() / 2) + offsetY));
+		
+	}
 }

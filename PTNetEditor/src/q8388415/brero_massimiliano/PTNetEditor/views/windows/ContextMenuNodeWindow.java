@@ -1,16 +1,11 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.windows;
 
+import java.awt.Point;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseListener;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-
-import org.w3c.dom.events.MouseEvent;
 
 /**
  * Context menu for node. Will show options to change node attributes 
@@ -25,10 +20,11 @@ public class ContextMenuNodeWindow extends JPopupMenu implements MouseListener {
 	
 	ActionListener listener;
 
-	public ContextMenuNodeWindow(ActionListener listener) {
+	public ContextMenuNodeWindow(ActionListener listener, Point location) {
 		this.listener = listener;
 		this.init();
 		this.setFocusable(true);
+		this.setLocation(location);
 	}
 
 	private void init() {

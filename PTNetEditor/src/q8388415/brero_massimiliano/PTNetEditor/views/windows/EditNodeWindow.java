@@ -1,5 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.windows;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -10,12 +11,13 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
+import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNetValidator;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 
@@ -25,15 +27,18 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	private JPanel panel;
 	private JTextField nameLabel;
 	private JTextField token;
+    private Boolean isInformationToBeSent = false;
 	private NodeView sourceNode;
+	private Dimension BUTTON_SIZE = new Dimension(50, 20);
+	private Dimension WINDOW_SIZE = new Dimension(200, 100);
 	
 	public EditNodeWindow(NodeView node) {
 
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		panel = new JPanel();
-		panel.setSize(100, 200);
-		panel.setLayout(new GridLayout(0,2));
 		this.setLocationRelativeTo(node);
+		panel = new JPanel();
+		panel.setPreferredSize(WINDOW_SIZE);
+		panel.setLayout(new GridLayout(0,2));
 		this.setFocusable(false);
 		this.sourceNode = node;
 		
@@ -64,7 +69,13 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 		
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(this);
+		okButton.setPreferredSize(BUTTON_SIZE);
 		this.addToPanel(okButton);
+		
+		JButton cancelButton = new JButton("Abbrechen");
+		cancelButton.addActionListener(this);
+		cancelButton.setPreferredSize(BUTTON_SIZE);
+		this.addToPanel(cancelButton);
 			
 	}
 	
@@ -83,8 +94,25 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		this.sendUpdatedNode();
-		this.dispose();
+		
+	     /**
+         * First check if we have a valid token. We'll check that in this window
+         * because we need no further information for this check.
+         * 
+         */
+        if (e.getActionCommand().equals("OK")) {
+
+                if (PTNNodeTypes.STELLE == sourceNode.getType() && !PTNNetValidator.isValidToken(token.getText())) {
+                        JOptionPane.showConfirmDialog(this, "Bitte geben Sie eine Zahl zwischen 0-999 ein.", "Token Fehler", JOptionPane.PLAIN_MESSAGE);
+                } else {
+                    isInformationToBeSent = true;
+                    this.dispose();                 
+                }
+
+        } else {
+        	System.out.println("ciao");
+        	this.dispose();
+        }
 	}
 
 	/**
@@ -93,31 +121,35 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	 */
 	public PTNINodeDTO sendUpdatedNode() {
 
-		return new PTNINodeDTO() {
-			@Override
-			public Integer getToken() {
-				return token.getText().equals("") || null == token.getText() ? 0 : Integer.parseInt(token.getText());
-			}
-			
-			@Override
-			public String getNodeName() {
-				return nameLabel.getText();
-			}
+		if (isInformationToBeSent) {
+			return new PTNINodeDTO() {
+				@Override
+				public Integer getToken() {
+					return token.getText().equals("") || null == token.getText() ? 0 : Integer.parseInt(token.getText());
+				}
 
-			@Override
-			public String getId() {
-				return sourceNode.getId();
-			}
+				@Override
+				public String getNodeName() {
+					return nameLabel.getText();
+				}
 
-			@Override
-			public PTNNodeTypes getType() {
-				return sourceNode.getType();
-			}
-			
-			@Override
-			public Point getLocation() {
-				return sourceNode.getLocation();
-			}
-		};
+				@Override
+				public String getId() {
+					return sourceNode.getId();
+				}
+
+				@Override
+				public PTNNodeTypes getType() {
+					return sourceNode.getType();
+				}
+
+				@Override
+				public Point getLocation() {
+					return sourceNode.getLocation();
+				}
+			};
+		}
+		
+		return null;
 	}
 }

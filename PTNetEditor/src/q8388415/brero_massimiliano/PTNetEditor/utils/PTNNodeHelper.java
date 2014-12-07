@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.lang.model.SourceVersion;
+
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
@@ -69,7 +71,7 @@ public class PTNNodeHelper implements ActionListener {
 	 */
 	public void handleContextmenu(NodeView sourceView) {
 		this.sourceView = sourceView;
-		cMenu = new ContextMenuNodeWindow(this);
+		cMenu = new ContextMenuNodeWindow(this, sourceView.getLocation());
 		cMenu.setLocation((int)sourceView.getLocation().getX() + 20, (int)sourceView.getLocation().getY() +20);
 		cMenu.setVisible(true);
 		desktop.addMouseListener(cMenu);

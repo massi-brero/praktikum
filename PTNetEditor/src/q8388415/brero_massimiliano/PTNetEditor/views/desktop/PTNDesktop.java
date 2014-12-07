@@ -346,10 +346,12 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		popUp.setVisible(true);
 
 		PTNINodeDTO nodeUpdate = popUp.sendUpdatedNode();
-		netController.updateNodeAttributes(source, nodeUpdate);
-
-		// so our arcs won't be obscured
-		this.paintImmediately(this.getBounds());
+		
+		if (null != nodeUpdate) {
+			netController.updateNodeAttributes(source, nodeUpdate);		
+			// so our arcs won't be obscured
+			this.paintImmediately(this.getBounds());
+		}
 
 	}
 
@@ -374,7 +376,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 	public void callNewNodeDialog(Point nodeLocation) {
 
-		NewNodeWindow popUp = new NewNodeWindow(nodeLocation);
+		NewNodeWindow popUp = new NewNodeWindow(nodeLocation, this);
 		popUp.setModal(true);
 		popUp.setVisible(true);
 
