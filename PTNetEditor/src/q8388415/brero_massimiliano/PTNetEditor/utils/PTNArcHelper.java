@@ -84,6 +84,7 @@ public class PTNArcHelper {
 	 * @param isSource
 	 * 		Type Boolean. Is node starting or ending point of arc?
 	 * @return
+	 * 		type: Point. New starting and ending points with the calculated offset.
 	 */
 	private Point addOffset(Point centeredLocation, PTNINodeDTO source, Boolean isSource) {
 		
@@ -97,20 +98,43 @@ public class PTNArcHelper {
 		return normalizedLocation;
 	}
 
+	/**
+	 * 
+	 * Computes the offset for an arc starting or ending point if source is a place.
+	 * Depending on the direction the arc is facing we have a given x offset (icon width
+	 * divided by 2) or a given y offset (icon height divided by 2). With a little
+	 * trigonometric magic and the arc's slope the missing offset can be calculated.
+	 * 
+	 * 
+	 * @param centeredLocation
+	 * 		Type: Point. Point right in the middle of the node icon.
+	 * @param isSource
+	 * 		Type Boolean. Is node starting or ending point of arc?
+	 * @return
+	 * 		type: Point. New starting and ending points with the calculated offset.
+	 */
 	private Point addOffSetToTransition(Point centeredLocation, Boolean isSource) {
 		// TODO Auto-generated method stub
 		return centeredLocation;
 	}
 
 	/**
-	 * Computes 
+	 * Computes the offset for an arc starting or ending point if source is a place.
+	 * Since the radius is given by the icon size, trigonometric functions can be used
+	 * after calculation the arcs gradient.
+	 * Thus is important to <strong>crop the circle in the icon source cleanly</strong>
+	 * or else we may get a little space between the arcs starting and ending point
+	 * and the icon image itself.
 	 * 
 	 * @param centeredLocation
+	 * 		Type: Point. Point right in the middle of the node icon.
 	 * @param isSource
+	 * 		Type Boolean. Is node starting or ending point of arc?
 	 * @return
+	 * 		type: Point. New starting and ending points with the calculated offset.
 	 */
 	private Point addOffSetToPlace(Point centeredLocation, Boolean isSource) {
-		// TODO Auto-generated method stub
+		//double gradient = Math.sin(a);
 		return centeredLocation;
 	}
 
