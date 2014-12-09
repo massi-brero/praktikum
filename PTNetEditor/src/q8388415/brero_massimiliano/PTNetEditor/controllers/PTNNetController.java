@@ -100,9 +100,10 @@ public class PTNNetController implements Runnable {
                 if (null == arc.getTarget().getLocation() || null == arc.getSource().getLocation()) {
                     throw new PTNArcConstructionException("Fehler: Allgemeiner Fehler beim Aufbau der Kanten");
                 }
-                Point start = arcHelper.normalizeLocation(arc.getSource(), true);
-                Point end = arcHelper.normalizeLocation(arc.getTarget(), false);
+                Point start = arcHelper.normalizeLocation(arc, true);
+                Point end = arcHelper.normalizeLocation(arc, false);
                 arcView = new ArcView(arc.getId(), start, end, this);
+                
                 arcHelper.addArcListener(arcView);
                 arcViewList.put(arc.getId(), arcView);
 
@@ -166,7 +167,7 @@ public class PTNNetController implements Runnable {
      * @param source
      */
     public void updateArcsForNode(NodeView nodeView) {
-
+    	
         PTNArc arc;
         PTNNode node = net.getNodeById(nodeView.getId());
         HashMap<String, PTNArc> arcsToMoveSource = net.getArcsBySource(node);
@@ -178,14 +179,14 @@ public class PTNNetController implements Runnable {
             arc = (PTNArc) it_s.next().getValue();
             node.setLocation(nodeView.getLocation());
             arc.setSource(node);
-            desktop.updateArcs(arc.getId(), arcHelper.normalizeLocation(node, true), arcHelper.normalizeLocation(arc.getTarget(), false));
+            desktop.updateArcs(arc.getId(), arcHelper.normalizeLocation(arc, true), arcHelper.normalizeLocation(arc, false));
         }
 
         while (it_t.hasNext()) {
             arc = (PTNArc) it_t.next().getValue();
             node.setLocation(nodeView.getLocation());
             arc.setTarget(node);
-            desktop.updateArcs(arc.getId(), arcHelper.normalizeLocation(arc.getSource(), true), arcHelper.normalizeLocation(node, false));
+            desktop.updateArcs(arc.getId(), arcHelper.normalizeLocation(arc, true), arcHelper.normalizeLocation(arc, false));
         }
 
     }
@@ -270,14 +271,15 @@ public class PTNNetController implements Runnable {
         source.setLocation(sourceView.getLocation());
         PTNNode target = net.getNodeById(targetView.getId());
         target.setLocation(targetView.getLocation());
-        Point normalizedSourceLocation = arcHelper.normalizeLocation(source, true);
-        Point normalizedTargetLocation = arcHelper.normalizeLocation(target, false);
+        PTNArc arcModel = new PTNArc(id, source, target);
+        net.addArc(arcModel);
+        Point normalizedSourceLocation = arcHelper.normalizeLocation(arcModel, true);
+        Point normalizedTargetLocation = arcHelper.normalizeLocation(arcModel, false);
 
        if (arcHelper.isAlreadyOnDesktop(normalizedSourceLocation, normalizedTargetLocation)) {
             arcHelper.showErrorPaneDoubleArc();
         } else {
 
-            net.addArc(new PTNArc(id, source, target));
             ArcView arcView = new ArcView(id, normalizedSourceLocation, normalizedTargetLocation, this);
             arcHelper.initArcView(arcView, target, targetView);
 
@@ -378,8 +380,8 @@ public class PTNNetController implements Runnable {
                     arc = it.next().getValue();
                     arcView = arcViewList.get(arc.getId());
 
-                    Point start = arcHelper.normalizeLocation(arc.getSource(), true);
-                    Point end = arcHelper.normalizeLocation(arc.getTarget(), false);
+                    Point start = arcHelper.normalizeLocation(arc, true);
+                    Point end = arcHelper.normalizeLocation(arc, false);
 
                     arcView.setStart(start);
                     arcView.setEnd(end);

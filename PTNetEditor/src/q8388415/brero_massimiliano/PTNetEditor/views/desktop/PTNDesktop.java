@@ -215,7 +215,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 	/**
 	 * Overloads public void updateArcs(String id, Point start, Point end) so
-	 * methods can also directly use Arview objects.
+	 * methods can also directly use  arc view objects.
 	 * 
 	 * @param arcView
 	 */
