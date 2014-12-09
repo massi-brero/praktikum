@@ -12,6 +12,7 @@ import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationExcep
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
@@ -40,12 +41,20 @@ public class PTNArcHelper {
 	
 	/**
 	 * Sets start and end points right in the middle of the source and target node.
+	 * The line then gets an offset, so starting and end point will be right from or
+	 * at the boundary of the node#s icon.
+	 * 
 	 * If you want to change that, this is the place to change.
 	 * 
-	 * @param location
-	 * @return Dimension now in the center of our NodeView
+	 * @param node
+	 * 		Type: {@link PTNINodeDTO}. Information of node from which or to whom the arc 
+	 * 		has to be drawn.
+	 * @param isSource
+	 * 		Type Boolean. Whether the node is start or ending point of the arc.
+	 * @return
+	 * 	Type: Point. Calculated Position with offset.
 	 */
-	public Point normalizeLocation(PTNNode node) {
+	public Point normalizeLocation(PTNINodeDTO node, Boolean isSource) {
 		
 		PTNNodeTypes type = node.getType();
 		Dimension size = null;
@@ -56,12 +65,55 @@ public class PTNArcHelper {
 		else if (type == PTNNodeTypes.TRANSITION)
 			size = TransitionView.getCurrentSize();
 		
-		normalizedLocation = new Point(node.getLocation().x + (int)size.getWidth()/2, 
-		                            node.getLocation().y + (int)size.getHeight()/2);
+		// location right in the middle of the node
+		Point centeredLocation = new Point(node.getLocation().x + (int)size.getWidth()/2, 
+		                            		node.getLocation().y + (int)size.getHeight()/2);
+		
+		normalizedLocation = this.addOffset(centeredLocation, node, isSource);
 		
 		return normalizedLocation;
 	}
 	
+	/**
+	 * Checks if node is source or target an delegates to the respective method.
+	 * 
+	 * @param centeredLocation
+	 * 		Type: Point. Point right in the middle of the node icon.
+	 * @param source
+	 * 		Type: PTNINodeDTO. Information about the node.
+	 * @param isSource
+	 * 		Type Boolean. Is node starting or ending point of arc?
+	 * @return
+	 */
+	private Point addOffset(Point centeredLocation, PTNINodeDTO source, Boolean isSource) {
+		
+		Point normalizedLocation = null;
+		
+		if (PTNNodeTypes.STELLE == source.getType())
+			normalizedLocation = this.addOffSetToPlace(centeredLocation, isSource);
+		else 
+			normalizedLocation = this.addOffSetToTransition(centeredLocation, isSource);
+		
+		return normalizedLocation;
+	}
+
+	private Point addOffSetToTransition(Point centeredLocation, Boolean isSource) {
+		// TODO Auto-generated method stub
+		return centeredLocation;
+	}
+
+	/**
+	 * Computes 
+	 * 
+	 * @param centeredLocation
+	 * @param isSource
+	 * @return
+	 */
+	private Point addOffSetToPlace(Point centeredLocation, Boolean isSource) {
+		// TODO Auto-generated method stub
+		return centeredLocation;
+	}
+
 	/**
 	 * 
 	 * @param arcView
