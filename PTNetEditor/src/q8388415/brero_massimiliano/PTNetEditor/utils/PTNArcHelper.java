@@ -139,10 +139,10 @@ public class PTNArcHelper {
 			 * adjust gradient for easier checking to span 0° - 360°
 			 */
 			double adjustedGradient = (gradient < 0.0) ? 360 + gradient : gradient;
-			Boolean pointsRight = (adjustedGradient > 135 && adjustedGradient <= 225) ? true : false;
-			Boolean pointsUp = (adjustedGradient > 45 && adjustedGradient <= 135) ? true : false;
-			Boolean pointsLeft = (adjustedGradient > 315 || adjustedGradient <= 45) ? true : false;
-			Boolean pointsDown = (adjustedGradient > 225 && adjustedGradient <= 315) ? true : false;
+			Boolean pointsRight = (adjustedGradient >= 135 && adjustedGradient < 225) ? true : false;
+			Boolean pointsUp = (adjustedGradient >= 45 && adjustedGradient < 135) ? true : false;
+			Boolean pointsLeft = (adjustedGradient >= 315 || adjustedGradient < 45) ? true : false;
+			Boolean pointsDown = (adjustedGradient >= 225 && adjustedGradient < 315) ? true : false;
 			int offsetX = 0;
 			int offsetY = 0;
 			NodeView nodeView = normalizeSource ? desktop.getNodeViewById(source.getId()) : desktop.getNodeViewById(target.getId());
@@ -154,20 +154,30 @@ public class PTNArcHelper {
 			if (nodeView != null) {
 				int givenX = (int) (nodeView.getIcon().getIconWidth() / 2);
 				int givenY = (int) (nodeView.getIcon().getIconHeight() / 2);
+				double tanGradient =  Math.tan(Math.toRadians(gradient));
+				
 				if (pointsRight) {
 					offsetX = givenX;
-					offsetY = (int)(offsetX * Math.tan(Math.toRadians(gradient)));
+					offsetY = (int)(givenX * tanGradient);
 				} else if (pointsUp) {
 					offsetY = -givenY;
-					offsetX = (int)(offsetY / Math.tan(Math.toRadians(gradient)));
+					offsetX = (int)(-givenY / tanGradient);
 				} else if (pointsLeft) {
 					offsetX = -givenX;
-					offsetY = (int)(offsetX * Math.tan(Math.toRadians(gradient)));
+					offsetY = (int)(-givenX * tanGradient);
 				} else if (pointsDown) {
 					offsetY = givenY;
-					offsetX = (int)(offsetY / Math.tan(Math.toRadians(gradient)));
+					offsetX = (int)(givenY / tanGradient);
 				}	
-
+				
+				System.out.println(offsetX);
+				System.out.println(offsetY);
+				System.out.println(adjustedGradient);
+				System.out.println();
+				offsetX = normalizeSource ? -offsetX : offsetX;
+				offsetY = normalizeSource ? -offsetY : offsetY;
+				//offsetX = Math.abs(offsetX) > givenX ? givenX * Integer.signum(offsetX) : offsetX;
+				
 				normalizedLocation = new Point(centeredLocation.x + offsetX, centeredLocation.y + offsetY);
 			}
 		}
