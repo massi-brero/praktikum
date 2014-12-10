@@ -52,16 +52,16 @@ public class PTNArcHelper {
 	 *            Type: {@link PTNArc}. ArcModel that holds informations about
 	 *            the arc like source and target
 	 * @param normalizeSource
-	 *            Type Boolean. Whether the start or ending point of the arc is
-	 *            needed. This we we may only normalize only starting or only
+	 *            {@link Boolean} Whether the start or ending point of the arc
+	 *            is needed. This we we may only normalize only starting or only
 	 *            ending point.
-	 * @return Type: Point. Calculated Position with offset.
+	 * @return {@link Point} Calculated Position including offset.
 	 */
 	public Point normalizeLocation(PTNArc arc, Boolean normalizeSource) {
-		
+
 		PTNNode node = normalizeSource ? arc.getSource() : arc.getTarget();
 		Point normalizedLocation = null;
-		
+
 		if (node != null) {
 			PTNNodeTypes type = node.getType();
 			Dimension size = null;
@@ -76,7 +76,6 @@ public class PTNArcHelper {
 
 			normalizedLocation = this.addOffset(centeredLocation, arc, normalizeSource);
 		}
-
 
 		return normalizedLocation;
 	}
@@ -97,7 +96,6 @@ public class PTNArcHelper {
 	private Point addOffset(Point centeredLocation, PTNArc arc, Boolean normalizeSource) {
 
 		Point normalizedLocation = centeredLocation;
-		NodeView nodeView = desktop.getNodeViewById(arc.getId());
 		PTNNode node = normalizeSource ? arc.getSource() : arc.getTarget();
 
 		if (null != node) {
@@ -128,8 +126,48 @@ public class PTNArcHelper {
 	 *         offset.
 	 */
 	private Point addOffSetToTransition(Point centeredLocation, PTNArc arc, Boolean normalizeSource) {
-		
-		return centeredLocation;
+
+		Point normalizedLocation = centeredLocation;
+
+		PTNNode source = arc.getSource();
+		PTNNode target = arc.getTarget();
+
+		if (source != null || target != null) {
+
+			double gradient = this.getGradient(arc.getSource(), arc.getTarget());
+			Boolean pointsRight = (gradient > 315 && gradient <= 45) ? true : false;
+			Boolean pointsUp = (gradient > 45 && gradient <= 135) ? true : false;
+			Boolean pointsLeft = (gradient > 135 && gradient <= 225) ? true : false;
+			Boolean pointsDown = (gradient > 225 && gradient <= 315) ? true : false;
+			int offsetX = 0;
+			int offsetY = 0;
+			System.out.println("gradient: " + gradient);
+			NodeView nodeView = normalizeSource ? desktop.getNodeViewById(source.getId()) : desktop.getNodeViewById(target.getId());
+
+			/**
+			 * Okay, we could boil this down to two situations, but this way the code
+			 * is easier to read and/or to change.
+			 */
+			if (nodeView != null) {
+				int givenX = (int) (nodeView.getIcon().getIconWidth() / 2);
+				int givenY = (int) (nodeView.getIcon().getIconHeight() / 2);
+				if (pointsRight) {
+					offsetX = givenX;
+					offsetY = (int)(offsetX * Math.sin(Math.toRadians(gradient)));
+				} else if (pointsUp) {
+					offsetY = givenY;
+					offsetX = (int)(offsetY * Math.cos(Math.toRadians(gradient)));
+				} else if (pointsLeft) {
+					offsetX = -givenX;
+					offsetY = (int)(offsetX * Math.sin(Math.toRadians(gradient)));
+				} else if (pointsDown) {
+					offsetY = -givenY;
+					offsetX = (int)(offsetY * Math.cos(Math.toRadians(gradient)));
+				}	
+				normalizedLocation = new Point(centeredLocation.x + offsetX, centeredLocation.y + offsetY);
+			}
+		}
+		return normalizedLocation;
 	}
 
 	/**
@@ -154,11 +192,11 @@ public class PTNArcHelper {
 		PTNNode source = arc.getSource();
 		PTNNode target = arc.getTarget();
 
-		if (source != null && target != null) {
+		if (source != null || target != null) {
 
 			double gradient = this.getGradient(source, target);
 			NodeView nodeView = normalizeSource ? desktop.getNodeViewById(source.getId()) : desktop.getNodeViewById(target.getId());
-			System.out.println(nodeView);
+
 			if (nodeView != null) {
 				int radius = (int) (nodeView.getIcon().getIconWidth() / 2);
 				int offsetX = (int) (radius * (Math.cos(Math.toRadians(gradient))));
@@ -179,20 +217,19 @@ public class PTNArcHelper {
 	 * Computes and returns the gradient between two nodes.
 	 * 
 	 * @param source
-	 * 		{@link PTNNode}
+	 *            {@link PTNNode}
 	 * @param target
-	 * 		{@link PTNNode}
-	 * @return
-	 * 		{@link Double} Gradient between starting and ending point.
+	 *            {@link PTNNode}
+	 * @return {@link Double} Gradient between starting and ending point.
 	 */
 	private double getGradient(PTNNode source, PTNNode target) {
-		return Math.toDegrees(Math.atan2(target.getLocation().y - source.getLocation().y, 
-											target.getLocation().x - source.getLocation().x));
+		return Math.toDegrees(Math.atan2(target.getLocation().y - source.getLocation().y, target.getLocation().x - source.getLocation().x));
 	}
 
 	/**
 	 * 
 	 * @param arcView
+	 *            Adds an arc as scales listener.
 	 */
 	public void addArcListener(ArcView arcView) {
 
@@ -247,9 +284,7 @@ public class PTNArcHelper {
 	public void initArcView(ArcView arcView, PTNNode targetModel, NodeView targetView) {
 
 		if (targetModel.getType() == PTNNodeTypes.TRANSITION) {
-
 			((TransitionView) targetView).setIsActivated(((PTNTransition) targetModel).isActivated());
-
 		}
 
 		this.addArcListener(arcView);
