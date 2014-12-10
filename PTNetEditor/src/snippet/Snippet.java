@@ -4,10 +4,10 @@ public class Snippet {
 	public static void main(String[] args) {
 
 		// get a variable x which is equal to PI/2
-		double x = -1;
+		double x = 1;
 
 		// get a variable y which is equal to PI/3
-		double y = 0;
+		double y = -1;
 
 
 		// get the polar coordinates

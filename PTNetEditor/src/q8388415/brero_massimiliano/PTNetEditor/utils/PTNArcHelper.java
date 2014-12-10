@@ -132,16 +132,20 @@ public class PTNArcHelper {
 		PTNNode source = arc.getSource();
 		PTNNode target = arc.getTarget();
 
-		if (source != null || target != null) {
+		if (source != null && target != null) {
 
-			double gradient = this.getGradient(arc.getSource(), arc.getTarget());
-			Boolean pointsRight = (gradient > 315 && gradient <= 45) ? true : false;
-			Boolean pointsUp = (gradient > 45 && gradient <= 135) ? true : false;
-			Boolean pointsLeft = (gradient > 135 && gradient <= 225) ? true : false;
-			Boolean pointsDown = (gradient > 225 && gradient <= 315) ? true : false;
+			double gradient = this.getGradient(source, target);
+			/**
+			 * adjust gradient for easier checking to span 0° - 360°
+			 */
+			double adjustedGradient = (gradient < 0.0) ? 360 + gradient : gradient;
+			Boolean pointsRight = (adjustedGradient > 135 && adjustedGradient <= 225) ? true : false;
+			Boolean pointsUp = (adjustedGradient > 45 && adjustedGradient <= 135) ? true : false;
+			Boolean pointsLeft = (adjustedGradient > 315 || adjustedGradient <= 45) ? true : false;
+			Boolean pointsDown = (adjustedGradient > 225 && adjustedGradient <= 315) ? true : false;
+			System.out.println(adjustedGradient);
 			int offsetX = 0;
 			int offsetY = 0;
-			System.out.println("gradient: " + gradient);
 			NodeView nodeView = normalizeSource ? desktop.getNodeViewById(source.getId()) : desktop.getNodeViewById(target.getId());
 
 			/**
@@ -164,6 +168,7 @@ public class PTNArcHelper {
 					offsetY = -givenY;
 					offsetX = (int)(offsetY * Math.cos(Math.toRadians(gradient)));
 				}	
+
 				normalizedLocation = new Point(centeredLocation.x + offsetX, centeredLocation.y + offsetY);
 			}
 		}
@@ -192,7 +197,7 @@ public class PTNArcHelper {
 		PTNNode source = arc.getSource();
 		PTNNode target = arc.getTarget();
 
-		if (source != null || target != null) {
+		if (source != null && target != null) {
 
 			double gradient = this.getGradient(source, target);
 			NodeView nodeView = normalizeSource ? desktop.getNodeViewById(source.getId()) : desktop.getNodeViewById(target.getId());
