@@ -143,7 +143,6 @@ public class PTNArcHelper {
 			Boolean pointsUp = (adjustedGradient > 45 && adjustedGradient <= 135) ? true : false;
 			Boolean pointsLeft = (adjustedGradient > 315 || adjustedGradient <= 45) ? true : false;
 			Boolean pointsDown = (adjustedGradient > 225 && adjustedGradient <= 315) ? true : false;
-			System.out.println(adjustedGradient);
 			int offsetX = 0;
 			int offsetY = 0;
 			NodeView nodeView = normalizeSource ? desktop.getNodeViewById(source.getId()) : desktop.getNodeViewById(target.getId());
@@ -157,16 +156,16 @@ public class PTNArcHelper {
 				int givenY = (int) (nodeView.getIcon().getIconHeight() / 2);
 				if (pointsRight) {
 					offsetX = givenX;
-					offsetY = (int)(offsetX * Math.sin(Math.toRadians(gradient)));
+					offsetY = (int)(offsetX * Math.tan(Math.toRadians(gradient)));
 				} else if (pointsUp) {
-					offsetY = givenY;
-					offsetX = (int)(offsetY * Math.cos(Math.toRadians(gradient)));
+					offsetY = -givenY;
+					offsetX = (int)(offsetY / Math.tan(Math.toRadians(gradient)));
 				} else if (pointsLeft) {
 					offsetX = -givenX;
-					offsetY = (int)(offsetX * Math.sin(Math.toRadians(gradient)));
+					offsetY = (int)(offsetX * Math.tan(Math.toRadians(gradient)));
 				} else if (pointsDown) {
-					offsetY = -givenY;
-					offsetX = (int)(offsetY * Math.cos(Math.toRadians(gradient)));
+					offsetY = givenY;
+					offsetX = (int)(offsetY / Math.tan(Math.toRadians(gradient)));
 				}	
 
 				normalizedLocation = new Point(centeredLocation.x + offsetX, centeredLocation.y + offsetY);
