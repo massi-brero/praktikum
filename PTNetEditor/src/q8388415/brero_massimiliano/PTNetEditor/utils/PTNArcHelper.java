@@ -72,9 +72,6 @@ public class PTNArcHelper {
 			else if (type == PTNNodeTypes.TRANSITION)
 				size = TransitionView.getCurrentSize();
 
-			// location right in the middle of the node
-			//Point centeredLocation = new Point(node.getLocation().x + (int) size.getWidth() / 2, node.getLocation().y + (int) size.getHeight() / 2);
-
 			normalizedLocation = this.addOffset(arc, normalizeSource);
 		}
 
@@ -140,10 +137,10 @@ public class PTNArcHelper {
 			 * adjust gradient for easier checking to span 0° - 360°
 			 */
 			double adjustedGradient = (gradient < 0.0) ? 360 + gradient : gradient;
-			Boolean pointsRight = (adjustedGradient >= 135 && adjustedGradient < 225) ? true : false;
-			Boolean pointsUp = (adjustedGradient >= 45 && adjustedGradient < 135) ? true : false;
-			Boolean pointsLeft = (adjustedGradient >= 315 || adjustedGradient < 45) ? true : false;
-			Boolean pointsDown = (adjustedGradient >= 225 && adjustedGradient < 315) ? true : false;
+			Boolean pointsRight = (adjustedGradient >= 135.0 && adjustedGradient < 225.0) ? true : false;
+			Boolean pointsUp = (adjustedGradient >= 45.0 && adjustedGradient < 135.0) ? true : false;
+			Boolean pointsLeft = (adjustedGradient >= 315.0 || adjustedGradient < 45.0) ? true : false;
+			Boolean pointsDown = (adjustedGradient >= 225.0 && adjustedGradient < 315.0) ? true : false;
 			int offsetX = 0;
 			int offsetY = 0;
 			NodeView nodeView = normalizeSource ? desktop.getNodeViewById(source.getId()) : desktop.getNodeViewById(target.getId());
@@ -155,7 +152,11 @@ public class PTNArcHelper {
 			if (nodeView != null) {
 				int givenX = (int) (nodeView.getIcon().getIconWidth() / 2);
 				int givenY = (int) (nodeView.getIcon().getIconHeight() / 2);
-				double tanGradient =  Math.tan(Math.toRadians(gradient));
+				//double tanGradient =  Math.tan(Math.toRadians(gradient));
+				Point centeredLocationSource = this.getCenteredLocation(source);
+				Point centeredLocationTarget = this.getCenteredLocation(target);
+				double tanGradient = (centeredLocationTarget.getLocation().y - centeredLocationSource.getLocation().y) /
+						(centeredLocationTarget.getLocation().x - centeredLocationSource.getLocation().x);
 				
 				if (pointsRight) {
 					offsetX = givenX;
@@ -175,7 +176,7 @@ public class PTNArcHelper {
 				System.out.println("offsetY" + offsetY);
 				System.out.println("givenX" + givenX);
 				System.out.println("givenY" + givenY);
-				System.out.println(adjustedGradient);
+				System.out.println(tanGradient);
 				System.out.println();
 				offsetX = normalizeSource ? -offsetX : offsetX;
 				offsetY = normalizeSource ? -offsetY : offsetY;
@@ -185,8 +186,8 @@ public class PTNArcHelper {
 				 * we will insert this hack and correct the x offset and change the y offset by that
 				 * correction ratio.
 				 */
-				offsetY = Math.abs(offsetX) > givenX ? offsetY + (int)(offsetY / 2) : offsetY;
-				offsetX = Math.abs(offsetX) > givenX ? givenX * Integer.signum(offsetX) : offsetX;
+				//offsetY = Math.abs(offsetX) > givenX ? offsetY + (int)(offsetY / 2) : offsetY;
+				//offsetX = Math.abs(offsetX) > givenX ? givenX * Integer.signum(offsetX) : offsetX;
 				
 				normalizedLocation = new Point(centeredLocation.x + offsetX, centeredLocation.y + offsetY);
 			}
