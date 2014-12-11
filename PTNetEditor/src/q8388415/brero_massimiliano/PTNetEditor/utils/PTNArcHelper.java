@@ -159,16 +159,16 @@ public class PTNArcHelper {
 				
 				if (pointsRight) {
 					offsetX = givenX;
-					offsetY = (int)(givenX * tanGradient);
+					offsetY = (int)(offsetX * tanGradient);
 				} else if (pointsUp) {
 					offsetY = -givenY;
-					offsetX = (int)(-givenY / tanGradient);
+					offsetX = (int)(offsetY / tanGradient);
 				} else if (pointsLeft) {
 					offsetX = -givenX;
-					offsetY = (int)(-givenX * tanGradient);
+					offsetY = (int)(offsetX * tanGradient);
 				} else if (pointsDown) {
 					offsetY = givenY;
-					offsetX = (int)(givenY / tanGradient);
+					offsetX = (int)(offsetY / tanGradient);
 				}	
 				
 				System.out.println("offsetX" + offsetX);
@@ -179,7 +179,14 @@ public class PTNArcHelper {
 				System.out.println();
 				offsetX = normalizeSource ? -offsetX : offsetX;
 				offsetY = normalizeSource ? -offsetY : offsetY;
-				//offsetX = Math.abs(offsetX) > givenX ? givenX * Integer.signum(offsetX) : offsetX;
+				
+				/**
+				 * Since we do not always get 100 percent correct values when using Math.atan2(),
+				 * we will insert this hack and correct the x offset and change the y offset by that
+				 * correction ratio.
+				 */
+				offsetY = Math.abs(offsetX) > givenX ? offsetY + (int)(offsetY / 2) : offsetY;
+				offsetX = Math.abs(offsetX) > givenX ? givenX * Integer.signum(offsetX) : offsetX;
 				
 				normalizedLocation = new Point(centeredLocation.x + offsetX, centeredLocation.y + offsetY);
 			}
