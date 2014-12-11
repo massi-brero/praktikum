@@ -71,10 +71,10 @@ public class PTNNodeHelper implements ActionListener {
 	 */
 	public void handleContextmenu(NodeView sourceView) {
 		this.sourceView = sourceView;
-		cMenu = new ContextMenuNodeWindow(this, sourceView.getLocation());
-		cMenu.setLocation((int)sourceView.getLocation().getX() + 20, (int)sourceView.getLocation().getY() +20);
+		cMenu = new ContextMenuNodeWindow(this, sourceView);
 		cMenu.setVisible(true);
 		desktop.addMouseListener(cMenu);
+		desktop.addAncestorListener(cMenu);
 		controlPanel.addMouseListener(cMenu);
 	}
 
@@ -83,7 +83,7 @@ public class PTNNodeHelper implements ActionListener {
 		
 		switch (e.getActionCommand()) {
 		case "Attribute ändern":
-			this.handleChangeAttributes();
+			this.handleChangeAttributesDialog();
 			break;
 		case "Kanten löschen":
 			this.handleDeleteArcsDialog();
@@ -94,7 +94,7 @@ public class PTNNodeHelper implements ActionListener {
 		
 	}
 
-	private void handleChangeAttributes() {
+	private void handleChangeAttributesDialog() {
 		
 		if (null != cMenu)
 			cMenu.setVisible(false);

@@ -25,10 +25,13 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
  */
 public class ArcView implements PTNIScaleListener {
 	
+
 	private Point start;
 	private Point end;
 	private String id;
 	private static double scale = 1.0;
+	private final double MAX_SIZE = 1.4;
+	private final double MIN_SIZE = 1;
 	private PTNNetController netController;
 	// We need this flag to check if an arc was just drawn (and thus can be deleted safely on the desktop).
 	private final int ARROW_SIZE_X = 8;
@@ -139,16 +142,16 @@ public class ArcView implements PTNIScaleListener {
 
 	@Override
 	public void increaseScale() {
-		if (ArcView.scale < 5) {
-			ArcView.scale += 0.2;
+		if (ArcView.scale < MAX_SIZE) {
+			ArcView.scale += 0.025;
 			netController.repaintDesktop();
 		}
 	}
 
 	@Override
 	public void decreaseScale() {
-		if (ArcView.scale > 1) {
-			ArcView.scale -= 0.2;
+		if (ArcView.scale > MIN_SIZE) {
+			ArcView.scale -= 0.025;
 			netController.repaintDesktop();			
 		}
 	}

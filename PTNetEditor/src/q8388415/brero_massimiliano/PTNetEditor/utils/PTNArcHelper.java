@@ -230,7 +230,8 @@ public class PTNArcHelper {
 	 *            {@link PTNNode}
 	 * @param target
 	 *            {@link PTNNode}
-	 * @return {@link Double} Gradient between starting and ending point.
+	 * @return 
+	 * 		{@link Double} Gradient between starting and ending point.
 	 */
 	private double getGradient(PTNNode source, PTNNode target) {
 		Point centeredLocationSource = this.getCenteredLocation(source);
@@ -264,7 +265,7 @@ public class PTNArcHelper {
 	/**
 	 * 
 	 * @param arcView
-	 *            Adds an arc as scales listener.
+	 *            Adds an arc as scale listener.
 	 */
 	public void addArcListener(ArcView arcView) {
 

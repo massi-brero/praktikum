@@ -2,10 +2,18 @@ package q8388415.brero_massimiliano.PTNetEditor.views.windows;
 
 import java.awt.Point;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
+
+import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 
 /**
  * Context menu for node. Will show options to change node attributes 
@@ -16,15 +24,17 @@ import javax.swing.JPopupMenu;
  * @author Laptop
  *
  */
-public class ContextMenuNodeWindow extends JPopupMenu implements MouseListener {
+public class ContextMenuNodeWindow extends JPopupMenu implements MouseListener, AncestorListener {
 	
 	ActionListener listener;
+	NodeView nodeView;
 
-	public ContextMenuNodeWindow(ActionListener listener, Point location) {
+	public ContextMenuNodeWindow(ActionListener listener, NodeView nodeView) {
+		this.nodeView = nodeView;
 		this.listener = listener;
 		this.init();
 		this.setFocusable(true);
-		this.setLocation(location);
+		this.setLocation(nodeView.getLocationOnScreen());
 	}
 
 	private void init() {
@@ -44,7 +54,9 @@ public class ContextMenuNodeWindow extends JPopupMenu implements MouseListener {
 	public void mouseClicked(java.awt.event.MouseEvent e) {}
 
 	@Override
-	public void mousePressed(java.awt.event.MouseEvent e) {}
+	public void mousePressed(java.awt.event.MouseEvent e) {
+		this.setLocation(nodeView.getLocationOnScreen());
+	}
 
 	@Override
 	public void mouseReleased(java.awt.event.MouseEvent e) {
@@ -58,6 +70,19 @@ public class ContextMenuNodeWindow extends JPopupMenu implements MouseListener {
 
 	@Override
 	public void mouseExited(java.awt.event.MouseEvent e) {}
+
+	@Override
+	public void ancestorAdded(AncestorEvent event) {}
+
+	@Override
+	public void ancestorRemoved(AncestorEvent event) {}
+
+	@Override
+	public void ancestorMoved(AncestorEvent event) {
+		this.setLocation(nodeView.getLocationOnScreen());
+	}
+
+
 
 	
 }
