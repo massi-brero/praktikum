@@ -109,10 +109,12 @@ public class PTNArcHelper {
 	/**
 	 * 
 	 * Computes the offset for an arc starting or ending point if source is a
-	 * place. Depending on the direction the arc is facing we have a given x
+	 * transition. Depending on the direction the arc is facing we have a given x
 	 * offset (icon width divided by 2) or a given y offset (icon height divided
 	 * by 2). With a little trigonometric magic and the arc's slope the missing
 	 * offset can be calculated.
+	 * The icon should have the standard ratio 1:2 you find in the visual representations
+	 * of petri nets ;-)
 	 * 
 	 * 
 	 * @param centeredLocation
@@ -136,11 +138,11 @@ public class PTNArcHelper {
 			/**
 			 * adjust gradient for easier checking to span 0° - 360°
 			 */
-			double adjustedGradient = (gradient < 0.0) ? 360 + gradient : gradient;
-			Boolean pointsRight = (adjustedGradient >= 135.0 && adjustedGradient < 225.0) ? true : false;
-			Boolean pointsUp = (adjustedGradient >= 45.0 && adjustedGradient < 135.0) ? true : false;
-			Boolean pointsLeft = (adjustedGradient >= 315.0 || adjustedGradient < 45.0) ? true : false;
-			Boolean pointsDown = (adjustedGradient >= 225.0 && adjustedGradient < 315.0) ? true : false;
+			double adjustedGradient = (gradient < 0.0) ? 360d + gradient : gradient;
+			Boolean pointsRight = (adjustedGradient >= 114 && adjustedGradient < 248) ? true : false;
+			Boolean pointsUp = (adjustedGradient >= 66 && adjustedGradient < 114) ? true : false;
+			Boolean pointsLeft = (adjustedGradient >= 294 || adjustedGradient < 66) ? true : false;
+			Boolean pointsDown = (adjustedGradient >= 248 && adjustedGradient < 294) ? true : false;
 			int offsetX = 0;
 			int offsetY = 0;
 			NodeView nodeView = normalizeSource ? desktop.getNodeViewById(source.getId()) : desktop.getNodeViewById(target.getId());
@@ -152,11 +154,7 @@ public class PTNArcHelper {
 			if (nodeView != null) {
 				int givenX = (int) (nodeView.getIcon().getIconWidth() / 2);
 				int givenY = (int) (nodeView.getIcon().getIconHeight() / 2);
-				//double tanGradient =  Math.tan(Math.toRadians(gradient));
-				Point centeredLocationSource = this.getCenteredLocation(source);
-				Point centeredLocationTarget = this.getCenteredLocation(target);
-				double tanGradient = (centeredLocationTarget.getLocation().y - centeredLocationSource.getLocation().y) /
-						(centeredLocationTarget.getLocation().x - centeredLocationSource.getLocation().x);
+				double tanGradient =  Math.tan(Math.toRadians(gradient));
 				
 				if (pointsRight) {
 					offsetX = givenX;
@@ -172,22 +170,8 @@ public class PTNArcHelper {
 					offsetX = (int)(offsetY / tanGradient);
 				}	
 				
-				System.out.println("offsetX" + offsetX);
-				System.out.println("offsetY" + offsetY);
-				System.out.println("givenX" + givenX);
-				System.out.println("givenY" + givenY);
-				System.out.println(tanGradient);
-				System.out.println();
 				offsetX = normalizeSource ? -offsetX : offsetX;
 				offsetY = normalizeSource ? -offsetY : offsetY;
-				
-				/**
-				 * Since we do not always get 100 percent correct values when using Math.atan2(),
-				 * we will insert this hack and correct the x offset and change the y offset by that
-				 * correction ratio.
-				 */
-				//offsetY = Math.abs(offsetX) > givenX ? offsetY + (int)(offsetY / 2) : offsetY;
-				//offsetX = Math.abs(offsetX) > givenX ? givenX * Integer.signum(offsetX) : offsetX;
 				
 				normalizedLocation = new Point(centeredLocation.x + offsetX, centeredLocation.y + offsetY);
 			}
