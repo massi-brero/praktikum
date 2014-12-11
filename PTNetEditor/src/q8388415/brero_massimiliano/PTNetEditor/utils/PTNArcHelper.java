@@ -13,6 +13,7 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
@@ -72,9 +73,9 @@ public class PTNArcHelper {
 				size = TransitionView.getCurrentSize();
 
 			// location right in the middle of the node
-			Point centeredLocation = new Point(node.getLocation().x + (int) size.getWidth() / 2, node.getLocation().y + (int) size.getHeight() / 2);
+			//Point centeredLocation = new Point(node.getLocation().x + (int) size.getWidth() / 2, node.getLocation().y + (int) size.getHeight() / 2);
 
-			normalizedLocation = this.addOffset(centeredLocation, arc, normalizeSource);
+			normalizedLocation = this.addOffset(arc, normalizeSource);
 		}
 
 		return normalizedLocation;
@@ -93,16 +94,16 @@ public class PTNArcHelper {
 	 * @return type: Point. New starting and ending points with the calculated
 	 *         offset.
 	 */
-	private Point addOffset(Point centeredLocation, PTNArc arc, Boolean normalizeSource) {
+	private Point addOffset(PTNArc arc, Boolean normalizeSource) {
 
-		Point normalizedLocation = centeredLocation;
+		Point normalizedLocation = null;
 		PTNNode node = normalizeSource ? arc.getSource() : arc.getTarget();
 
 		if (null != node) {
 			if (PTNNodeTypes.STELLE == node.getType())
-				normalizedLocation = this.addOffSetToPlace(centeredLocation, arc, normalizeSource);
+				normalizedLocation = this.addOffsetToPlace(arc, normalizeSource);
 			else
-				normalizedLocation = this.addOffSetToTransition(centeredLocation, arc, normalizeSource);
+				normalizedLocation = this.addOffSetToTransition(arc, normalizeSource);
 		}
 
 		return normalizedLocation;
@@ -125,12 +126,12 @@ public class PTNArcHelper {
 	 * @return type: Point. New starting and ending points with the calculated
 	 *         offset.
 	 */
-	private Point addOffSetToTransition(Point centeredLocation, PTNArc arc, Boolean normalizeSource) {
-
-		Point normalizedLocation = centeredLocation;
+	private Point addOffSetToTransition(PTNArc arc, Boolean normalizeSource) {
 
 		PTNNode source = arc.getSource();
 		PTNNode target = arc.getTarget();
+		Point centeredLocation = normalizeSource ? this.getCenteredLocation(source) : this.getCenteredLocation(target);
+		Point normalizedLocation = centeredLocation;
 
 		if (source != null && target != null) {
 
@@ -170,8 +171,10 @@ public class PTNArcHelper {
 					offsetX = (int)(givenY / tanGradient);
 				}	
 				
-				System.out.println(offsetX);
-				System.out.println(offsetY);
+				System.out.println("offsetX" + offsetX);
+				System.out.println("offsetY" + offsetY);
+				System.out.println("givenX" + givenX);
+				System.out.println("givenY" + givenY);
 				System.out.println(adjustedGradient);
 				System.out.println();
 				offsetX = normalizeSource ? -offsetX : offsetX;
@@ -200,11 +203,12 @@ public class PTNArcHelper {
 	 * @return type: Point. New starting and ending points with the calculated
 	 *         offset.
 	 */
-	private Point addOffSetToPlace(Point centeredLocation, PTNArc arc, Boolean normalizeSource) {
+	private Point addOffsetToPlace(PTNArc arc, Boolean normalizeSource) {
 
-		Point normalizedLocation = centeredLocation;
 		PTNNode source = arc.getSource();
 		PTNNode target = arc.getTarget();
+		Point centeredLocation = normalizeSource ? this.getCenteredLocation(source) : this.getCenteredLocation(target);
+		Point normalizedLocation = centeredLocation;
 
 		if (source != null && target != null) {
 
@@ -237,7 +241,32 @@ public class PTNArcHelper {
 	 * @return {@link Double} Gradient between starting and ending point.
 	 */
 	private double getGradient(PTNNode source, PTNNode target) {
-		return Math.toDegrees(Math.atan2(target.getLocation().y - source.getLocation().y, target.getLocation().x - source.getLocation().x));
+		Point centeredLocationSource = this.getCenteredLocation(source);
+		Point centeredLocationTarget = this.getCenteredLocation(target);
+		return Math.toDegrees(Math.atan2(centeredLocationTarget.getLocation().y - centeredLocationSource.getLocation().y, 
+											centeredLocationTarget.getLocation().x - centeredLocationSource.getLocation().x));
+	}
+	
+	/**
+	 * Calculates  location right in the middle of the node.
+	 * 
+	 * @param node
+	 * 		{@link PTNINodeDTO}
+	 * @return
+	 * 		{@link Point} center of Node.
+	 */
+	public Point getCenteredLocation(PTNINodeDTO node) {
+		
+		Dimension size = null;
+		
+		if (node.getType() == PTNNodeTypes.STELLE)
+			size = PlaceView.getCurrentSize();
+		else if (node.getType() == PTNNodeTypes.TRANSITION)
+			size = TransitionView.getCurrentSize();
+
+		return new Point(node.getLocation().x + (int) size.getWidth() / 2, node.getLocation().y + (int) size.getHeight() / 2);
+
+		
 	}
 
 	/**
