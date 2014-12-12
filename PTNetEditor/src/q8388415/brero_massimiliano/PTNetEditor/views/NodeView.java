@@ -104,7 +104,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 			setIcon(iconSelected);
 		else
 			setIcon(iconStandard);
-		//@todo Warum funktioniert scale - 1 besser als scale?
+
 		this.updateIconSize(scale);
 	}
 

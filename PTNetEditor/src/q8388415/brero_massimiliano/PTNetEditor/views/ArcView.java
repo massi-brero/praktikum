@@ -29,6 +29,9 @@ public class ArcView implements PTNIScaleListener {
 	private Point start;
 	private Point end;
 	private String id;
+	private Boolean selected;
+	private Color color = Color.BLUE;
+	private Graphics desktopGraphics = null;
 	private static double scale = 1.0;
 	private final double MAX_SIZE = 1.4;
 	private final double MIN_SIZE = 1;
@@ -36,6 +39,10 @@ public class ArcView implements PTNIScaleListener {
 	// We need this flag to check if an arc was just drawn (and thus can be deleted safely on the desktop).
 	private final int ARROW_SIZE_X = 8;
 	private final int ARROW_SIZE_Y = 4;
+	/**
+	 * How near the arc a user has to click to select it.
+	 */
+	private final int SENSITIVITY = 80;
 	
 	public ArcView(String id, Point s, Point e, PTNNetController netController) {
 		
@@ -55,14 +62,24 @@ public class ArcView implements PTNIScaleListener {
 	 * @param g
 	 */
 	public void drawArc(Graphics  g) {
+		
 		double gradient = Math.atan2(this.getEnd().y - this.getStart().y, this.getEnd().x - this.getStart().x);
 		Graphics2D g2 = (Graphics2D)g;
-		g2.setColor(Color.BLUE);
+		g2.setColor(color);
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		Point end = this.getEnd();
 		g2.drawLine(this.getStart().x, this.getStart().y, end.x, end.y);
 		this.drawArrowHead(g2, end, gradient);
+		
+	}
 	
+	/**
+	 * Redraws an arc after it was already drawn once and thus object holds a 
+	 * reference to the desktop's graphics object.
+	 */
+	private void updateArc() {		
+		if(desktopGraphics != null)
+			this.drawArc(desktopGraphics);	
 	}
 	
 	/**
@@ -102,6 +119,18 @@ public class ArcView implements PTNIScaleListener {
 		return p;
 	}
 	
+	/**
+	 * Checks if the arc representation contains the given Point.
+	 * 
+	 * @param p
+	 * 		{@link Point}
+	 * @return
+	 * 		{@link Boolean}
+	 */
+	public Boolean contains(Point p) {
+		
+		return true;
+	}
 	
 	public Point getStart() {
 		return start;
@@ -154,6 +183,24 @@ public class ArcView implements PTNIScaleListener {
 			ArcView.scale -= 0.025;
 			netController.repaintDesktop();			
 		}
+	}
+	
+	public Boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(Boolean s) {
+		this.selected = s;
+		this.setColor(Color.MAGENTA);
+		this.updateArc();
+	}
+	
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
 	
 }
