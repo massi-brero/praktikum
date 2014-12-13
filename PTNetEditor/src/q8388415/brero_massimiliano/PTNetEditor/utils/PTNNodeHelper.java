@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.lang.model.SourceVersion;
+import javax.swing.ImageIcon;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
@@ -219,6 +219,32 @@ public class PTNNodeHelper implements ActionListener {
 		location.y = location.y < 0 ? 0 : location.y;
 		
 		return location;
+	}
+	
+	/**
+	 * 
+	 * @param sourceNodeView
+	 * 		{@link NodeView}
+	 * @param point
+	 * 		{@link Point}
+	 * @return
+	 * 		{@link Boolean}
+	 */
+	public boolean iconContainsPoint(NodeView sourceNodeView, Point point) {
+
+		Dimension viewSize = (sourceNodeView.getType() == PTNNodeTypes.STELLE) ? 
+								PlaceView.getCurrentSize() : TransitionView.getCurrentSize();
+		int viewWidth = (int)viewSize.getWidth();
+		int viewHeight = (int)viewSize.getHeight();
+		int iconWidth = sourceNodeView.getIcon().getIconWidth();
+		int iconHeight = sourceNodeView.getIcon().getIconHeight();
+		
+		Boolean xPositionInIcon = point.x >= (int)((viewWidth - iconWidth) / 2)
+								  	&& point.x <= (int)((viewWidth - iconWidth) / 2) +  iconWidth;
+		Boolean yPositionInIcon = point.x >= (int)((viewHeight - iconHeight) / 2)
+			  						&& point.x <= (int)((viewHeight - iconHeight) / 2) +  iconHeight;
+		
+		return xPositionInIcon && yPositionInIcon;
 	}
 
 }

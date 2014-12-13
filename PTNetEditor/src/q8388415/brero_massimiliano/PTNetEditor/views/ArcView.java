@@ -9,6 +9,7 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
@@ -29,7 +30,7 @@ public class ArcView implements PTNIScaleListener {
 	private Point start;
 	private Point end;
 	private String id;
-	private Boolean selected;
+	private Boolean selected = false;
 	private Color color = Color.BLUE;
 	private Graphics desktopGraphics = null;
 	private static double scale = 1.0;
@@ -42,7 +43,7 @@ public class ArcView implements PTNIScaleListener {
 	/**
 	 * How near the arc a user has to click to select it.
 	 */
-	private final int SENSITIVITY = 80;
+	private final double SENSITIVITY = 7.0;
 	
 	public ArcView(String id, Point s, Point e, PTNNetController netController) {
 		
@@ -67,8 +68,7 @@ public class ArcView implements PTNIScaleListener {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setColor(color);
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		Point end = this.getEnd();
-		g2.drawLine(this.getStart().x, this.getStart().y, end.x, end.y);
+		g2.drawLine(this.getStart().x, this.getStart().y, this.getEnd().x, this.getEnd().y);
 		this.drawArrowHead(g2, end, gradient);
 		
 	}
@@ -128,8 +128,12 @@ public class ArcView implements PTNIScaleListener {
 	 * 		{@link Boolean}
 	 */
 	public Boolean contains(Point p) {
-		
-		return true;
+//		System.out.println(Line2D.ptLineDist(this.getStart().x, this.getStart().y, 
+//				  this.getEnd().x, this.getEnd().y, 
+//				  p.getX(), p.getY()));
+		return Line2D.ptSegDist(this.getStart().x, this.getStart().y, 
+								  this.getEnd().x, this.getEnd().y, 
+								  p.getX(), p.getY()) < SENSITIVITY;
 	}
 	
 	public Point getStart() {
@@ -185,13 +189,16 @@ public class ArcView implements PTNIScaleListener {
 		}
 	}
 	
-	public Boolean isSelected() {
+	public Boolean getSelected() {
 		return selected;
 	}
 
 	public void setSelected(Boolean s) {
 		this.selected = s;
-		this.setColor(Color.MAGENTA);
+		if (selected)
+			this.setColor(Color.MAGENTA);
+		else 
+			this.setColor(Color.BLUE);
 		this.updateArc();
 	}
 	

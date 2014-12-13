@@ -17,6 +17,7 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNSimulationInterpreter;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIModeListener;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
+import q8388415.brero_massimiliano.PTNetEditor.utils.PTNArcHelper;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
@@ -35,6 +36,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 	private PTNDesktop desktop;
 	private PTNNodeHelper nodeHelper;
+	private PTNArcHelper arcHelper;
 	private volatile Point currentDraggingPosistion;
 	static boolean isDragged = false;
 	private Boolean isInSimulationMode = false;  
@@ -44,6 +46,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 		this.desktop = dt;
 		nodeHelper = new PTNNodeHelper(desktop, net);
+		arcHelper = new PTNArcHelper(desktop, net);
 		simInterpreter = new PTNSimulationInterpreter(desktop, net);
 		/**
 		 * Position of mouse when dragging.
@@ -84,7 +87,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 					int diffX = e.getX() - (int) currentDraggingPosistion.getX();
 					int diffY = e.getY() - (int) currentDraggingPosistion.getY();
 					
-					if (desktop.hasSelected()) { // here we many have to move more
+					if (desktop.hasSelectedNodes()) { // here we many have to move more
 						// than one element
 						
 						ArrayList<NodeView> nodes = desktop.getNodeViews();
@@ -92,7 +95,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 						
 						while (it.hasNext()) {
 							NodeView node = (NodeView) it.next();
-							if (node.isSelected())
+							if (node.getSelected())
 								moveNode(diffX, diffY, node);
 						}
 					} else { // ok it's just one node that is dragged
@@ -137,26 +140,34 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 	}
 
-	@Override
 	/**
+	 * If a node was clicked
 	 * Context menu wanted ? -> Right Click
-	 * Node selected? -> Left Click
+	 * Select Node? -> Left Click
+	 * This method will check anyway if a click near an arc was triggered.
 	 */
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		
-		NodeView source = null;
-		if (e.getComponent() instanceof NodeView)
-			source = (NodeView)e.getComponent();
+		NodeView sourceNodeView = null;
 
-		if (!isInSimulationMode) {			
-			if (source instanceof JLabel && 3 == e.getButton()) // context menu
-				nodeHelper.handleContextmenu(source);
-			else if (PTNAppController.selectMode) // select/deselect element
-				source.setSelected(!source.isSelected());
-		} else {
-			if (source.getType() == PTNNodeTypes.TRANSITION && ((TransitionView)source).isActivated()) {
+		//node clicked?
+		if (!isInSimulationMode) {
+			if (e.getComponent() instanceof NodeView && nodeHelper.iconContainsPoint(((NodeView)e.getComponent()), e.getPoint())){
+				sourceNodeView = (NodeView)e.getComponent();
+				if (sourceNodeView instanceof JLabel && 3 == e.getButton()) // context menu
+					nodeHelper.handleContextmenu(sourceNodeView);
+				else if (PTNAppController.selectMode) // select/deselect element
+					sourceNodeView.setSelected(!sourceNodeView.getSelected());				
+			}
+			
+			if (PTNAppController.selectMode)
+				arcHelper.handleArcSelection(e);
+			
+		} else { //we're in sim mode
+			if (sourceNodeView.getType() == PTNNodeTypes.TRANSITION && ((TransitionView)sourceNodeView).isActivated()) {
 				try {
-					simInterpreter.handleClick((TransitionView) source);
+					simInterpreter.handleClick((TransitionView) sourceNodeView);
 				} catch (PTNSimulationException e2) {
 					JOptionPane.showConfirmDialog(desktop, e2.getMessage(), "Simulationsstop", JOptionPane.WARNING_MESSAGE);
 				}
@@ -189,7 +200,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 					&& !isInSimulationMode) {
 			// Dragging is over so reset moving variables.
 			isDragged = false;
-			currentDraggingPosistion.setLocation(-1, -1);
 		} else if (isAllowedTarget 
 						&& !isInSimulationMode
 							&& e.getButton() == MouseEvent.BUTTON1) {
@@ -203,6 +213,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		// the desktop.
 		desktop.removeArc("");
 		desktop.requestFocus();
+		currentDraggingPosistion.setLocation(-1, -1);
 
 	}
 
@@ -245,11 +256,18 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			 */
 			if (PTNAppController.deselectAll) {
 				desktop.deselectNodes();
+				desktop.deselectArcs();
 				PTNAppController.deselectAll = false;
-			} else if (PTNAppController.deleteSelection) {
+			} else if (PTNAppController.deleteSelection 
+					&& (desktop.hasSelectedNodes() || desktop.hasSelectedArcs())) {
+				
 				PTNAppController.deleteSelection = false;
-				if (JOptionPane.OK_OPTION == (JOptionPane.showConfirmDialog(desktop, "Wollen Sie die Knoten wirklich löschen?", "Löschen", JOptionPane.WARNING_MESSAGE)))
-					desktop.deleteSelected();
+				if (JOptionPane.OK_OPTION == (JOptionPane.showConfirmDialog(desktop, "Wollen Sie die Elemente wirklich löschen?", 
+						"Löschen", JOptionPane.WARNING_MESSAGE))) {
+					desktop.deleteSelectedNodes();
+					//desktop.deleteSelectedArcs();
+				}
+			
 			}
 
 		}

@@ -57,7 +57,7 @@ public class PTNMenu extends JMenuBar {
 		
 		JMenu menu = new JMenu("Schreibtisch");
 		menu.setMnemonic('D');
-		JMenuItem item1 = new JMenuItem("Schreibtischgr vergrößern");
+		JMenuItem item1 = new JMenuItem("Schreibtisch vergrößern");
 		JMenuItem item2 = new JMenuItem("Schreibtisch löschen");
 		
 		

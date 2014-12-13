@@ -94,7 +94,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 		nameLabel.setText(adjustedLabel);
 	}
 
-	public boolean isSelected() {
+	public boolean getSelected() {
 		return selected;
 	}
 
@@ -188,7 +188,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	 */
 	protected void updateIcon() {
 	   
-	    setIcon(this.isSelected() ? iconSelected : iconStandard);
+	    setIcon(this.getSelected() ? iconSelected : iconStandard);
 	    
 	}
 

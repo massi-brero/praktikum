@@ -2,11 +2,13 @@ package q8388415.brero_massimiliano.PTNetEditor.utils;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
@@ -335,6 +337,28 @@ public class PTNArcHelper {
 	 */
 	public String generateId() {
 		return PREFIX_ID.concat(String.valueOf(net.getNumberOfArcs() + 1));
+	}
+
+	/**
+	 * Checks if an arc on the desktop was clicked and updates its selection state.
+	 * 
+	 * @param 
+	 * 		MouseEvent
+	 */
+	public void handleArcSelection(MouseEvent e) {
+
+		e = SwingUtilities.convertMouseEvent(e.getComponent(), e, desktop);
+		Hashtable<String, ArcView> arcViews = desktop.getArcViews();
+		Iterator<Map.Entry<String, ArcView>> it = arcViews.entrySet().iterator();
+		
+		while (it.hasNext()) {
+			ArcView arcView = it.next().getValue();
+			if (arcView.contains(e.getPoint())) {
+				//System.out.println(arcView.getId());
+				arcView.setSelected(!arcView.getSelected());
+			}
+		}		
+		
 	}
 
 }

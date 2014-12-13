@@ -99,7 +99,7 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 	@Override
 	protected void updateIcon() {
 
-		if (isSelected())
+		if (getSelected())
 			this.setIcon(iconSelected);
 		else if (isActivated)
 			this.setIcon(iconActivated);

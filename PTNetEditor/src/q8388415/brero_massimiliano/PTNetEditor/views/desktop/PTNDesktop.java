@@ -74,37 +74,30 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	public PTNDesktop(PTNAppController appController, PTNNet net) {
 
 		this.net = net;
-		this.appController = appController;
-		setFocusable(true);
-		this.setOpaque(false);
-		addKeyListener(appController);
-		addMouseListener(this);
-		setDoubleBuffered(true);
-		this.setLayout(null);
-		this.init();
-
-	}
-
-	/**
-	 * Set up the desktop and calls the set-up operations on the net controller
-	 */
-	public void init() {
 		
-		this.reset();
-		maxSize = getSize();
 		/**
-		 * initialize controllers and helpers
+		 * initialize controllersand helpers
 		 */
-		this.netController = new PTNNetController(net, this);
-		netController.setUpNodeViews();
-		arcs = netController.setUpArcs();
+		this.appController = appController;
 		desktopController = new PTNDesktopController(this, net);
-		appController.addSimulationListener(desktopController);
+		netController = new PTNNetController(net, this);
 		nodeHelper = new PTNNodeHelper(this, net);
 		
 		/**
-		 * basic panel work
+		 * setup listeners
 		 */
+		this.addMouseListener(desktopController);
+		this.appController.addSimulationListener(desktopController);
+		this.addKeyListener(appController);
+		
+		/**
+		 * Basics
+		 */
+		this.setFocusable(true);
+		this.setOpaque(false);
+		this.addMouseListener(this);
+		this.setDoubleBuffered(true);
+		this.setLayout(null);
 		this.setBackground(Color.WHITE);
 		
 		/**
@@ -114,8 +107,20 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		t1.start();
 		Thread t2 = new Thread(netController);
 		t2.start();
-		this.repaint();
+		
+		this.init();
 
+	}
+
+	/**
+	 * Set up the desktop and calls the set-up operations on the net controller
+	 */
+	public void init() {		
+		this.reset();
+		maxSize = getSize();
+		netController.setUpNodeViews();
+		arcs = netController.setUpArcs();
+		this.repaint();
 	}
 
 	/**
@@ -263,19 +268,40 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	}
 
 	/**
-	 * returns wether we have some selected nodes or none. So we may move or
+	 * Returns whether we have some selected nodes or none. So we may move or
 	 * delete them at once.
 	 * 
 	 * @return boolean
 	 */
-	public boolean hasSelected() {
+	public boolean hasSelectedNodes() {
+		
+		Iterator<NodeView> it_n = getNodeViews().iterator();
 
-		Iterator<NodeView> it = getNodeViews().iterator();
-
-		while (it.hasNext()) {
-			if (it.next().isSelected())
+		while (it_n.hasNext()) {
+			if (it_n.next().getSelected())
 				return true;
 		}
+		
+
+		return false;
+
+	}
+	
+	/**
+	 * Returns whether we have some selected nodes or none. So we may move or
+	 * delete them at once.
+	 * 
+	 * @return boolean
+	 */
+	public boolean hasSelectedArcs() {
+		
+		Hashtable<String, ArcView> arcViews = this.getArcViews();
+		Iterator<Map.Entry<String, ArcView>> it_a = arcViews.entrySet().iterator();
+		
+		while (it_a.hasNext()) {
+			if (it_a.next().getValue().getSelected())
+				return true;
+		}	
 
 		return false;
 
@@ -291,22 +317,37 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		}
 
 	}
+	
+	public void deselectArcs() {
+
+		Hashtable<String, ArcView> arcViews = this.getArcViews();
+		Iterator<Map.Entry<String, ArcView>> it = arcViews.entrySet().iterator();
+		
+		while (it.hasNext()) {
+			ArcView arcView = it.next().getValue();
+			arcView.setSelected(false);
+		}	
+		
+		this.repaint();
+
+	}
+
 
 	/**
-	 * 
+	 * Removes selected nodes and tells the controller to erase their models too
+	 * and update the net.
 	 */
-	public void deleteSelected() {
+	public void deleteSelectedNodes() {
 
 		Iterator<NodeView> it = getNodeViews().iterator();
 		// we store the nodes we want to delete so we don't manipulate the
-		// iterator and remove
-		// stuff while it's still going through our list
+		// iterator and remove stuff while it's still going through our list
 		ArrayList<NodeView> nodesToRemove = new ArrayList<NodeView>();
 
 		if (!getNodeViews().isEmpty()) {
 			while (it.hasNext()) {
 				NodeView node = (NodeView) it.next();
-				if (node.isSelected()) {
+				if (node.getSelected()) {
 					nodesToRemove.add(node);
 					// TODO richtig löschen!?
 					node.setVisible(false);
@@ -320,6 +361,16 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 			}
 
 		}
+
+	}
+	
+	/**
+	 * Removes selected arcs and tells the controller to erase their models too
+	 * and update the net.
+	 */
+	public void deleteSelectedArcs() {
+
+		System.out.println("delete arcs");
 
 	}
 
@@ -463,7 +514,6 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
 		if (e.getClickCount() == 2) {
 			e = SwingUtilities.convertMouseEvent(e.getComponent(), e, this);
 			Point mouseLocation = e.getPoint();
@@ -474,27 +524,15 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mousePressed(MouseEvent e) {}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseReleased(MouseEvent e) {}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent e) {}
 
 }
