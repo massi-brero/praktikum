@@ -265,7 +265,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 				if (JOptionPane.OK_OPTION == (JOptionPane.showConfirmDialog(desktop, "Wollen Sie die Elemente wirklich löschen?", 
 						"Löschen", JOptionPane.WARNING_MESSAGE))) {
 					desktop.deleteSelectedNodes();
-					//desktop.deleteSelectedArcs();
+					desktop.deleteSelectedArcs();
 				}
 			
 			}

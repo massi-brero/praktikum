@@ -214,7 +214,6 @@ public class PTNNetController implements Runnable {
         net.removeNode(node);
         desktop.getNodeViews().remove(nodeView);
 
-
         desktop.paintImmediately(desktop.getBounds());
     }
 
@@ -233,7 +232,7 @@ public class PTNNetController implements Runnable {
         desktop.removeArc(arc.getId());
         net.getArcs().remove(arc.getId());
         
-        //Check which transition status have to be updated
+        //Check which transition status has to be updated
         if (arc.getTarget() != null && arc.getTarget().getType() == PTNNodeTypes.TRANSITION) {
         	nodeHelper.updateTransitionState((PTNTransition)arc.getTarget());
         }

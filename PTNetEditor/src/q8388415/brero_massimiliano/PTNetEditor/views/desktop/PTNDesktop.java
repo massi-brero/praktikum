@@ -185,14 +185,19 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 	/**
 	 * Draws all arcs currently in arcs hashTable.
+	 * 	synchronize on arcs just in case two thread wants to manipulate the arc list
+	 * at the same time.
 	 */
 	public void drawArcs(Graphics g) {
 
-		Iterator<Map.Entry<String, ArcView>> it = arcs.entrySet().iterator();
-		ArcView arcView = null;
-		while (it.hasNext()) {
-			arcView = (ArcView) it.next().getValue();
-			arcView.drawArc(g);
+		synchronized (arcs) {
+			Iterator<Map.Entry<String, ArcView>> it = arcs.entrySet().iterator();
+			ArcView arcView = null;
+			while (it.hasNext()) {
+				arcView = (ArcView) it.next().getValue();
+				arcView.drawArc(g);
+			}
+			
 		}
 
 	}
@@ -301,7 +306,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		while (it_a.hasNext()) {
 			if (it_a.next().getValue().getSelected())
 				return true;
-		}	
+		}
 
 		return false;
 
@@ -377,11 +382,15 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	/**
 	 * Stub for redrawing all incoming and outgoing arcs for a node that has
 	 * been moved.
+	 * We synchronize on arcs just in case two thread wants to manipulate tthe arc list
+	 * at the same time.
 	 * 
 	 * @param source
 	 */
 	public void redrawArcs(NodeView source) {
-		netController.updateArcsForNode(source);
+		synchronized (arcs) {
+			netController.updateArcsForNode(source);			
+		}
 	}
 
 	/**
@@ -485,6 +494,11 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public NodeView getNodeViewById(String id) {
 
 		Iterator<NodeView> it = this.getNodeViews().iterator();
