@@ -222,30 +222,29 @@ public class PTNNodeHelper implements ActionListener {
 	}
 	
 	/**
+	 * Checks if an icon in a node contains the given point.
 	 * 
 	 * @param sourceNodeView
-	 * 		{@link NodeView}
+	 *            {@link NodeView} The coordinates relative to the node#s JLabel are used here.
 	 * @param point
-	 * 		{@link Point}
-	 * @return
-	 * 		{@link Boolean}
+	 *            {@link Point} 
+	 * @return {@link Boolean}
 	 */
 	public boolean iconContainsPoint(NodeView sourceNodeView, Point point) {
-		System.out.println(point);
-		System.out.println(sourceNodeView);
-		Dimension viewSize = (sourceNodeView.getType() == PTNNodeTypes.STELLE) ? 
-								PlaceView.getCurrentSize() : TransitionView.getCurrentSize();
-		int viewWidth = (int)viewSize.getWidth();
-		int viewHeight = (int)viewSize.getHeight();
-		int iconWidth = sourceNodeView.getIcon().getIconWidth();
-		int iconHeight = sourceNodeView.getIcon().getIconHeight();
-		
-		Boolean xPositionInIcon = point.x >= (int)((viewWidth - iconWidth) / 2)
-								  	&& point.x <= (int)((viewWidth - iconWidth) / 2) +  iconWidth;
-		Boolean yPositionInIcon = point.x >= (int)((viewHeight - iconHeight) / 2)
-			  						&& point.x <= (int)((viewHeight - iconHeight) / 2) +  iconHeight;
-		
-		return xPositionInIcon && yPositionInIcon;
+
+		if (sourceNodeView != null && point != null) {
+			Dimension viewSize = (sourceNodeView.getType() == PTNNodeTypes.STELLE) ? PlaceView.getCurrentSize() : TransitionView.getCurrentSize();
+			int viewWidth = (int) viewSize.getWidth();
+			int viewHeight = (int) viewSize.getHeight();
+			int iconWidth = sourceNodeView.getIcon().getIconWidth();
+			int iconHeight = sourceNodeView.getIcon().getIconHeight();
+
+			Boolean xPositionInIcon = point.x >= (int) ((viewWidth - iconWidth) / 2) && point.x <= (int) ((viewWidth - iconWidth) / 2) + iconWidth;
+			Boolean yPositionInIcon = point.x >= (int) ((viewHeight - iconHeight) / 2) && point.x <= (int) ((viewHeight - iconHeight) / 2) + iconHeight;
+
+			return xPositionInIcon && yPositionInIcon;
+		}
+		return false;
 	}
 
 }

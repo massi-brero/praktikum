@@ -345,8 +345,9 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 
 	/**
-	 * Removes selected nodes and tells the controller to erase their models too
-	 * and update the net.
+	 * Removes selected nodes and the connected arcs. Call controller method
+	 * {@link PTNNetController#removeNodeAndArcs(NodeView) }to erase their 
+	 * models too and update the net.
 	 */
 	public void deleteSelectedNodes() {
 
@@ -382,6 +383,10 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	public void deleteSelectedArcs() {
 
 		System.out.println("delete arcs");
+		
+		Iterator<Map.Entry<String, ArcView>> it = arcs.entrySet().iterator();
+		ArcView arcView = null;
+
 
 	}
 

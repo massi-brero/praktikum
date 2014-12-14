@@ -121,6 +121,9 @@ public class ArcView implements PTNIScaleListener {
 	
 	/**
 	 * Checks if the arc representation contains the given Point.
+	 * A little bit of starting and ending segment is cut, so the arc
+	 * won't be selected if somebody clicks to mark a node an the click is 
+	 * near the node icon's boundaries.
 	 * 
 	 * @param p
 	 * 		{@link Point}
@@ -128,9 +131,6 @@ public class ArcView implements PTNIScaleListener {
 	 * 		{@link Boolean}
 	 */
 	public Boolean contains(Point p) {
-//		System.out.println(Line2D.ptLineDist(this.getStart().x, this.getStart().y, 
-//				  this.getEnd().x, this.getEnd().y, 
-//				  p.getX(), p.getY()));
 		return Line2D.ptSegDist(this.getStart().x, this.getStart().y, 
 								  this.getEnd().x, this.getEnd().y, 
 								  p.getX(), p.getY()) < SENSITIVITY;

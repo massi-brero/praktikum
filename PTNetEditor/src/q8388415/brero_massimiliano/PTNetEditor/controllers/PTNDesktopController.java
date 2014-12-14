@@ -42,6 +42,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	static boolean isDragged = false;
 	private Boolean isInSimulationMode = false;  
 	PTNSimulationInterpreter simInterpreter;
+	private final Point DEFAULT_DRAGGING_POSITION = new Point(-1, -1);
 
 	public PTNDesktopController(PTNDesktop dt, PTNNet net) {
 
@@ -52,7 +53,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		/**
 		 * Position of mouse when dragging.
 		 */
-		currentDraggingPosistion = new Point(-1, -1);
+		currentDraggingPosistion = DEFAULT_DRAGGING_POSITION;
 
 	}
 
@@ -85,22 +86,24 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 					if (!isDragged) {
 						isDragged = true;
+						this.resetCurrentDraggingPosition();
 					} else {
 						// now somebody drags...!
 						int diffX = e.getX() - (int) currentDraggingPosistion.getX();
 						int diffY = e.getY() - (int) currentDraggingPosistion.getY();
-
-						if (desktop.hasSelectedNodes()) { // here we move a
-															// selection of
-															// nodes
-
-							ArrayList<NodeView> nodes = desktop.getNodeViews();
-							Iterator<NodeView> it = nodes.iterator();
-
-							while (it.hasNext()) {
-								NodeView node = (NodeView) it.next();
-								if (node.getSelected())
-									moveNode(diffX, diffY, node);
+						
+						// here we move a selection of nodes
+						if (desktop.hasSelectedNodes()) { 
+							if (((NodeView)source).getSelected()) {
+								ArrayList<NodeView> nodes = desktop.getNodeViews();
+								Iterator<NodeView> it = nodes.iterator();
+								
+								while (it.hasNext()) {
+									NodeView node = (NodeView) it.next();
+									if (node.getSelected())
+										moveNode(diffX, diffY, node);
+								}
+								
 							}
 						} else { // ok it's just one node that is dragged
 							moveNode(diffX, diffY, (NodeView) source);
@@ -195,10 +198,8 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		if (e.getComponent() instanceof NodeView)
 			source = (NodeView) e.getComponent();
 
-
 		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) 
 										|| (source instanceof TransitionView && target instanceof PlaceView);
-		
 
 		if (PTNAppController.moveNodes 
 				&& isDragged
@@ -218,7 +219,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		// the desktop.
 		desktop.removeArc("");
 		desktop.requestFocus();
-		currentDraggingPosistion.setLocation(-1, -1);
+		this.resetCurrentDraggingPosition();
 
 	}
 
@@ -230,9 +231,11 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	 * @return JComponent A node or the desktop.
 	 */
 	private JComponent getComponentAtMouseLocation(Point mouseLocation) {
-
+		
 		for (Component component : desktop.getComponents()) {
-			if (component.getBounds().contains(mouseLocation))
+			if (component.getBounds().contains(mouseLocation)
+					&& component instanceof NodeView
+						&& nodeHelper.iconContainsPoint((NodeView) component, component.getMousePosition()))
 				return (JComponent) component;
 		}
 
@@ -268,23 +271,19 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			 */
 			if (PTNAppController.deselectAll) {
 				synchronized (desktop.getArcViews()) {
-					System.out.println("desktop1 - views in");
 					desktop.deselectNodes();
 					desktop.deselectArcs();
 					PTNAppController.deselectAll = false;
 					desktop.getArcViews().notifyAll();
-					System.out.println("desktop1 - views out");
 				}
 			} else if (PTNAppController.deleteSelection && (desktop.hasSelectedNodes() || desktop.hasSelectedArcs())) {
 
 				PTNAppController.deleteSelection = false;
 				synchronized (desktop.getArcViews()) {
-					System.out.println("desktop2 - views in");
 					if (JOptionPane.OK_OPTION == (JOptionPane.showConfirmDialog(desktop, "Wollen Sie die Elemente wirklich löschen?", "Löschen", JOptionPane.WARNING_MESSAGE))) {
+						desktop.deleteSelectedArcs();
 						desktop.deleteSelectedNodes();
-						//desktop.deleteSelectedArcs();
 						desktop.getArcViews().notifyAll();
-						System.out.println("desktop2 - views out");
 					}
 
 				}
@@ -293,6 +292,10 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 	}
 
+	private void resetCurrentDraggingPosition() {
+		currentDraggingPosistion = DEFAULT_DRAGGING_POSITION;
+	}
+	
 	@Override
 	public void startSimulationMode() {
 		isInSimulationMode = true;
