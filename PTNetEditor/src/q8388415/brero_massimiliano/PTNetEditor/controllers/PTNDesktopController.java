@@ -11,6 +11,7 @@ import java.util.Iterator;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNSimulationException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
@@ -56,8 +57,8 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	}
 
 	/**
-	 * Handles when arcs are drawn or nodes shall be moved by dragging the mouse after selecting them.
-	 * Does nothing in simulation mode.
+	 * Handles when arcs are drawn or nodes shall be moved by dragging the mouse
+	 * after selecting them. Does nothing in simulation mode.
 	 * 
 	 * @param e
 	 *            MouseEvent
@@ -66,46 +67,50 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	public void mouseDragged(MouseEvent e) {
 
 		JComponent source = (JComponent) e.getComponent();
-		e.translatePoint(source.getX(), source.getY());
+		Point notconvertedPoint = new Point(e.getPoint().x, e.getPoint().y);
+		e = SwingUtilities.convertMouseEvent(e.getComponent(), e, desktop);
 
 		if (!isInSimulationMode) {
-			
+
 			// here we are drawing an arc
 			if (!PTNAppController.moveNodes) {
-				
+
 				Point start = new Point(source.getLocation().x + source.getWidth() / 2, source.getLocation().y + source.getHeight() / 2);
 				Point end = new Point(e.getX(), e.getY());
 				desktop.updateArcs("", start, end);
-				
+
 			} else {
-				
-				if (!isDragged) {
-					isDragged = true;
-				} else {
-					
-					// now somebody drags...!
-					int diffX = e.getX() - (int) currentDraggingPosistion.getX();
-					int diffY = e.getY() - (int) currentDraggingPosistion.getY();
-					
-					if (desktop.hasSelectedNodes()) { // here we many have to move more
-						// than one element
-						
-						ArrayList<NodeView> nodes = desktop.getNodeViews();
-						Iterator<NodeView> it = nodes.iterator();
-						
-						while (it.hasNext()) {
-							NodeView node = (NodeView) it.next();
-							if (node.getSelected())
-								moveNode(diffX, diffY, node);
+
+				if (source instanceof NodeView) {
+
+					if (!isDragged) {
+						isDragged = true;
+					} else {
+						// now somebody drags...!
+						int diffX = e.getX() - (int) currentDraggingPosistion.getX();
+						int diffY = e.getY() - (int) currentDraggingPosistion.getY();
+
+						if (desktop.hasSelectedNodes()) { // here we move a
+															// selection of
+															// nodes
+
+							ArrayList<NodeView> nodes = desktop.getNodeViews();
+							Iterator<NodeView> it = nodes.iterator();
+
+							while (it.hasNext()) {
+								NodeView node = (NodeView) it.next();
+								if (node.getSelected())
+									moveNode(diffX, diffY, node);
+							}
+						} else { // ok it's just one node that is dragged
+							moveNode(diffX, diffY, (NodeView) source);
 						}
-					} else { // ok it's just one node that is dragged
-						moveNode(diffX, diffY, (NodeView) source);
+
 					}
-					
 				}
-				
+
 			}
-			
+
 			currentDraggingPosistion = e.getPoint();
 		}
 
@@ -241,6 +246,13 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		desktop.updateArcs("", start, end);
 	}
 
+	/**
+	 * A monitor on both the views list ensures that only
+     * one thread may manipulate those lists at the same time.
+     * 
+     * @see PTNDesktop
+     * @see PTNNetController
+	 */
 	@Override
 	public void run() {
 
@@ -255,21 +267,28 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			 * select and deselect nodes
 			 */
 			if (PTNAppController.deselectAll) {
-				desktop.deselectNodes();
-				desktop.deselectArcs();
-				PTNAppController.deselectAll = false;
-			} else if (PTNAppController.deleteSelection 
-					&& (desktop.hasSelectedNodes() || desktop.hasSelectedArcs())) {
-				
-				PTNAppController.deleteSelection = false;
-				if (JOptionPane.OK_OPTION == (JOptionPane.showConfirmDialog(desktop, "Wollen Sie die Elemente wirklich löschen?", 
-						"Löschen", JOptionPane.WARNING_MESSAGE))) {
-					desktop.deleteSelectedNodes();
-					desktop.deleteSelectedArcs();
+				synchronized (desktop.getArcViews()) {
+					System.out.println("desktop1 - views in");
+					desktop.deselectNodes();
+					desktop.deselectArcs();
+					PTNAppController.deselectAll = false;
+					desktop.getArcViews().notifyAll();
+					System.out.println("desktop1 - views out");
 				}
-			
-			}
+			} else if (PTNAppController.deleteSelection && (desktop.hasSelectedNodes() || desktop.hasSelectedArcs())) {
 
+				PTNAppController.deleteSelection = false;
+				synchronized (desktop.getArcViews()) {
+					System.out.println("desktop2 - views in");
+					if (JOptionPane.OK_OPTION == (JOptionPane.showConfirmDialog(desktop, "Wollen Sie die Elemente wirklich löschen?", "Löschen", JOptionPane.WARNING_MESSAGE))) {
+						desktop.deleteSelectedNodes();
+						//desktop.deleteSelectedArcs();
+						desktop.getArcViews().notifyAll();
+						System.out.println("desktop2 - views out");
+					}
+
+				}
+			}
 		}
 
 	}

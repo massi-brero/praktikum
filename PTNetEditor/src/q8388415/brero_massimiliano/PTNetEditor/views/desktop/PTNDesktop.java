@@ -43,6 +43,9 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.ResizeDesktopWindow
  * to iterate the complete net and re-add all buttons when some update action on
  * the nodes is due.
  * 
+ * Protocol: If the node and arc list are to be used in another thread (like net or desktop
+ * controller) a monitor must be put on those lists.
+ * 
  * @author q8388415
  *
  */
@@ -177,6 +180,10 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 	}
 
+	/**
+	 * @param
+	 * 		Rectangle
+	 */
 	@Override
 	public void paintImmediately(Rectangle bounds) {
 		super.paintImmediately(bounds);
@@ -184,20 +191,19 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	}
 
 	/**
-	 * Draws all arcs currently in arcs hashTable.
-	 * 	synchronize on arcs just in case two thread wants to manipulate the arc list
-	 * at the same time.
+	 * Draws all arcs currently in arcs hashTable. There'a monitor on arcs just
+	 * in case tanother thread (like in desktop controller) is manipulating the
+	 * list while this method is called at the same time.
+	 * 
+	 * @param g
 	 */
 	public void drawArcs(Graphics g) {
 
-		synchronized (arcs) {
-			Iterator<Map.Entry<String, ArcView>> it = arcs.entrySet().iterator();
-			ArcView arcView = null;
-			while (it.hasNext()) {
-				arcView = (ArcView) it.next().getValue();
-				arcView.drawArc(g);
-			}
-			
+		Iterator<Map.Entry<String, ArcView>> it = arcs.entrySet().iterator();
+		ArcView arcView = null;
+		while (it.hasNext()) {
+			arcView = (ArcView) it.next().getValue();
+			arcView.drawArc(g);
 		}
 
 	}
@@ -382,15 +388,13 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	/**
 	 * Stub for redrawing all incoming and outgoing arcs for a node that has
 	 * been moved.
-	 * We synchronize on arcs just in case two thread wants to manipulate tthe arc list
-	 * at the same time.
+	 * There'a monitor on arcs just in case tanother thread (like in desktop controller)
+	 * is manipulating the list while this method is called at the same time.
 	 * 
 	 * @param source
 	 */
 	public void redrawArcs(NodeView source) {
-		synchronized (arcs) {
 			netController.updateArcsForNode(source);			
-		}
 	}
 
 	/**
@@ -489,7 +493,8 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		HashMap<String, PTNArc> arcsToDelete = popUp.sendArcsToDelete();
 
 		if (0 < arcsToDelete.size())
-			if (0 == (JOptionPane.showConfirmDialog(this, "Wollen Sie die Kanten wirklich löschen?", "Löschen", JOptionPane.WARNING_MESSAGE)))
+			if (0 == (JOptionPane.showConfirmDialog(this, "Wollen Sie die Kanten wirklich löschen?", 
+																"Löschen", JOptionPane.WARNING_MESSAGE)))
 				netController.removeArcsFromNetAndDesktop(arcsToDelete);
 
 	}

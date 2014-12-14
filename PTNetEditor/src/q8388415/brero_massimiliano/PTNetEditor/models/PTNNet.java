@@ -7,6 +7,16 @@ import java.util.Map;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNArcDirections;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
+/**
+ * 
+ * Base class where all the net business logic is in. 
+ * 
+ * Protocol: If the node and arc list are to be used in another thread (like net or desktop
+ * controller) a monitor must be put on those lists.
+ *
+ * @author Laptop
+ *
+ */
 public class PTNNet {
 	
 	private HashMap<String,PTNNode> nodes;
@@ -19,40 +29,90 @@ public class PTNNet {
 		
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 * 		{@link String}
+	 * @return
+	 * 		{@link PTNNode}N
+	 */
 	public PTNNode getNodeById(String id) {
 		return nodes.get(id);
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 * 		{@link String}
+	 * @return
+	 * 		{@link PTNArc}
+	 */
 	public PTNArc getArcById(String id) {
 		return arcs.get(id);
 	}
 	
+	/**
+	 * @return
+	 * 		int
+	 */
 	public int getNumberOfNodes() {
 		return nodes.size();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * 		int
+	 */
 	public int getNumberOfArcs() {
 		return arcs.size();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * 		int
+	 */
 	public int numberOfPlaces() {
 		
 		return 1;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * 		int
+	 */
 	public int numberOfTransitions() {
 		
 		return 1;
 	}
 
+	/**
+	 * 
+	 * @return
+	 * 		HashMap<String,PTNNode>
+	 */
 	public HashMap<String,PTNNode> getNodes() {
 		return nodes;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * 		HashMap<String,PTNArc>
+	 */
 	public HashMap<String,PTNArc> getArcs() {
 		return arcs;
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 * 		{@link String}
+	 * @return
+	 * 		HashMap<String,PTNNode> Successors of a node with the given id.
+	 */
 	public HashMap<String,PTNNode> getSuccessors(String id) {
 		PTNArc arc;
 		HashMap<String, PTNNode> list = new HashMap<String, PTNNode>();
@@ -68,6 +128,13 @@ public class PTNNet {
 		
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 * 		{@link String}
+	 * @return
+	 * 		HashMap<String,PTNNode> Nodes the arcs are coming from.
+	 */
 	public HashMap<String,PTNNode> getPredecessors(String id) {
 		PTNArc arc;
 		HashMap<String, PTNNode> list = new HashMap<String, PTNNode>();
@@ -116,14 +183,35 @@ public class PTNNet {
 
 	}
 	
+	/**
+	 * 
+	 * @param node
+	 * 		{@link PTNNode}
+	 * @return
+	 * 		HashMap<String, PTNArc>
+	 */
 	public HashMap<String, PTNArc> getOutgoingArcs(PTNNode node) {
 		return this.getIncomingOutgoingArcs(node, PTNArcDirections.outgoing);
 	}
 	
+	/**
+	 * 
+	 * @param node
+	 * 		{@link PTNNode}
+	 * @return
+	 * 		HashMap<String, PTNArc>
+	 */
 	public HashMap<String, PTNArc> getIncomingArcs(PTNNode node) {
 		return this.getIncomingOutgoingArcs(node, PTNArcDirections.incoming);
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 * 		{@link String}
+	 * @return
+	 * 		int
+	 */
 	public int getNumberOfSuccessors(String id) {
 		return 1;
 	}
@@ -216,7 +304,8 @@ public class PTNNet {
 
 	/**
 	 * 
-	 * @param PTNNode n
+	 * @param 
+	 * 		PTNNode n
 	 */
 	public void addNode(PTNNode n) {
 		nodes.put(n.getId(), n);

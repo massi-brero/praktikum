@@ -352,6 +352,18 @@ public class PTNNetController implements Runnable {
         desktop.paintImmediately(desktop.getBounds());
     }
 
+    /**
+     * Check if arcs must be redrawn e. g. because of scale
+     * increasement/decreasement of nodes.
+     * In this case both view and model are updated. 
+     * A monitor on both the views an model list ensures that only
+     * one thread may manipulate those lists at the same time.
+     * 
+     * @see PTNDesktop
+     * @see PTNDesktopController
+     * 
+     */
+    @Override
     public void run() {
 
         while (true) {
@@ -361,10 +373,7 @@ public class PTNNetController implements Runnable {
             } catch (InterruptedException e) {
                 // continue waiting even if interrupted
             }
-            /**
-             * Check if arcs must be redrawn e. g. because of scale
-             * increasement/decreasement of nodes
-             */
+
             if (PTNAppController.redrawArcs) {
 
                 HashMap<String, PTNArc> arcs = net.getArcs();
@@ -372,28 +381,30 @@ public class PTNNetController implements Runnable {
                 Hashtable<String, ArcView> arcViewList = desktop.getArcViews();
                 PTNArc arc;
 
-                Iterator<Map.Entry<String, PTNArc>> it = arcs.entrySet().iterator();
-
-                while (it.hasNext()) {
-
-                    arc = it.next().getValue();
-                    arcView = arcViewList.get(arc.getId());
-
-                    Point start = arcHelper.normalizeLocation(arc, true);
-                    Point end = arcHelper.normalizeLocation(arc, false);
-
-                    arcView.setStart(start);
-                    arcView.setEnd(end);
-
-                }
-
-                desktop.repaint();
-                PTNAppController.redrawArcs = false;
-
+                	synchronized (arcViewList) {
+                        synchronized (arcs) {
+                        Iterator<Map.Entry<String, PTNArc>> it = arcs.entrySet().iterator();
+                		while (it.hasNext()) {
+                			
+                			arc = it.next().getValue();
+                			arcView = arcViewList.get(arc.getId());
+                			
+                			Point start = arcHelper.normalizeLocation(arc, true);
+                			Point end = arcHelper.normalizeLocation(arc, false);
+                			
+                			arcView.setStart(start);
+                			arcView.setEnd(end);
+                			
+                			desktop.repaint();
+                			PTNAppController.redrawArcs = false;
+                			
+                		}
+            			arcs.notifyAll();
+					}
+                        arcViewList.notifyAll();
+				}
+                
             }
-
         }
-
     }
-
 }

@@ -231,7 +231,8 @@ public class PTNNodeHelper implements ActionListener {
 	 * 		{@link Boolean}
 	 */
 	public boolean iconContainsPoint(NodeView sourceNodeView, Point point) {
-
+		System.out.println(point);
+		System.out.println(sourceNodeView);
 		Dimension viewSize = (sourceNodeView.getType() == PTNNodeTypes.STELLE) ? 
 								PlaceView.getCurrentSize() : TransitionView.getCurrentSize();
 		int viewWidth = (int)viewSize.getWidth();
