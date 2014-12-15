@@ -121,8 +121,12 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	public void init() {		
 		this.reset();
 		maxSize = getSize();
-		netController.setUpNodeViews();
-		arcs = netController.setUpArcs();
+		synchronized (nodes) {
+			netController.setUpNodeViews();			
+		}
+		synchronized (arcs) {
+			arcs = netController.setUpArcs();			
+		}
 		this.repaint();
 	}
 
@@ -218,12 +222,14 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	 */
 	public void updateArcs(String id, Point start, Point end) {
 
-		if (!arcs.containsKey(id)) {
-			ArcView arcView = new ArcView(id, start, end, netController);
-			arcs.put(id, arcView);
-		} else {
-			arcs.get(id).setStart(start);
-			arcs.get(id).setEnd(end);
+		synchronized (arcs) {
+			if (!arcs.containsKey(id)) {
+				ArcView arcView = new ArcView(id, start, end, netController);
+				arcs.put(id, arcView);
+			} else {
+				arcs.get(id).setStart(start);
+				arcs.get(id).setEnd(end);
+			}
 		}
 
 		this.paintImmediately(this.getBounds());
@@ -237,11 +243,13 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	 */
 	public void updateArcs(ArcView arcView) {
 
-		if (!arcs.containsKey(arcView.getId())) {
-			arcs.put(arcView.getId(), arcView);
-		} else {
-			arcs.get(arcView.getId()).setStart(arcView.getStart());
-			arcs.get(arcView.getId()).setEnd(arcView.getEnd());
+		synchronized (arcs) {
+			if (!arcs.containsKey(arcView.getId())) {
+				arcs.put(arcView.getId(), arcView);
+			} else {
+				arcs.get(arcView.getId()).setStart(arcView.getStart());
+				arcs.get(arcView.getId()).setEnd(arcView.getEnd());
+			}			
 		}
 
 		this.paintImmediately(this.getBounds());
@@ -255,8 +263,10 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	 */
 	public void removeArc(String id) {
 
-		arcs.remove(id);
-		this.repaint();
+		synchronized (arcs) {
+			arcs.remove(id);
+			this.repaint();			
+		}
 
 	}
 
@@ -309,9 +319,11 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		Hashtable<String, ArcView> arcViews = this.getArcViews();
 		Iterator<Map.Entry<String, ArcView>> it_a = arcViews.entrySet().iterator();
 		
-		while (it_a.hasNext()) {
-			if (it_a.next().getValue().getSelected())
-				return true;
+		synchronized (arcs) {
+			while (it_a.hasNext()) {
+				if (it_a.next().getValue().getSelected())
+					return true;
+			}			
 		}
 
 		return false;
@@ -321,10 +333,12 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	public void deselectNodes() {
 
 		Iterator<NodeView> it = getNodeViews().iterator();
-
-		while (it.hasNext()) {
-			NodeView node = (NodeView) it.next();
-			node.setSelected(false);
+		
+		synchronized(nodes) {
+			while (it.hasNext()) {
+				NodeView node = (NodeView) it.next();
+				node.setSelected(false);
+			}			
 		}
 
 	}
@@ -334,10 +348,12 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		Hashtable<String, ArcView> arcViews = this.getArcViews();
 		Iterator<Map.Entry<String, ArcView>> it = arcViews.entrySet().iterator();
 		
-		while (it.hasNext()) {
-			ArcView arcView = it.next().getValue();
-			arcView.setSelected(false);
-		}	
+		synchronized (arcs) {
+			while (it.hasNext()) {
+				ArcView arcView = it.next().getValue();
+				arcView.setSelected(false);
+			}				
+		}
 		
 		this.repaint();
 
@@ -356,24 +372,25 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		// iterator and remove stuff while it's still going through our list
 		ArrayList<NodeView> nodesToRemove = new ArrayList<NodeView>();
 
-		if (!getNodeViews().isEmpty()) {
-			while (it.hasNext()) {
-				NodeView node = (NodeView) it.next();
-				if (node.getSelected()) {
-					nodesToRemove.add(node);
-					// TODO richtig löschen!?
-					node.setVisible(false);
+		synchronized(nodes) {		
+			if (!getNodeViews().isEmpty()) {
+				while (it.hasNext()) {
+					NodeView node = (NodeView) it.next();
+					if (node.getSelected()) {
+						nodesToRemove.add(node);
+						// TODO richtig löschen!?
+						node.setVisible(false);
+					}
 				}
+				
+				it = nodesToRemove.iterator();
+				// now we remove them nodes from our precious list
+				while (it.hasNext()) {
+					netController.removeNodeAndArcs(it.next());
+				}
+				
 			}
-
-			it = nodesToRemove.iterator();
-			// now we remove them nodes from our precious list
-			while (it.hasNext()) {
-				netController.removeNodeAndArcs(it.next());
-			}
-
 		}
-
 	}
 	
 	/**
@@ -497,10 +514,13 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 		HashMap<String, PTNArc> arcsToDelete = popUp.sendArcsToDelete();
 
-		if (0 < arcsToDelete.size())
-			if (0 == (JOptionPane.showConfirmDialog(this, "Wollen Sie die Kanten wirklich löschen?", 
-																"Löschen", JOptionPane.WARNING_MESSAGE)))
-				netController.removeArcsFromNetAndDesktop(arcsToDelete);
+		synchronized (arcs) {
+			
+			if (0 < arcsToDelete.size())
+				if (0 == (JOptionPane.showConfirmDialog(this, "Wollen Sie die Kanten wirklich löschen?", 
+						"Löschen", JOptionPane.WARNING_MESSAGE)))
+					netController.removeArcsFromNetAndDesktop(arcsToDelete);
+		}
 
 	}
 
