@@ -92,7 +92,8 @@ public class NewNodeWindow extends JDialog implements ActionListener {
         this.addToPanel(new JLabel("Knoten-Label"));
         this.addToPanel(nameLabel);
 
-        JButton okButton = new JButton("Abspeichern");
+        JButton okButton = new JButton("Zeichnen"
+        		+ "");
         okButton.addActionListener(this);
         okButton.setPreferredSize(BUTTON_SIZE);
         this.addToPanel(okButton);
@@ -124,7 +125,7 @@ public class NewNodeWindow extends JDialog implements ActionListener {
          * because we need no further information for this check.
          * 
          */
-        if (e.getActionCommand().equals("Abspeichern")) {
+        if (e.getActionCommand().equals("Zeichnen")) {
 
                 if (types.getSelectedItem() == PTNNodeTypes.STELLE && !PTNNetValidator.isValidToken(token.getText())) {
                         JOptionPane.showConfirmDialog(this, "Bitte geben Sie eine Zahl zwischen 0-999 ein.", "Token Fehler", JOptionPane.PLAIN_MESSAGE);
