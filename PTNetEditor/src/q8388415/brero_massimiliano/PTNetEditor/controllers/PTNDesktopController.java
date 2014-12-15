@@ -68,13 +68,12 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	public void mouseDragged(MouseEvent e) {
 
 		JComponent source = (JComponent) e.getComponent();
-		Point notconvertedPoint = new Point(e.getPoint().x, e.getPoint().y);
-		e = SwingUtilities.convertMouseEvent(e.getComponent(), e, desktop);
+		e.translatePoint(source.getX(), source.getY());
 
 		if (!isInSimulationMode) {
 
 			// here we are drawing an arc
-			if (!PTNAppController.moveNodes) {
+			if (!PTNAppController.moveNodes && !PTNAppController.selectMode) {
 
 				Point start = new Point(source.getLocation().x + source.getWidth() / 2, source.getLocation().y + source.getHeight() / 2);
 				Point end = new Point(e.getX(), e.getY());

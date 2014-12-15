@@ -358,21 +358,27 @@ public class PTNNet {
 	 */
 	private HashMap<String, PTNArc> getArcsBySourceOrTarget(PTNNode node, Boolean isSource) {
 		
-		String id = node.getId();
+		
 		PTNArc arc;
 		HashMap<String, PTNArc> list = new HashMap<String, PTNArc>();
-		Iterator<Map.Entry<String, PTNArc>> it = arcs.entrySet().iterator();
 		
-		while(it.hasNext()) {
-			arc = (PTNArc) it.next().getValue();
+		if(node != null) {
 			
-			if (isSource) {
-				if (id.equals(arc.getSource().getId()))
-					list.put(arc.getId(), arc);				
-			} else {
-				if (id.equals(arc.getTarget().getId()))
-					list.put(arc.getId(), arc);	
+			String id = node.getId();
+			Iterator<Map.Entry<String, PTNArc>> it = arcs.entrySet().iterator();
+			
+			while(it.hasNext()) {
+				arc = (PTNArc) it.next().getValue();
+				
+				if (isSource) {
+					if (id.equals(arc.getSource().getId()))
+						list.put(arc.getId(), arc);				
+				} else {
+					if (id.equals(arc.getTarget().getId()))
+						list.put(arc.getId(), arc);	
+				}
 			}
+			
 		}
 		
 		return list;

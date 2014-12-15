@@ -73,23 +73,25 @@ public class PTNFileController implements PTNIFileListener {
 
 		PlaceView.resetSize();
 		TransitionView.resetSize();
-		this.openFileDialog();
-
-		try {
-
-			if (null != lastOpenedFile) {
-				net.reset();
-				readModel.readFromFile(lastOpenedFile, net);
-			}
-
-			desktop.init();
-			desktop.setSize(readModel.getDesktopSize());
-
-		} catch (PTNNetContructionException e) {
-			this.callNetContructionWarning(e.getMessage());
-		} catch (PTNNodeConstructionException e) {
-			this.callNetContructionWarning(e.getMessage());
+		
+		if (true == this.openFileDialog()) {
+			try {
+				
+				if (null != lastOpenedFile) {
+					net.reset();
+					readModel.readFromFile(lastOpenedFile, net);
+				}
+				
+				desktop.init();
+				desktop.setSize(readModel.getDesktopSize());
+				
+			} catch (PTNNetContructionException e) {
+				this.callNetContructionWarning(e.getMessage());
+			} catch (PTNNodeConstructionException e) {
+				this.callNetContructionWarning(e.getMessage());
+			}			
 		}
+
 
 	}
 
@@ -97,15 +99,17 @@ public class PTNFileController implements PTNIFileListener {
 	 * Let's the user choose a file and store last chosen file path so the
 	 * window will display that folder next time when it's opened.
 	 */
-	private void openFileDialog() {
+	private Boolean openFileDialog() {
 
 		PTNFileChooser fileDialog = new PTNFileChooser(lastOpenedFile.getParent());
 		int val = fileDialog.showDialog(desktop, "Netz-Datei wählen");
 
 		if (0 == val) {
 			lastOpenedFile = fileDialog.getSelectedFile();
-		}
-
+			return true;
+		} 
+		
+		return false;
 	}
 
 	/**
