@@ -62,30 +62,32 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	 * after selecting them. Does nothing in simulation mode.
 	 * 
 	 * @param e
-	 *            MouseEvent
+	 * 		{@link MouseEvent}
 	 */
 	@Override
 	public void mouseDragged(MouseEvent e) {
 
 		JComponent source = (JComponent) e.getComponent();
-		e.translatePoint(source.getX(), source.getY());
 
-		if (!isInSimulationMode) {
-
-			// here we are drawing an arc
-			if (!PTNAppController.moveNodes && !PTNAppController.selectMode) {
+		if (!isInSimulationMode  && !PTNAppController.selectMode && source instanceof NodeView) {
+			
+			e.translatePoint(source.getX(), source.getY());
+			
+			/**
+			 * here we are drawing an arc
+			 */
+			if (!PTNAppController.moveNodes) {
 
 				Point start = new Point(source.getLocation().x + source.getWidth() / 2, source.getLocation().y + source.getHeight() / 2);
 				Point end = new Point(e.getX(), e.getY());
 				desktop.updateArcs("", start, end);
-
+			/**
+			 * User wants to move nodes
+			 */
 			} else {
-
-				if (source instanceof NodeView) {
 
 					if (!isDragged) {
 						isDragged = true;
-						this.resetCurrentDraggingPosition();
 					} else {
 						// now somebody drags...!
 						int diffX = e.getX() - (int) currentDraggingPosistion.getX();
@@ -110,8 +112,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 					}
 				}
-
-			}
 
 			currentDraggingPosistion = e.getPoint();
 		}
@@ -172,9 +172,9 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 				arcHelper.handleArcSelection(e);
 			
 		} else { //we're in sim mode
-			if (sourceNodeView.getType() == PTNNodeTypes.TRANSITION && ((TransitionView)sourceNodeView).isActivated()) {
+			if (e.getComponent() instanceof TransitionView && ((TransitionView)e.getComponent()).isActivated()) {
 				try {
-					simInterpreter.handleClick((TransitionView) sourceNodeView);
+					simInterpreter.handleClick((TransitionView) e.getComponent());
 				} catch (PTNSimulationException e2) {
 					JOptionPane.showConfirmDialog(desktop, e2.getMessage(), "Simulationsstop", JOptionPane.WARNING_MESSAGE);
 				}
@@ -200,22 +200,17 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		boolean isAllowedTarget = (source instanceof PlaceView && target instanceof TransitionView) 
 										|| (source instanceof TransitionView && target instanceof PlaceView);
 
-		if (PTNAppController.moveNodes 
-				&& isDragged
-					&& !isInSimulationMode) {
+		if (PTNAppController.moveNodes && isDragged && !isInSimulationMode) {
 			// Dragging is over so reset moving variables.
 			isDragged = false;
-		} else if (isAllowedTarget 
-						&& !isInSimulationMode
-							&& e.getButton() == MouseEvent.BUTTON1) {
+		} else if (isAllowedTarget && !isInSimulationMode && e.getButton() == MouseEvent.BUTTON1) {
 			// We can cast safely to node view since we now know that we have a
 			// NodeView type under the mouse pointer.
 			this.drawTempEdge(source, target);
 			desktop.addNewArc(source, (NodeView) target);
 			PTNAppController.moveNodes = false;
 		}
-		// delete all temporary or id-less arcs that may have be lingering on
-		// the desktop.
+		// delete all temporary or id-less arcs that may have be lingering onthe desktop.
 		desktop.removeArc("");
 		desktop.requestFocus();
 		this.resetCurrentDraggingPosition();
@@ -298,6 +293,8 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	@Override
 	public void startSimulationMode() {
 		isInSimulationMode = true;
+		desktop.deleteSelectedArcs();
+		desktop.deselectNodes();
 	}
 
 	@Override
