@@ -8,11 +8,8 @@ package q8388415.brero_massimiliano.PTNetEditor.types;
  * @author 8388415
  *
  */
-public interface PTNArcDTO {
+public interface PTNIArcDTO {
 	
 	String getId();
-	String getArcName();
-	PTNNodeTypes getType();
-	int getToken();
 	
 }

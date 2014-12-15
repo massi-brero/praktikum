@@ -23,6 +23,7 @@ import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNIArcDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIModeListener;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
@@ -259,7 +260,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	/**
 	 * If id is "newArc" an arc with a non valid target will be deleted.
 	 * 
-	 * @param id
+	 * @param String id
 	 */
 	public void removeArc(String id) {
 
@@ -274,6 +275,11 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		return this.nodes;
 	}
 
+	/**
+	 * 
+	 * @return
+	 * 		Hashtable<String, ArcView> ... Arcs current visible on desktop.
+	 */
 	public Hashtable<String, ArcView> getArcViews() {
 		return this.arcs;
 	}
@@ -330,6 +336,9 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 	}
 
+	/**
+	 * Removes selection from previously selected nodes.
+	 */
 	public void deselectNodes() {
 
 		Iterator<NodeView> it = getNodeViews().iterator();
@@ -343,6 +352,9 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 	}
 	
+	/**
+	 * Removes selection from previously selected arcs.
+	 */
 	public void deselectArcs() {
 
 		Hashtable<String, ArcView> arcViews = this.getArcViews();
@@ -368,8 +380,10 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	public void deleteSelectedNodes() {
 
 		Iterator<NodeView> it = getNodeViews().iterator();
-		// we store the nodes we want to delete so we don't manipulate the
-		// iterator and remove stuff while it's still going through our list
+		/** 
+		* We store the nodes we want to delete so we don't manipulate the
+		* iterator and remove stuff while it's still going through our list
+		*/
 		ArrayList<NodeView> nodesToRemove = new ArrayList<NodeView>();
 
 		synchronized(nodes) {		
@@ -399,10 +413,32 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	 */
 	public void deleteSelectedArcs() {
 
-		System.out.println("delete arcs");
-		
 		Iterator<Map.Entry<String, ArcView>> it = arcs.entrySet().iterator();
+		HashMap<String, ArcView> arcsToRemove = new HashMap<String, ArcView>();
 		ArcView arcView = null;
+		
+		/** 
+		* We store the nodes we want to delete so we don't manipulate the
+		* iterator and remove stuff while it's still going through our list
+		*/
+		synchronized(arcs) {		
+			if (!getArcViews().isEmpty()) {
+				while (it.hasNext()) {
+					arcView = (ArcView) it.next().getValue();
+					if (arcView.getSelected()) {
+						arcsToRemove.put(arcView.getId(), arcView);
+
+					}
+				}
+				
+				it = arcsToRemove.entrySet().iterator();
+				// now we remove them nodes from our precious list
+				while (it.hasNext()) {
+					netController.removeArcFromNetAndDesktop(it.next().getKey());
+				}
+				
+			}
+		}
 
 
 	}
@@ -512,7 +548,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		popUp.setModal(true);
 		popUp.setVisible(true);
 
-		HashMap<String, PTNArc> arcsToDelete = popUp.sendArcsToDelete();
+		HashMap<String, PTNIArcDTO> arcsToDelete = popUp.sendArcsToDelete();
 
 		synchronized (arcs) {
 			

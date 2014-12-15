@@ -93,7 +93,7 @@ public class PTNMenu extends JMenuBar {
 		JMenu menu = new JMenu("Bearbeiten");
 		menu.setMnemonic('B');
 		JMenuItem item1 = new JMenuItem("Markierung aufheben");
-		JMenuItem item2 = new JMenuItem("Markierte Knoten löschen");
+		JMenuItem item2 = new JMenuItem("Markierte Elemente löschen");
 		JMenuItem item3 = new JMenuItem("Neuer Knoten");
 
 

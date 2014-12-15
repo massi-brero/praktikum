@@ -1,6 +1,9 @@
 package q8388415.brero_massimiliano.PTNetEditor.models;
 
-public class PTNArc {
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNIArcDTO;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
+
+public class PTNArc implements PTNIArcDTO {
 	
 	private PTNNode source;
 	private PTNNode target;

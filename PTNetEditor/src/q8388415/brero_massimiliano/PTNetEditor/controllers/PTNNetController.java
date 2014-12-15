@@ -13,6 +13,7 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNPlace;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNIArcDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNArcHelper;
@@ -206,10 +207,10 @@ public class PTNNetController implements Runnable {
         Iterator<Map.Entry<String, PTNArc>> it_t = arcsToRemoveByTarget.entrySet().iterator();
 
         while (it_s.hasNext())
-            this.removeArcFromNetAndDesktop(it_s.next().getValue());
+            this.removeArcFromNetAndDesktop(it_s.next().getValue().getId());
 
         while (it_t.hasNext())
-            this.removeArcFromNetAndDesktop(it_t.next().getValue());
+            this.removeArcFromNetAndDesktop(it_t.next().getValue().getId());
         
         net.removeNode(node);
         desktop.getNodeViews().remove(nodeView);
@@ -226,15 +227,17 @@ public class PTNNetController implements Runnable {
      * @param arc
      *            PTNArc
      */
-    private void removeArcFromNetAndDesktop(PTNArc arc) {
-        arc = (PTNArc) arc;
-        
-        desktop.removeArc(arc.getId());
-        net.getArcs().remove(arc.getId());
-        
-        //Check which transition status has to be updated
-        if (arc.getTarget() != null && arc.getTarget().getType() == PTNNodeTypes.TRANSITION) {
-        	nodeHelper.updateTransitionState((PTNTransition)arc.getTarget());
+    public void removeArcFromNetAndDesktop(String id) {
+        PTNArc arcModel = net.getArcById(id);
+        desktop.removeArc(id);
+        net.getArcs().remove(id);
+
+       /**
+        *  Check which transition status has to be updated. Arc model is now removed from the list but we still 
+        *  hold a reference.
+        */
+        if (arcModel.getTarget() != null && arcModel.getTarget().getType() == PTNNodeTypes.TRANSITION) {
+        	nodeHelper.updateTransitionState((PTNTransition)arcModel.getTarget());
         }
         
     }
@@ -243,13 +246,13 @@ public class PTNNetController implements Runnable {
      * 
      * @param arc
      */
-    public void removeArcsFromNetAndDesktop(HashMap<String, PTNArc> arcs) {
-        Iterator<Map.Entry<String, PTNArc>> it = arcs.entrySet().iterator();
-        PTNArc arc;
+    public void removeArcsFromNetAndDesktop(HashMap<String, PTNIArcDTO> arcs) {
+        Iterator<Map.Entry<String, PTNIArcDTO>> it = arcs.entrySet().iterator();
+        PTNIArcDTO arc;
 
         while (it.hasNext()) {
             arc = it.next().getValue();
-            this.removeArcFromNetAndDesktop(arc);
+            this.removeArcFromNetAndDesktop(arc.getId());
         }
 
         desktop.repaint();

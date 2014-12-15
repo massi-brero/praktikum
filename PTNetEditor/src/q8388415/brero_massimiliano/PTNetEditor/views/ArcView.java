@@ -12,6 +12,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNIArcDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
 
 /**
@@ -24,7 +25,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
  * @author Laptop
  *
  */
-public class ArcView implements PTNIScaleListener {
+public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 	
 
 	private Point start;

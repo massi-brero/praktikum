@@ -26,6 +26,7 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNArcDirections;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNIArcDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 
 public class DeleteArcWindow extends JDialog implements ItemListener, ActionListener {
@@ -35,7 +36,7 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 	private HashMap<String, PTNArc> incomingArcs;
 	private HashMap<String, PTNArc> outgoingArcs;
 	private HashMap<String, PTNArc> allNodeArcs;
-	private HashMap<String, PTNArc> arcsToDelete;
+	private HashMap<String, PTNIArcDTO> arcsToDelete;
 	private JPanel basePanel = new JPanel();
 	private final int BUTTON_HEIGHT = 30;
 	private final int BUTTON_WIDTH = 120;
@@ -47,7 +48,7 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 		this.net = net;
 		this.nodeView = nodeView;
 		allNodeArcs = new HashMap<String, PTNArc>();
-		arcsToDelete = new HashMap<String, PTNArc>();
+		arcsToDelete = new HashMap<String, PTNIArcDTO>();
 		node = net.getNodeById(nodeView.getId());
 		incomingArcs = net.getIncomingArcs(node);
 		outgoingArcs = net.getOutgoingArcs(node);
@@ -187,7 +188,7 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 		this.dispose();
 	}
 
-	public HashMap<String, PTNArc> sendArcsToDelete() {
+	public HashMap<String, PTNIArcDTO> sendArcsToDelete() {
 
 			return arcsToDelete;
 

@@ -98,7 +98,7 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 		case "Markierung aufheben":
 			PTNAppController.deselectAll = true;
 			break;
-		case "Markierte Knoten löschen":
+		case "Markierte Elemente löschen":
 			PTNAppController.deleteSelection = true;
 			break;
 		case "+":
