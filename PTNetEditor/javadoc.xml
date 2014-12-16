@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" author="true" classpath="C:\Program Files\eclipse-standard-kepler-SR1-win32-x86_64\eclipse\plugins\org.junit_4.11.0.v201303080030\junit.jar;C:\Program Files\eclipse-standard-kepler-SR1-win32-x86_64\eclipse\plugins\org.hamcrest.core_1.3.0.v201303031735.jar" destdir="C:\Users\brero\Desktop" doctitle="PTNEditor" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="q8388415.brero_massimiliano.PTNetEditor.views,q8388415.brero_massimiliano.PTNetEditor.views.partials,q8388415.brero_massimiliano.PTNetEditor.models,q8388415.brero_massimiliano.PTNetEditor.tests,q8388415.brero_massimiliano.PTNetEditor.utils,q8388415.brero_massimiliano.PTNetEditor.types,q8388415.brero_massimiliano.PTNetEditor.exceptions,q8388415.brero_massimiliano.PTNetEditor.views.desktop,q8388415.brero_massimiliano.PTNetEditor.controllers,q8388415.brero_massimiliano.PTNetEditor.views.windows,q8388415.brero_massimiliano.PTNetEditor" source="1.7" sourcepath="src" splitindex="true" use="true" version="true"/>
+    </target>
+</project>
