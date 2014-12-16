@@ -31,10 +31,12 @@ public class PTNEnlargementPanel extends JPanel {
 		plusButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 10));
 		plusButton.setMargin(new Insets(0, 0, 2, 0));
 		plusButton.setText("+");
+		plusButton.setFocusable(false);
 		minusButton = new JButton("minusButton");
 		minusButton.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 10));
 		minusButton.setMargin(new Insets(0, 0, 0, 0));
 		minusButton.setText("-");
+		minusButton.setFocusable(false);
 		this.init();
 	}
 	

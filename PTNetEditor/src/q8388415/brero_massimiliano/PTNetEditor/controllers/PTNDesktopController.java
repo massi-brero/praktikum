@@ -68,6 +68,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	public void mouseDragged(MouseEvent e) {
 
 		JComponent source = (JComponent) e.getComponent();
+		Boolean legalNodeMovement = true;
 
 		if (!isInSimulationMode  && !PTNAppController.selectMode && source instanceof NodeView) {
 			
@@ -93,7 +94,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 						// now somebody drags...!
 						int diffX = e.getX() - (int) currentDraggingPosistion.getX();
 						int diffY = e.getY() - (int) currentDraggingPosistion.getY();
-						
 						// here we move a selection of nodes
 						if (desktop.hasSelectedNodes()) { 
 							if (((NodeView)source).getSelected()) {
@@ -102,12 +102,17 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 								
 								while (it.hasNext()) {
 									NodeView node = (NodeView) it.next();
-									if (node.getSelected())
-										moveNode(diffX, diffY, node);
-								}
-								
+									if (node.getSelected()) {
+										legalNodeMovement = moveNode(diffX, diffY, node);
+									}
+									if (!legalNodeMovement) {
+										desktop.deselectNodes();
+										break;
+									}	
+								}	
 							}
-						} else { // ok it's just one node that is dragged
+						} else { 
+							// ok it's just one node that is dragged
 							moveNode(diffX, diffY, (NodeView) source);
 						}
 
@@ -119,6 +124,15 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 	}
 	
+	/**
+	 * Translates Point with {@link MouseEvent#translatePoint(int, int)} but
+	 * only if we don't get the correct relative coordinates from the source.
+	 * 
+	 * @param e
+	 * 		{@link MouseEvent}
+	 * @return
+	 * 		{@link MouseEvent} 
+	 */
 	private MouseEvent translateLocation(MouseEvent e) {
 
 		Point componentLocation = e.getComponent().getLocation();
@@ -150,33 +164,43 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	 * @param diffY
 	 * @param nodeView
 	 */
-	private void moveNode(int diffX, int diffY, NodeView nodeView) {
+	private Boolean moveNode(int diffX, int diffY, NodeView nodeView) {
+		
+		if (currentDraggingPosistion.x < DEFAULT_DRAGGING_POSITION.x || currentDraggingPosistion.x < DEFAULT_DRAGGING_POSITION.x)
+			return false;
+		
 		int moveToX = nodeView.getX();
 		int moveToY = nodeView.getY();
+		Boolean legalNodeMovement = true;
 		
-		System.out.println(diffX);
-		System.out.println(diffY);
-		
-		if (nodeView.getLocation().x < 0)
+		if (nodeView.getLocation().x < 0) {
 			moveToX = 0;
-		else
-			moveToX = moveToX + diffX;
+			legalNodeMovement = false;
+		}
+		else {
+			moveToX = moveToX + diffX;			
+		}
 
-		if (nodeView.getLocation().y < 0)
+		if (nodeView.getLocation().y < 0) {
 			moveToY = 0;
-		else
-			moveToY = moveToY + diffY;
+			legalNodeMovement = false;
+		}
+		else {
+			moveToY = moveToY + diffY;			
+		}
 
 		nodeView.setLocation(moveToX, moveToY);
 		nodeHelper.updateNodeModelLocation(nodeView);
 		desktop.redrawArcs((NodeView) nodeView);
+		
+		return legalNodeMovement;
 
 	}
 
 	/**
 	 * If a node was clicked
 	 * Context menu wanted ? -> Right Click
-	 * Select Node? -> Left Click
+	 * Select Node or arc? -> Left Click
 	 * This method will check anyway if a click near an arc was triggered.
 	 */
 	@Override
