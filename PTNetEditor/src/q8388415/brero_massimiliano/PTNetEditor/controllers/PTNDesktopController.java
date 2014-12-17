@@ -12,6 +12,7 @@ import java.util.Iterator;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNSimulationException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
@@ -68,25 +69,26 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	public void mouseDragged(MouseEvent e) {
 
 		JComponent source = (JComponent) e.getComponent();
-
-		if (!isInSimulationMode  && !PTNAppController.selectMode && source instanceof NodeView) {
-			
-			source.requestFocusInWindow();
-			this.translateLocation(e);
-			
-			/**
-			 * here we are drawing an arc
-			 */
-			if (!PTNAppController.moveNodes) {
-
-				Point start = new Point(source.getLocation().x + source.getWidth() / 2, source.getLocation().y + source.getHeight() / 2);
-				Point end = new Point(e.getX(), e.getY());
-				desktop.updateArcs("", start, end);
-			/**
-			 * User wants to move nodes
-			 */
-			} else {
-
+		
+		if(this.desktopContainsMousePointer(e)) {
+			e.translatePoint(source.getX(), source.getY());
+			if (!isInSimulationMode  && !PTNAppController.selectMode && source instanceof NodeView) {
+				
+				source.requestFocusInWindow();
+				
+				/**
+				 * here we are drawing an arc
+				 */
+				if (!PTNAppController.moveNodes) {
+					;
+					Point start = new Point(source.getLocation().x + source.getWidth() / 2, source.getLocation().y + source.getHeight() / 2);
+					Point end = new Point(e.getX(), e.getY());
+					desktop.updateArcs("", start, end);
+					/**
+					 * User wants to move nodes
+					 */
+				} else {
+					//this.translateLocation(e);
 					if (!isDragged) {
 						isDragged = true;
 					} else {
@@ -104,52 +106,53 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 									if (node.getSelected()) {
 										moveNode(diffX, diffY, node);
 									}
-
+									
 								}	
 							}
 						} else { 
 							// ok it's just one node that is dragged
 							moveNode(diffX, diffY, (NodeView) source);
 						}
-
+						
 					}
 				}
-
-			currentDraggingPosistion = e.getPoint();
+				
+				currentDraggingPosistion = e.getPoint();
+			}
 		}
 
 	}
 	
-	/**
-	 * Translates Point with {@link MouseEvent#translatePoint(int, int)} but
-	 * only if we don't get the correct relative coordinates from the source.
-	 * 
-	 * @param e
-	 * 		{@link MouseEvent}
-	 * @return
-	 * 		{@link MouseEvent} 
-	 */
-	private MouseEvent translateLocation(MouseEvent e) {
-
-		Point componentLocation = e.getComponent().getLocation();
-		Dimension nodeSize = null;
-
-		if (e.getComponent() instanceof NodeView) {
-			NodeView nodeView = (NodeView)(e.getComponent());
-			if (nodeView.getType() == PTNNodeTypes.STELLE)
-				nodeSize = PlaceView.getCurrentSize();
-			else
-				nodeSize = TransitionView.getCurrentSize();
-
-			if (e.getX() <= componentLocation.getX() + nodeSize.width 
-					&& e.getY() <= componentLocation.getY() + nodeSize.getHeight()) {
-				e.translatePoint(nodeView.getX(), nodeView.getY());
-			}
-		}
-
-		return e;
-
-	}
+//	/**
+//	 * Translates Point with {@link MouseEvent#translatePoint(int, int)} but
+//	 * only if we don't get the correct relative coordinates from the source.
+//	 * 
+//	 * @param e
+//	 * 		{@link MouseEvent}
+//	 * @return
+//	 * 		{@link MouseEvent} 
+//	 */
+//	private MouseEvent translateLocation(MouseEvent e) {
+//
+//		Point componentLocation = e.getComponent().getLocation();
+//		Dimension nodeSize = null;
+//
+//		if (e.getComponent() instanceof NodeView) {
+//			NodeView nodeView = (NodeView)(e.getComponent());
+//			if (nodeView.getType() == PTNNodeTypes.STELLE)
+//				nodeSize = PlaceView.getCurrentSize();
+//			else
+//				nodeSize = TransitionView.getCurrentSize();
+//
+//			if (e.getX() <= componentLocation.getX() + nodeSize.width 
+//					&& e.getY() <= componentLocation.getY() + nodeSize.getHeight()) {
+//				e.translatePoint(nodeView.getX(), nodeView.getY());
+//			}
+//		}
+//
+//		return e;
+//
+//	}
 
 	/**
 	 * Resets location when moving a node for the moved node and all arcs
@@ -184,7 +187,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		nodeView.setLocation(moveToX, moveToY);
 		nodeHelper.updateNodeModelLocation(nodeView);
 		desktop.redrawArcs((NodeView) nodeView);
-		
 
 	}
 
@@ -203,10 +205,16 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		if (!isInSimulationMode) {
 			if (e.getComponent() instanceof NodeView && nodeHelper.iconContainsPoint(((NodeView)e.getComponent()), e.getPoint())) {
 				sourceNodeView = (NodeView)e.getComponent();
-				if (sourceNodeView instanceof JLabel && 3 == e.getButton()) // context menu
+				if (sourceNodeView instanceof JLabel && 3 == e.getButton()) {
+					// context menu
 					nodeHelper.handleContextmenu(sourceNodeView);
-				else if (PTNAppController.selectMode) // select/deselect element
-					sourceNodeView.setSelected(!sourceNodeView.getSelected());				
+				}
+				else if (PTNAppController.selectMode) {
+					// select/deselect element
+					sourceNodeView.setSelected(!sourceNodeView.getSelected());		
+					if (sourceNodeView.getSelected())
+						desktop.moveToFront(sourceNodeView);
+				}
 			}
 			
 			if (PTNAppController.selectMode)
@@ -229,7 +237,8 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
-
+		
+		this.correctNodePositions();
 		NodeView source = null;
 		Point mouseLocation = currentDraggingPosistion;
 		mouseLocation = new Point(currentDraggingPosistion.x, currentDraggingPosistion.y);
@@ -255,6 +264,31 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		desktop.removeArc("");
 		desktop.requestFocus();
 		this.resetCurrentDraggingPosition();
+
+	}
+
+	/**
+	 * Corrects position of nodes which were erroneously or purposefully drawn over the edges of
+	 * the desktop. This is not allowed. The involved coordinate will be set to 0;
+	 */
+	private void correctNodePositions() {
+
+		ArrayList<NodeView> nodes = desktop.getNodeViews();
+		Iterator<NodeView> it = nodes.iterator();
+
+		while (it.hasNext()) {
+			NodeView nodeView = (NodeView) it.next();
+			if (nodeView.getLocation().x < 0 ) {
+				nodeView.setLocation(0, nodeView.getLocation().y);
+			} else if (nodeView.getLocation().y < 0 ) {
+				nodeView.setLocation(nodeView.getLocation().x, 0);
+			} else {
+				continue;
+			}
+			nodeHelper.updateNodeModelLocation(nodeView);
+			desktop.redrawArcs((NodeView) nodeView);
+
+		}
 
 	}
 
@@ -329,6 +363,21 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 	private void resetCurrentDraggingPosition() {
 		currentDraggingPosistion = DEFAULT_DRAGGING_POSITION;
+	}
+	
+	/**
+	 * Returns if the mouse pointer is still moving over the desktop or
+	 * left the desktop panel.
+	 * 
+	 * @param e
+	 * 		{@link MouseEvent} Mouse event whose coordinates should not
+	 * 		be already translated.
+	 * @return
+	 * 		Boolean
+	 */
+	private Boolean desktopContainsMousePointer(MouseEvent e) {
+		e = SwingUtilities.convertMouseEvent(e.getComponent(), e, desktop);
+		return desktop.contains(e.getPoint());
 	}
 	
 	@Override
