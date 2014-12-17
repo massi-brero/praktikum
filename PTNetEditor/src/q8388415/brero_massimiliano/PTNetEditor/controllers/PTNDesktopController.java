@@ -164,7 +164,8 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		
 		int moveToX = nodeView.getX();
 		int moveToY = nodeView.getY();
-		Boolean legalNodeMovement = true;
+		
+		System.out.println(desktop.getNodeViews().size());
 		
 		if (nodeView.getLocation().x < 0) {
 			moveToX = 0;
