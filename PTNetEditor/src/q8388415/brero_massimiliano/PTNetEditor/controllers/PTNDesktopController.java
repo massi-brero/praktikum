@@ -68,7 +68,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	public void mouseDragged(MouseEvent e) {
 
 		JComponent source = (JComponent) e.getComponent();
-		Boolean legalNodeMovement = true;
 
 		if (!isInSimulationMode  && !PTNAppController.selectMode && source instanceof NodeView) {
 			
@@ -103,12 +102,9 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 								while (it.hasNext()) {
 									NodeView node = (NodeView) it.next();
 									if (node.getSelected()) {
-										legalNodeMovement = moveNode(diffX, diffY, node);
+										moveNode(diffX, diffY, node);
 									}
-									if (!legalNodeMovement) {
-										desktop.deselectNodes();
-										break;
-									}	
+
 								}	
 							}
 						} else { 
@@ -164,10 +160,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	 * @param diffY
 	 * @param nodeView
 	 */
-	private Boolean moveNode(int diffX, int diffY, NodeView nodeView) {
-		
-		if (currentDraggingPosistion.x < DEFAULT_DRAGGING_POSITION.x || currentDraggingPosistion.x < DEFAULT_DRAGGING_POSITION.x)
-			return false;
+	private void moveNode(int diffX, int diffY, NodeView nodeView) {
 		
 		int moveToX = nodeView.getX();
 		int moveToY = nodeView.getY();
@@ -175,7 +168,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		
 		if (nodeView.getLocation().x < 0) {
 			moveToX = 0;
-			legalNodeMovement = false;
 		}
 		else {
 			moveToX = moveToX + diffX;			
@@ -183,7 +175,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 		if (nodeView.getLocation().y < 0) {
 			moveToY = 0;
-			legalNodeMovement = false;
 		}
 		else {
 			moveToY = moveToY + diffY;			
@@ -193,7 +184,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		nodeHelper.updateNodeModelLocation(nodeView);
 		desktop.redrawArcs((NodeView) nodeView);
 		
-		return legalNodeMovement;
 
 	}
 
