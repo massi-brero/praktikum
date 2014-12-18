@@ -1,6 +1,7 @@
 package q8388415.brero_massimiliano.PTNetEditor.views;
 
 import java.awt.Dimension;
+import java.awt.Image;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -27,6 +28,8 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 	final private static String sourceIconSelected = "rectangle_selected.png";
 	final private String sourceIconActivated = "rectangle_activated.png";
 	private Icon iconActivated;
+	private static final int ICON_WIDTH = 15;
+	private static final int ICON_HEIGHT = 30;
 	private Boolean isActivated = false;
 	/**
 	 * Current scaling factor for nodes' components
@@ -47,6 +50,7 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 
 	private void init() {
 		
+		this.customizeIcon();
 		setSize(DEFAULT_SIZE);
 		TransitionView.currentSize = TransitionView.currentSize == null ? DEFAULT_SIZE : TransitionView.currentSize;
         scale = TransitionView.currentTransitionScale;
@@ -130,6 +134,13 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 	@Override
 	public Integer getToken() {
 		return null;
+	}
+	
+	@Override
+	protected void customizeIcon() {
+    	Image image = ((ImageIcon) this.getIcon()).getImage();
+		image = image.getScaledInstance(ICON_WIDTH, ICON_HEIGHT, Image.SCALE_SMOOTH);
+    	this.setIcon(new ImageIcon(image));
 	}
 
 

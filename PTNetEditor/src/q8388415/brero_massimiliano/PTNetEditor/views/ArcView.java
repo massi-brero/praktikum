@@ -37,7 +37,8 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 	private Boolean selected = false;
 	private Color color = Color.BLUE;
 	private Graphics desktopGraphics = null;
-	private static double scale = 1.0;
+	private double scale;
+	private static double currentScale = 1.0;
 	private final double MAX_SIZE = 1.4;
 	private final double MIN_SIZE = 1;
 	private PTNNetController netController;
@@ -52,6 +53,7 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 	public ArcView(String id, Point s, Point e, PTNNetController netController) {
 		
 		this.netController = netController;
+		scale = currentScale;
 		this.setStart(s);
 		this.setEnd(e);
 		this.setId(id);
@@ -117,8 +119,8 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 		// Okay, this can also be done with an AffineTransorm. But since we already use it for rotating
 		// it would involve quite some translating computations and multiplying those matrices is also 
 		// a little more complex than this simple but effective approach;
-		p.addPoint((int)(end.x - ARROW_SIZE_X * ArcView.scale), (int)(end.y - ARROW_SIZE_Y * ArcView.scale));
-		p.addPoint((int)(end.x - ARROW_SIZE_X * ArcView.scale), (int)(end.y + ARROW_SIZE_Y * ArcView.scale));
+		p.addPoint((int)(end.x - ARROW_SIZE_X * currentScale), (int)(end.y - ARROW_SIZE_Y * currentScale));
+		p.addPoint((int)(end.x - ARROW_SIZE_X * currentScale), (int)(end.y + ARROW_SIZE_Y * currentScale));
 		
 		return p;
 	}
@@ -179,16 +181,19 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 
 	@Override
 	public void increaseScale() {
-		if (ArcView.scale < MAX_SIZE) {
-			ArcView.scale += 0.025;
+		System.out.println(scale);
+		if (scale <= MAX_SIZE) {
+			scale += 0.1;
+			currentScale = scale;
 			netController.repaintDesktop();
 		}
 	}
 
 	@Override
 	public void decreaseScale() {
-		if (ArcView.scale > MIN_SIZE) {
-			ArcView.scale -= 0.025;
+		if (scale > MIN_SIZE) {
+			scale -= 0.1;
+			currentScale = scale;
 			netController.repaintDesktop();			
 		}
 	}
@@ -200,7 +205,7 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 	public void setSelected(Boolean s) {
 		this.selected = s;
 		if (selected)
-			this.setColor(Color.MAGENTA);
+			this.setColor(Color.RED);
 		else 
 			this.setColor(Color.BLUE);
 		this.updateArc();

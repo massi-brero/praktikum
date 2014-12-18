@@ -216,6 +216,12 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 		this.id = id;
 	}
 	
+	/**
+	 * A method with which every child may ccutomize its icon regarding
+	 * form, size, shape...
+	 */
+	protected abstract void customizeIcon();
+	
 	
 		
 }

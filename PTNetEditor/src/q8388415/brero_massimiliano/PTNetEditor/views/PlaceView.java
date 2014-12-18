@@ -2,9 +2,13 @@ package q8388415.brero_massimiliano.PTNetEditor.views;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNIArcDTO;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
 /**
@@ -19,9 +23,11 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  */
 public class PlaceView extends NodeView {
 
-    final private static String sourceIconStandard = "circle.png";
-    final private static String sourceIconSelected = "circle_selected.png";
+    final private static String sourceIconStandard = "circle2.png";
+    final private static String sourceIconSelected = "circle2_selected.png";
     final private static Dimension DEFAULT_SIZE = new Dimension(50, 70);
+	private static final int ICON_WIDTH = 35;
+	private static final int ICON_HEIGHT = 35;
     private int token = 0;
     /**
 	 * Current scaling factor for nodes' components.
@@ -37,6 +43,7 @@ public class PlaceView extends NodeView {
         super(id, sourceIconStandard, sourceIconSelected);
         this.init();
         this.updateToken(token);
+        
     }
 
     /**
@@ -48,6 +55,7 @@ public class PlaceView extends NodeView {
      */
     private void init() {
 
+    	this.customizeIcon();
     	this.setSize(DEFAULT_SIZE);
         PlaceView.currentSize = PlaceView.currentSize == null ? DEFAULT_SIZE : PlaceView.currentSize;
         scale = PlaceView.currentPlaceScale;
@@ -66,7 +74,7 @@ public class PlaceView extends NodeView {
      */
     @Override
     public void updateSize(int factor) {
-
+    	
         int addSize = factor * 2;
         Font tokenFont = this.getFont();
         this.setFont(new Font(tokenFont.getFontName(), Font.PLAIN, (int) (tokenFont.getSize() + addSize)));
@@ -111,7 +119,7 @@ public class PlaceView extends NodeView {
      */
     public static void resetSize() {
     	PlaceView.currentSize = DEFAULT_SIZE;
-    	PlaceView.currentPlaceScale = 1;
+    	PlaceView.currentPlaceScale = 0;
     }
     
     /**
@@ -140,9 +148,26 @@ public class PlaceView extends NodeView {
 		return this.getName();
 	}
 
+	/**
+	 * Returns token. Also a {@link PTNINodeDTO} method.
+	 */
 	@Override
 	public Integer getToken() {
 		return token;
+	}
+	
+	@Override
+	public void setSelected(boolean selected) {
+		super.setSelected(selected);
+		this.customizeIcon();
+	}
+
+	@Override
+	protected void customizeIcon() {
+    	Image image = ((ImageIcon) this.getIcon()).getImage();
+		image = image.getScaledInstance(ICON_WIDTH, ICON_HEIGHT, Image.SCALE_SMOOTH);
+    	this.setIcon(new ImageIcon(image));
+		
 	}
 
 }
