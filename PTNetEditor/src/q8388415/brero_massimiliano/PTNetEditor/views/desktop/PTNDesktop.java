@@ -29,6 +29,8 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
+import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
+import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.DeleteArcWindow;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.EditNodeWindow;
 import q8388415.brero_massimiliano.PTNetEditor.views.windows.NewNodeWindow;
@@ -52,7 +54,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.ResizeDesktopWindow
  */
 public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseListener {
 
-	private final int DEFAULT_HEIGHT = 300;
+	private final int DEFAULT_HEIGHT = 400;
 	private final int DEFAULT_WIDTH = 600;
 	private ArrayList<NodeView> nodes;
 	private PTNNetController netController;
@@ -102,6 +104,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		this.addMouseListener(this);
 		this.setDoubleBuffered(true);
 		this.setLayout(null);
+		this.setOpaque(true);
 		this.setBackground(Color.WHITE);
 		
 		/**
@@ -121,7 +124,9 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	 */
 	public void init() {		
 		this.reset();
-		maxSize = getSize();
+		arcs = new Hashtable<String, ArcView>();
+		maxSize =this.getPreferredSize();
+		
 		synchronized (nodes) {
 			netController.setUpNodeViews();			
 		}
@@ -138,7 +143,6 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	 */
 	public void reset() {
 		nodes = new ArrayList<NodeView>();
-		arcs = new Hashtable<String, ArcView>();
 
 		/**
 		 * Default size is not set if we have another preference set elsewhere
@@ -153,10 +157,21 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	/**
 	 * The method setSize is overridden because we want to be sure that all our
 	 * nodes fit on the desktop. So we add the biggest current node size to the
-	 * size given
+	 * size given (+ a little fixed additional space).
 	 */
 	@Override
 	public void setSize(Dimension size) {
+		System.out.println(size);
+		int additionalSpace = 10;
+		Dimension placeSize = PlaceView.getCurrentSize();
+		Dimension transitionSize = TransitionView.getCurrentSize();
+		double biggestNodeWidth = placeSize.getWidth() > transitionSize.getWidth() ?
+										placeSize.getWidth() : transitionSize.getWidth();
+		double biggestNodeHeight = placeSize.getHeight() > transitionSize.getHeight() ?
+										placeSize.getHeight() : transitionSize.getHeight();
+		size.setSize( size.getWidth() + biggestNodeHeight + additionalSpace,
+					  size.getHeight() + biggestNodeHeight + additionalSpace);
+		
 		this.setSize((int) size.getWidth(), (int) size.getHeight());
 	}
 

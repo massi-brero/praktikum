@@ -305,10 +305,14 @@ public class PTNNet {
 	/**
 	 * 
 	 * @param 
-	 * 		PTNNode n
+	 * 		PTNNode n ...	New node. Can be a place or a transition. If it's a transition's
+	 * 						status will be set to activated.
 	 */
 	public void addNode(PTNNode n) {
 		nodes.put(n.getId(), n);
+		
+		if (n.getType() == PTNNodeTypes.TRANSITION)
+			this.activateTransition((PTNTransition)n);
 	}
 	
 	
@@ -427,8 +431,6 @@ public class PTNNet {
 				
 			}
 			
-		} else {
-			isActivated = false;
 		}
 
 		transition.setIsActivated(isActivated);

@@ -141,10 +141,10 @@ public class PTNArcHelper {
 			 * adjust gradient for easier checking to span 0° - 360°
 			 */
 			double adjustedGradient = (gradient < 0.0) ? 360d + gradient : gradient;
-			Boolean pointsRight = (adjustedGradient >= 114 && adjustedGradient < 248) ? true : false;
+			Boolean pointsRight = (adjustedGradient >= 114 && adjustedGradient < 246) ? true : false;
 			Boolean pointsUp = (adjustedGradient >= 66 && adjustedGradient < 114) ? true : false;
 			Boolean pointsLeft = (adjustedGradient >= 294 || adjustedGradient < 66) ? true : false;
-			Boolean pointsDown = (adjustedGradient >= 248 && adjustedGradient < 294) ? true : false;
+			Boolean pointsDown = (adjustedGradient >= 246 && adjustedGradient < 294) ? true : false;
 			int offsetX = 0;
 			int offsetY = 0;
 			NodeView nodeView = normalizeSource ? desktop.getNodeViewById(source.getId()) : desktop.getNodeViewById(target.getId());

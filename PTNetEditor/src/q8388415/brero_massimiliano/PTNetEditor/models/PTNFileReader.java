@@ -52,8 +52,8 @@ public class PTNFileReader {
         return desktopSize;
     }
 
-    public void setDesktopSize(Dimension desktopSite) {
-        this.desktopSize = desktopSite;
+    public void setDesktopSize(Dimension desktopSize) {
+        this.desktopSize = desktopSize;
     }
 
     

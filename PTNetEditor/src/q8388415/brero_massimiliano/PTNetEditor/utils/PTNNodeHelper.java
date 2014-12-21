@@ -115,7 +115,8 @@ public class PTNNodeHelper implements ActionListener {
 	}
 
     /**
-     * Prepares a node view so it my be displayed on the desktop.
+     * Prepares a new node view so it my be displayed on the desktop.
+     * A new transtion view's status wil be set to activated.
      * 
      * @param name
      * @param nodeView
@@ -127,10 +128,15 @@ public class PTNNodeHelper implements ActionListener {
         desktop.addListenertoNode(nodeView);
         desktop.getNodeViews().add(nodeView);
         desktop.add(nodeView);
+        this.updateTransitionState(nodeView);
         desktop.moveToFront(nodeView);
         desktop.repaint();
     }
     
+    /**
+     * 
+     * @param nodeView
+     */
     public void updateNodeModelLocation(NodeView nodeView) {
     	PTNNode nodeModel = net.getNodeById(nodeView.getId());
     	nodeModel.setLocation(nodeView.getLocation());

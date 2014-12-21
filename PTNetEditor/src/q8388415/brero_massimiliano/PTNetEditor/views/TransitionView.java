@@ -24,12 +24,12 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 public class TransitionView extends NodeView implements PTNINodeDTO {
 
 	PTNDesktopController listener;
-	final private static String sourceIconStandard = "rectangle.png";
-	final private static String sourceIconSelected = "rectangle_selected.png";
-	final private String sourceIconActivated = "rectangle_activated.png";
+	final private static String sourceIconStandard = "rectangle2.png";
+	final private static String sourceIconSelected = "rectangle2_selected.png";
+	final private String sourceIconActivated = "rectangle2_activated.png";
 	private Icon iconActivated;
-	private static final int ICON_WIDTH = 15;
-	private static final int ICON_HEIGHT = 30;
+	private static final int ICON_WIDTH = 17;
+	private static final int ICON_HEIGHT = 34;
 	private Boolean isActivated = false;
 	/**
 	 * Current scaling factor for nodes' components
@@ -93,6 +93,7 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 		this.isActivated = isActivated;
 		this.updateIcon();
 		this.updateIconSize(TransitionView.currentTransitionScale);
+		this.customizeIcon();
 		
 	}
 
@@ -134,6 +135,12 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 	@Override
 	public Integer getToken() {
 		return null;
+	}
+	
+	@Override
+	public void setSelected(boolean selected) {
+		super.setSelected(selected);
+		this.customizeIcon();
 	}
 	
 	@Override

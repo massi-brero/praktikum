@@ -334,23 +334,6 @@ public class PTNNetController implements Runnable {
         
     }
 
-    /**
-     * Checks and returns node location by determining if nodeInformation
-     * contains information about a new node or it is information about a node
-     * from a file that already has a location.
-     * 
-     * @param nodeInformation
-     * @return Point default location or given location for node
-     */
-    private Point determineNodeLocation(PTNINodeDTO nodeInformation) {
-
-        if (nodeInformation instanceof PTNNode)
-            return ((PTNNode) nodeInformation).getLocation();
-        else
-            return PTNAppController.DEFAULT_NODE_LOCATION;
-
-    }
-
     public void repaintDesktop() {
         desktop.paintImmediately(desktop.getBounds());
     }
