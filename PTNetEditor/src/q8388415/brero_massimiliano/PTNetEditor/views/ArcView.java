@@ -35,7 +35,8 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 	private Point end;
 	private String id;
 	private Boolean selected = false;
-	private Color color = Color.GRAY;
+	private final Color DEFAULT_COLOR = Color.GRAY;
+	private Color color;
 	private Graphics desktopGraphics = null;
 	private double scale;
 	private static double currentScale = 1.0;
@@ -55,6 +56,7 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 
 		this.netController = netController;
 		scale = currentScale;
+		color = DEFAULT_COLOR;
 		this.setStart(s);
 		this.setEnd(e);
 		this.setId(id);
@@ -211,7 +213,7 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 		if (selected)
 			this.setColor(Color.RED);
 		else
-			this.setColor(Color.BLUE);
+			this.setColor(DEFAULT_COLOR);
 		this.updateArc();
 	}
 

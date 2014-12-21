@@ -191,13 +191,12 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	}
 
 	/**
-	 * If a node was clicked
 	 * Context menu wanted ? -> Right Click
 	 * Select Node or arc? -> Left Click
 	 * This method will check anyway if a click near an arc was triggered.
 	 */
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mousePressed(MouseEvent e) {
 		
 		NodeView sourceNodeView = null;
 
@@ -229,7 +228,6 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -393,19 +391,14 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-	}
+	public void mouseExited(MouseEvent e) {}
+
+	public void mouseClicked(MouseEvent e) {}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-	}
+	public void mouseMoved(MouseEvent e) {}
 
 }
