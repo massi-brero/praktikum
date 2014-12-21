@@ -16,7 +16,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.MainFrame;
 /**
  * This class starts the application.
  * 
- * @author Laptop
+ * @author 8388415 - Massimiliano Brero
  *
  */
 public class PTNBootstrap {

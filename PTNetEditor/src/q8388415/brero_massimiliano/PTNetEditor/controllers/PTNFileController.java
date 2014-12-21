@@ -24,7 +24,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.PTNFileChooser;
  * 
  * @see PTNFileReader
  * 
- * @author Laptop
+ * @author 8388415 - Massimiliano Brero
  * 
  */
 public class PTNFileController implements PTNIFileListener {

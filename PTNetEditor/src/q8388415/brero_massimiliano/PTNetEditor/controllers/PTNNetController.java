@@ -28,7 +28,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
  * This controller handles net related operations like update and set-up
  * operations. 
  * 
- * @author brero
+ * @author 8388415 - Massimiliano Brero
  * 
  */
 public class PTNNetController implements Runnable {

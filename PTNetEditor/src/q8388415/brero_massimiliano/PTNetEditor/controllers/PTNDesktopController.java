@@ -31,7 +31,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
  * dragging. It's also a thread since it will listen when it's time to delete
  * nodes.
  * 
- * @author 8388415
+ * @author 8388415 - Massimiliano Brero
  *
  */
 public class PTNDesktopController implements MouseMotionListener, MouseListener, Runnable, PTNIModeListener {

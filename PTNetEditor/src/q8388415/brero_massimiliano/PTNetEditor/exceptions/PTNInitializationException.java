@@ -1,5 +1,10 @@
 package q8388415.brero_massimiliano.PTNetEditor.exceptions;
 
+/**
+ * 
+ * @author 8388415 - Massimiliano Brero
+ *
+ */
 public class PTNInitializationException extends Exception {
 
 	public PTNInitializationException() {

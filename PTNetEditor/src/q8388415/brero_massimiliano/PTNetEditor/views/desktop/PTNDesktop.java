@@ -49,7 +49,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.ResizeDesktopWindow
  * Protocol: If the node and arc list are to be used in another thread (like net or desktop
  * controller) a monitor must be put on those lists.
  * 
- * @author q8388415
+ * @author 8388415 - Massimiliano Brero
  *
  */
 public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseListener {
@@ -158,14 +158,17 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		int additionalSpace = 10;
 		Dimension placeSize = PlaceView.getCurrentSize();
 		Dimension transitionSize = TransitionView.getCurrentSize();
+		
 		double biggestNodeWidth = placeSize.getWidth() > transitionSize.getWidth() ?
 										placeSize.getWidth() : transitionSize.getWidth();
 		double biggestNodeHeight = placeSize.getHeight() > transitionSize.getHeight() ?
 										placeSize.getHeight() : transitionSize.getHeight();
-		size.setSize(size.getWidth() + biggestNodeHeight + additionalSpace,
+										
+		size.setSize(size.getWidth() + biggestNodeWidth + additionalSpace,
 					  size.getHeight() + biggestNodeHeight + additionalSpace);
 	
 		super.setSize((int) size.getWidth(), (int) size.getHeight());
+		
 	}
 
 	/**
@@ -179,7 +182,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 		super.paintComponent(g);
 		drawArcs(g);
-		System.out.println(getSize());
+
 		if (getSize().width > maxSize.width || getSize().height > maxSize.height) {
 
 			if (getSize().width > maxSize.width)
