@@ -110,7 +110,6 @@ public class EditNodeWindow extends JDialog implements ActionListener {
                 }
 
         } else {
-        	System.out.println("ciao");
         	this.dispose();
         }
 	}

@@ -187,7 +187,7 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 
 	@Override
 	public void increaseScale() {
-		System.out.println(scale);
+
 		if (scale <= MAX_SIZE) {
 			scale += 0.1;
 			currentScale = scale;

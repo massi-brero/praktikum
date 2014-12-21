@@ -20,12 +20,14 @@ public class MainFrame extends JFrame implements PTNIModeListener {
 	private JScrollPane scPane = null;
 	private PTNMenu menu;
 	private PTNSimAlertLabel simLabel;
+	private final String title = "8388415 - Massimiliano Brero";
 
 	public MainFrame(PTNDesktop desktop, PTNControlPanel controlPanel, PTNMenu menu) {
 		
 		this.menu = menu;
 		this.controlPanel = controlPanel;
 		this.setUpSimPanel();
+		this.setTitle(title);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.desktop = desktop;
 		this.setupScrollPane();

@@ -32,6 +32,13 @@ public class PTNControlPanel extends JPanel {
 	private PTNEnlargementPanel arrowHeadSizePanel;
 	private static PTNControlPanel instance = null;
 	private Boolean isInitialized = false;
+	/**
+	 * Icons for size panels.
+	 * @return
+	 */
+	private final String PLACE_ICON = "icons/size-place-icon.png";
+	private final String TRANSITION_ICON = "icons/size-rectangle-icon.png";
+	private final String ARROW_ICON = "icons/size-arrow-icon.png";
 
 	public static PTNControlPanel getInstance() {
 
@@ -54,16 +61,16 @@ public class PTNControlPanel extends JPanel {
 		// controllerPanel.setLayout(new FlowLayout());
 
 		// add enlargement Panels
-		placeSizePanel = new PTNEnlargementPanel("Place Size");
-		transitionSizePanel = new PTNEnlargementPanel("Transition Size");
-		arrowHeadSizePanel = new PTNEnlargementPanel("Arrowhead Size");
+		placeSizePanel = new PTNEnlargementPanel("Place Size", PLACE_ICON);
+		transitionSizePanel = new PTNEnlargementPanel("Transition Size", TRANSITION_ICON);
+		arrowHeadSizePanel = new PTNEnlargementPanel("Arrowhead Size", ARROW_ICON);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		controllerPanel.add(placeSizePanel, BorderLayout.WEST);
-		controllerPanel.add(transitionSizePanel, BorderLayout.CENTER);
-		controllerPanel.add(arrowHeadSizePanel, BorderLayout.EAST);
+		controllerPanel.add(placeSizePanel);
+		controllerPanel.add(transitionSizePanel);
+		controllerPanel.add(arrowHeadSizePanel);
 
-		this.setSize(new Dimension(700, 20));
+		this.setSize(new Dimension((int)(desktop.getSize().getWidth()), 20));
 		
 		this.add(controllerPanel);
 		setDoubleBuffered(true);

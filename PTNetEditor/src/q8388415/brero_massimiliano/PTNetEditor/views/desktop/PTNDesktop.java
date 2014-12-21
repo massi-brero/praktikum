@@ -99,6 +99,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		/**
 		 * Basics
 		 */
+		this.setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 		this.setFocusable(true);
 		this.setOpaque(false);
 		this.addMouseListener(this);
@@ -143,15 +144,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	 */
 	public void reset() {
 		nodes = new ArrayList<NodeView>();
-
-		/**
-		 * Default size is not set if we have another preference set elsewhere
-		 */
-		if (this.getPreferredSize().getWidth() == 0 && this.getPreferredSize().getHeight() == 0)
-			this.setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
-
 		this.removeAll();
-		this.repaint();
 	}
 
 	/**
@@ -161,7 +154,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	 */
 	@Override
 	public void setSize(Dimension size) {
-		System.out.println(size);
+		
 		int additionalSpace = 10;
 		Dimension placeSize = PlaceView.getCurrentSize();
 		Dimension transitionSize = TransitionView.getCurrentSize();
@@ -169,10 +162,10 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 										placeSize.getWidth() : transitionSize.getWidth();
 		double biggestNodeHeight = placeSize.getHeight() > transitionSize.getHeight() ?
 										placeSize.getHeight() : transitionSize.getHeight();
-		size.setSize( size.getWidth() + biggestNodeHeight + additionalSpace,
+		size.setSize(size.getWidth() + biggestNodeHeight + additionalSpace,
 					  size.getHeight() + biggestNodeHeight + additionalSpace);
-		
-		this.setSize((int) size.getWidth(), (int) size.getHeight());
+	
+		super.setSize((int) size.getWidth(), (int) size.getHeight());
 	}
 
 	/**
@@ -186,7 +179,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 		super.paintComponent(g);
 		drawArcs(g);
-
+		System.out.println(getSize());
 		if (getSize().width > maxSize.width || getSize().height > maxSize.height) {
 
 			if (getSize().width > maxSize.width)

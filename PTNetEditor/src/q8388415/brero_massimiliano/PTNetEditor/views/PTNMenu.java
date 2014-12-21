@@ -10,13 +10,28 @@ import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNFileController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
+import q8388415.brero_massimiliano.PTNetEditor.utils.PTNInfoMessages;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
+/**
+ * Menu bar for the application containing these menus:
+ * <ul>
+ * <li>desktop</li>
+ * <li>edit</li>
+ * <li>file</li>
+ * <li>mode</li>
+ * <li>information</li>
+ * </ul>
+ * 
+ * @author Laptop
+ *
+ */
 public class PTNMenu extends JMenuBar {
 
 	private PTNDesktop desktop;
@@ -28,6 +43,7 @@ public class PTNMenu extends JMenuBar {
 	private JMenu nodeMenu;
 	private JMenu fileMenu;
 	private JMenu modusMenu;
+	private JMenu infoMenu;
 
 	public PTNMenu(PTNDesktop desktop, PTNAppController appC, PTNNet net) {
 
@@ -44,12 +60,53 @@ public class PTNMenu extends JMenuBar {
 		nodeMenu = this.initStandardMenu();
 		fileMenu = this.initFileMenu();
 		modusMenu = this.initModusMenu();
+		infoMenu = this.addInfoMenu();
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
 		this.add(desktopMenu);
 		this.add(nodeMenu);
 		this.add(fileMenu);
 		this.add(modusMenu);
+		this.add(infoMenu);
+
+	}
+
+	private JMenu addInfoMenu() {
+
+		JMenu menu = new JMenu("Info");
+		menu.setMnemonic('I');
+		JMenuItem item1 = new JMenuItem("Version");
+		JMenuItem item2 = new JMenuItem("Credits");
+
+		item1.setIcon(new ImageIcon("icons/info-icon.png"));
+		item1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String message = "<html><body>" +
+								 PTNInfoMessages.getVersionInformation()
+								 + PTNInfoMessages.getCopyrightInformation()
+								 + "</body></html>";
+								
+				JOptionPane.showMessageDialog(desktop, message, "Copyright", JOptionPane.PLAIN_MESSAGE);
+			}
+		});
+
+		item2.setIcon(new ImageIcon("icons/credits-icon.png"));
+		item2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String message = "<html><body>" +
+						 PTNInfoMessages.getCredits()
+						 + "</body></html>";
+						
+		JOptionPane.showMessageDialog(desktop, message, "Credits", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+
+		menu.add(item1);
+		menu.add(item2);
+
+		return menu;
 
 	}
 
