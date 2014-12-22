@@ -31,7 +31,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 
 public class DeleteArcWindow extends JDialog implements ItemListener, ActionListener {
 
-	private PTNNet net;
+	private static final long serialVersionUID = 1L;
 	private PTNNode node;
 	private HashMap<String, PTNArc> incomingArcs;
 	private HashMap<String, PTNArc> outgoingArcs;
@@ -45,7 +45,6 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 	private JPanel panel;
 
 	public DeleteArcWindow(PTNNet net, NodeView nodeView) {
-		this.net = net;
 		this.nodeView = nodeView;
 		allNodeArcs = new HashMap<String, PTNArc>();
 		arcsToDelete = new HashMap<String, PTNIArcDTO>();
@@ -166,7 +165,6 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 	 * source.getName() returns the id of the arc that was selected
 	 */
 	public void itemStateChanged(ItemEvent e) {
-		JCheckBox box = (JCheckBox)e.getSource();
 		int change = e.getStateChange();
 		String arcId = ((JCheckBox)e.getSource()).getName();
 		PTNArc changedArc = allNodeArcs.get(arcId);

@@ -36,9 +36,9 @@ public class PTNControlPanel extends JPanel {
 	 * Icons for size panels.
 	 * @return
 	 */
-	private final String PLACE_ICON = "icons/size-place-icon.png";
-	private final String TRANSITION_ICON = "icons/size-rectangle-icon.png";
-	private final String ARROW_ICON = "icons/size-arrow-icon.png";
+	private final String PLACE_ICON = "/resources/icons/size-place-icon.png";
+	private final String TRANSITION_ICON = "/resources/icons/size-rectangle-icon.png";
+	private final String ARROW_ICON = "/resources/icons/size-arrow-icon.png";
 
 	public static PTNControlPanel getInstance() {
 
@@ -58,7 +58,6 @@ public class PTNControlPanel extends JPanel {
 		 * Set up panel.
 		 */
 		controllerPanel = new JPanel();
-		// controllerPanel.setLayout(new FlowLayout());
 
 		// add enlargement Panels
 		placeSizePanel = new PTNEnlargementPanel("Place Size", PLACE_ICON);

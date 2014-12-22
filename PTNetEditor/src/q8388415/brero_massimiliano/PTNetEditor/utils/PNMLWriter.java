@@ -86,7 +86,7 @@ public final class PNMLWriter {
         try {
             FileOutputStream fos = new FileOutputStream(pnmlDatei);
             XMLOutputFactory factory = XMLOutputFactory.newInstance();
-            writer = factory.createXMLStreamWriter(fos);
+            writer = factory.createXMLStreamWriter(fos, "UTF-8");
             // XML Dokument mit Version 1.0 und Kodierung UTF-8 beginnen
             writer.writeStartDocument("UTF-8", "1.0");
             writer.writeStartElement("pnml");
@@ -99,7 +99,7 @@ public final class PNMLWriter {
         } catch (XMLStreamException e) {
             System.err.println("XML Fehler: " + e.getMessage());
             e.printStackTrace();
-        	throw new PTNWriteException(errorMsg + " Es gab einen allgemeinen XML-Fehler");
+        	throw new PTNWriteException("Es gab einen allgemeinen XML-Fehler\n" + e.getMessage());
         }
     }
 
@@ -117,7 +117,7 @@ public final class PNMLWriter {
             } catch (XMLStreamException e) {
                 System.err.println("XML Fehler: " + e.getMessage());
                 e.printStackTrace();
-                throw new PTNWriteException(errorMsg + " Es gab einen allgemeinen XML-Fehler");
+                throw new PTNWriteException("Es gab einen allgemeinen XML-Fehler\n" + e.getMessage());
             }
         } else {
             System.err.println("Das Dokument wurde noch nicht gestartet!");

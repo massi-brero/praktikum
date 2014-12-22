@@ -47,7 +47,7 @@ public class PTNArcHelper {
 	/**
 	 * Sets start and end points right in the middle of the source and target
 	 * node. The line then gets an offset, so starting and end point will be
-	 * right from or at the boundary of the node#s icon.
+	 * right from or at the boundary of the node's icon.
 	 * 
 	 * If you want to change that, this is the place to change.
 	 * 
@@ -65,17 +65,8 @@ public class PTNArcHelper {
 		PTNNode node = normalizeSource ? arc.getSource() : arc.getTarget();
 		Point normalizedLocation = null;
 
-		if (node != null) {
-			PTNNodeTypes type = node.getType();
-			Dimension size = null;
-
-			if (type == PTNNodeTypes.STELLE)
-				size = PlaceView.getCurrentSize();
-			else if (type == PTNNodeTypes.TRANSITION)
-				size = TransitionView.getCurrentSize();
-
+		if (node != null)
 			normalizedLocation = this.addOffset(arc, normalizeSource);
-		}
 
 		return normalizedLocation;
 	}

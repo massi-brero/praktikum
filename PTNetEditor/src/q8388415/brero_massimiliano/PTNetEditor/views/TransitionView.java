@@ -25,9 +25,9 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 
 	private static final long serialVersionUID = 1L;
 	PTNDesktopController listener;
-	final private static String sourceIconStandard = "rectangle2.png";
-	final private static String sourceIconSelected = "rectangle2_selected.png";
-	final private String sourceIconActivated = "rectangle2_activated.png";
+	final private static String sourceIconStandard = "/resources/elements/rectangle2.png";
+	final private static String sourceIconSelected = "/resources/elements/rectangle2_selected.png";
+	final private String sourceIconActivated = "/resources/elements/rectangle2_activated.png";
 	private Icon iconActivated;
 	private static final int ICON_WIDTH = 17;
 	private static final int ICON_HEIGHT = 34;
@@ -45,7 +45,7 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 
 	public TransitionView(String id) {
 		super(id, sourceIconStandard, sourceIconSelected);
-		iconActivated = new ImageIcon(sourceIconActivated);
+		iconActivated = new ImageIcon(TransitionView.class.getResource(sourceIconActivated));
 		this.init();
 	}
 

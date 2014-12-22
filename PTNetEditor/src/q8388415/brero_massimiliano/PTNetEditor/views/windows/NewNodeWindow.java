@@ -24,9 +24,10 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 public class NewNodeWindow extends JDialog implements ActionListener {
 
-    JMenuItem item;
+	private static final long serialVersionUID = 1L;
+	JMenuItem item;
     private JPanel panel;
-    private JComboBox types;
+    private JComboBox<PTNNodeTypes> types;
     JLabel tokenLabel;
     private JTextField nameLabel;
     private JTextField token;
@@ -106,7 +107,7 @@ public class NewNodeWindow extends JDialog implements ActionListener {
     }
 
     private JComboBox<PTNNodeTypes> initializeDropDown() {
-        return new JComboBox(PTNNodeTypes.values());
+        return new JComboBox<PTNNodeTypes>(PTNNodeTypes.values());
     }
 
     public JPanel getPanel() {

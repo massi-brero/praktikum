@@ -7,8 +7,6 @@ import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.swing.ImageIcon;
-
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;

@@ -78,7 +78,7 @@ public class PTNMenu extends JMenuBar {
 		JMenuItem item1 = new JMenuItem("Version");
 		JMenuItem item2 = new JMenuItem("Credits");
 
-		item1.setIcon(new ImageIcon("icons/info-icon.png"));
+		item1.setIcon(this.getIcon("/resources/icons/info-icon.png"));
 		item1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -91,7 +91,7 @@ public class PTNMenu extends JMenuBar {
 			}
 		});
 
-		item2.setIcon(new ImageIcon("icons/credits-icon.png"));
+		item2.setIcon(this.getIcon("/resources/icons/credits-icon.png"));
 		item2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -118,7 +118,7 @@ public class PTNMenu extends JMenuBar {
 		JMenuItem item2 = new JMenuItem("Schreibtisch löschen");
 		
 		
-		item1.setIcon(new ImageIcon("icons/desktop-size.png"));
+		item1.setIcon(this.getIcon("/resources/icons/desktop-size.png"));
 		item1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -127,7 +127,7 @@ public class PTNMenu extends JMenuBar {
 		});
 
 		
-		item2.setIcon(new ImageIcon("icons/broom-desktop.png"));
+		item2.setIcon(this.getIcon("/resources/icons/broom-desktop.png"));
 		item2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -155,13 +155,13 @@ public class PTNMenu extends JMenuBar {
 
 
 		// add listeners
-		item1.setIcon(new ImageIcon("icons/unselect.png"));
+		item1.setIcon(this.getIcon("/resources/icons/unselect.png"));
 		item1.addActionListener(appControl);
 
-		item2.setIcon(new ImageIcon("icons/remove-node.png"));
+		item2.setIcon(this.getIcon("/resources/icons/remove-node.png"));
 		item2.addActionListener(appControl);
 
-		item3.setIcon(new ImageIcon("icons/add-node.png"));
+		item3.setIcon(this.getIcon("/resources/icons/add-node.png"));
 		item3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -185,7 +185,7 @@ public class PTNMenu extends JMenuBar {
 		JMenuItem item1 = new JMenuItem("Datei öffnen");
 		JMenuItem item2 = new JMenuItem("Datei speichern");
 
-		item1.setIcon(new ImageIcon("icons/open-file.png"));
+		item1.setIcon(this.getIcon("/resources/icons/open-file.png"));
 		item1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -193,7 +193,7 @@ public class PTNMenu extends JMenuBar {
 			}
 		});
 
-		item2.setIcon(new ImageIcon("icons/save-file.png"));
+		item2.setIcon(this.getIcon("/resources/icons/save-file.png"));
 		item2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -216,10 +216,10 @@ public class PTNMenu extends JMenuBar {
 		JMenuItem item1 = new JRadioButtonMenuItem("Editor");
 
 		item1.setSelected(true);
-		item1.setIcon(new ImageIcon("icons/editor-mode.png"));
+		item1.setIcon(this.getIcon("/resources/icons/editor-mode.png"));
 		item1.addActionListener(appControl);
 		JMenuItem item2 = new JRadioButtonMenuItem("Simulation");
-		item2.setIcon(new ImageIcon("icons/sim-mode.png"));
+		item2.setIcon(this.getIcon("/resources/icons/sim-mode.png"));
 		item2.addActionListener(appControl);
 
 		group.add(item1);
@@ -229,6 +229,27 @@ public class PTNMenu extends JMenuBar {
 
 		return menu;
 
+	}
+	
+	/**
+	 * @param iconPath String
+	 * 		Path to the icon. Must be relative to root (src):
+	 * @return {@link ImageIcon}
+	 * 		
+	 */
+	private ImageIcon getIcon(String iconPath) {
+		ImageIcon icon = null;
+		try {
+			
+			icon = new ImageIcon(PTNMenu.class.getResource(iconPath));
+			
+		} catch (Exception e) {
+			System.out.println("Wrong path to Icon!");
+			e.printStackTrace();
+		}
+		
+		return icon;
+		
 	}
 	
 	/**

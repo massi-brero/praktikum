@@ -75,7 +75,7 @@ public class PTNEnlargementPanel extends JPanel {
 		if (!iconPath.isEmpty()) {
 			
 			try {
-				ImageIcon icon = new ImageIcon(iconPath);
+				ImageIcon icon = new ImageIcon(PTNEnlargementPanel.class.getResource(iconPath));
 				label.setIcon(icon);
 			} catch (Exception e) {
 				e.printStackTrace();

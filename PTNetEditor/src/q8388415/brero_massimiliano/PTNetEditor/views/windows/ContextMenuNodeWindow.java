@@ -1,12 +1,7 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.windows;
 
-import java.awt.Point;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -26,6 +21,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
  */
 public class ContextMenuNodeWindow extends JPopupMenu implements MouseListener, AncestorListener {
 	
+	private static final long serialVersionUID = 1L;
 	ActionListener listener;
 	NodeView nodeView;
 

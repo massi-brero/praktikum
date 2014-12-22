@@ -208,7 +208,7 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 	public void setSelected(Boolean s) {
 		this.selected = s;
 		if (selected)
-			this.setColor(Color.RED);
+			this.setColor(Color.ORANGE);
 		else
 			this.setColor(DEFAULT_COLOR);
 		this.updateArc();

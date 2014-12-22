@@ -40,8 +40,8 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	public NodeView(String id, String sourceStandardIcon, String sourceSelectedIcon) {
 		
 		nameLabel = new JLabel("");
-		iconStandard = new ImageIcon(sourceStandardIcon);
-		iconSelected = new ImageIcon(sourceSelectedIcon);
+		iconStandard = new ImageIcon(NodeView.class.getResource(sourceStandardIcon));
+		iconSelected = new ImageIcon(NodeView.class.getResource(sourceSelectedIcon));
 		this.setId(id);
 		this.init();
 

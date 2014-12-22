@@ -8,19 +8,16 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNetValidator;
 
 public class ResizeDesktopWindow extends JDialog implements ActionListener {
 	
-	JMenuItem item;
+	private static final long serialVersionUID = 1L;
 	private JPanel panel;
 	private JTextField widthField;
 	private JTextField heightField;

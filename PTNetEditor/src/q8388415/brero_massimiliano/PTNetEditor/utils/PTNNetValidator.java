@@ -1,7 +1,5 @@
 package q8388415.brero_massimiliano.PTNetEditor.utils;
 
-import javax.swing.JOptionPane;
-
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 
 /**

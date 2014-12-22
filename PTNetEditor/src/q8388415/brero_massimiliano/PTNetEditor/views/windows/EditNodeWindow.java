@@ -10,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -23,7 +22,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 
 public class EditNodeWindow extends JDialog implements ActionListener {
 	
-	JMenuItem item;
+	private static final long serialVersionUID = 1L;
 	private JPanel panel;
 	private JTextField nameLabel;
 	private JTextField token;

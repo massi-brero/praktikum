@@ -23,8 +23,8 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 public class PlaceView extends NodeView {
 
 	private static final long serialVersionUID = 1L;
-	final private static String sourceIconStandard = "circle2.png";
-    final private static String sourceIconSelected = "circle2_selected.png";
+	final private static String sourceIconStandard = "/resources/elements/circle2.png";
+    final private static String sourceIconSelected = "/resources/elements/circle2_selected.png";
     final private static Dimension DEFAULT_SIZE = new Dimension(50, 70);
 	private static final int ICON_WIDTH = 35;
 	private static final int ICON_HEIGHT = 35;

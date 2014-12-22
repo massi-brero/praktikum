@@ -170,6 +170,8 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	/**
 	 * Computes the maximum size this pane had so we can adjust the ScrollPanes'
 	 * handles.
+	 * This method will also redraw the arcs on the desktop and therefore will
+	 * do that in an arc syncronized block.
 	 * 
 	 * @return void
 	 */
@@ -177,8 +179,11 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	public void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
-		drawArcs(g);
-
+		
+		synchronized (arcs) {
+			drawArcs(g);
+		}
+		
 		if (getSize().width > maxSize.width || getSize().height > maxSize.height) {
 
 			if (getSize().width > maxSize.width)
@@ -213,9 +218,11 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 		Iterator<Map.Entry<String, ArcView>> it = arcs.entrySet().iterator();
 		ArcView arcView = null;
-		while (it.hasNext()) {
-			arcView = (ArcView) it.next().getValue();
-			arcView.drawArc(g);
+		synchronized (arcs) {
+			while (it.hasNext()) {
+				arcView = (ArcView) it.next().getValue();
+				arcView.drawArc(g);
+			}
 		}
 
 	}

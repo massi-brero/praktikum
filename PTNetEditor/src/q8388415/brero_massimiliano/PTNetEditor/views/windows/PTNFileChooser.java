@@ -1,9 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.windows;
 
-import java.io.File;
-
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNFileFilter;
 
@@ -17,7 +14,7 @@ import q8388415.brero_massimiliano.PTNetEditor.utils.PTNFileFilter;
  */
 public class PTNFileChooser extends JFileChooser  {
     
-    private FileNameExtensionFilter filter = new FileNameExtensionFilter("Net Files", "pnml");
+	private static final long serialVersionUID = 1L;
     
     public PTNFileChooser() {
         super();

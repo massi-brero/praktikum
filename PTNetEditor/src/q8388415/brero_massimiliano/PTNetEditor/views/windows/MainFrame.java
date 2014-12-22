@@ -15,6 +15,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 public class MainFrame extends JFrame implements PTNIModeListener {
 
+	private static final long serialVersionUID = 1L;
 	private PTNDesktop desktop;
 	private PTNControlPanel controlPanel;
 	private JScrollPane scPane = null;

@@ -409,18 +409,21 @@ public class PTNNet {
 
     
     /**
+     * Activates a transition and returns true if every predecessors
+     * has at least one token or if there are no predecessors at all.
      * 
-     * @param transition
+     * @param PTNTransition
+     * 		transition
      * @return Boolean
      * 		True if transition is now activated, else false.
      */
 	public Boolean activateTransition(PTNTransition transition) {
 		
 		Boolean isActivated = true;
-		HashMap<String, PTNNode> places =  this.getPredecessors(transition.getId());
-		Iterator<Map.Entry<String, PTNNode>> it = places.entrySet().iterator();
+		HashMap<String, PTNNode> predecessors =  this.getPredecessors(transition.getId());
+		Iterator<Map.Entry<String, PTNNode>> it = predecessors.entrySet().iterator();
 
-		if (!places.isEmpty()) {
+		if (!predecessors.isEmpty()) {
 			while(it.hasNext()) {
 				
 				PTNPlace place = (PTNPlace)it.next().getValue();
