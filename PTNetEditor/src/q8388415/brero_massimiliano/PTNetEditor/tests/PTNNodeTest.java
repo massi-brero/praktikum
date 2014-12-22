@@ -17,6 +17,7 @@ public class PTNNodeTest {
 	@Rule
     public ExpectedException thrown = ExpectedException.none();
 	
+	@SuppressWarnings({"unused"})
 	private PTNNode nodeModel;
 
 	@Before
@@ -28,6 +29,7 @@ public class PTNNodeTest {
 	}
 	
 	@Test
+	@SuppressWarnings({"unused"})
 	public void testConstructionError() throws PTNNodeConstructionException {
 		
 		thrown.expect(PTNNodeConstructionException.class);

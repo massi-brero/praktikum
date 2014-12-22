@@ -1,15 +1,11 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.partials;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -33,6 +29,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
  */
 public class PTNEnlargementPanel extends JPanel {
 	
+	private static final long serialVersionUID = 1L;
 	private JLabel label;
 	private JButton plusButton;
 	private JButton minusButton;

@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.xml.stream.Location;
-
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNSimulationException;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;

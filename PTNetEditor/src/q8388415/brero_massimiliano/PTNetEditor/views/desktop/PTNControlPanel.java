@@ -1,6 +1,5 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.desktop;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
@@ -24,6 +23,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.partials.PTNEnlargementPane
  */
 public class PTNControlPanel extends JPanel {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel controllerPanel;
 	private PTNDesktop desktop = null;
 	private PTNAppController appController = null;
@@ -70,7 +70,7 @@ public class PTNControlPanel extends JPanel {
 		controllerPanel.add(transitionSizePanel);
 		controllerPanel.add(arrowHeadSizePanel);
 
-		this.setSize(new Dimension((int)(desktop.getSize().getWidth()), 20));
+		this.setSize(new Dimension((int)(this.desktop.getSize().getWidth()), 20));
 		
 		this.add(controllerPanel);
 		setDoubleBuffered(true);

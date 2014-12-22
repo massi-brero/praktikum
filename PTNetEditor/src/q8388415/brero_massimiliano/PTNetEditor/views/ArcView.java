@@ -1,7 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.views;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -14,9 +13,7 @@ import java.awt.geom.Line2D;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIArcDTO;
-import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
-import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
 /**
  * Visual reprensentation of an arc connecting 2 nodes. This class just knows

@@ -3,7 +3,6 @@ package q8388415.brero_massimiliano.PTNetEditor.views;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -34,6 +33,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
  */
 public class PTNMenu extends JMenuBar {
 
+	private static final long serialVersionUID = 1L;
 	private PTNDesktop desktop;
 	private PTNNet net;
 	private PTNAppController appControl;

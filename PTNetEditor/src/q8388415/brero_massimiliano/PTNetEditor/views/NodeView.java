@@ -1,6 +1,5 @@
 package q8388415.brero_massimiliano.PTNetEditor.views;
 
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
@@ -8,8 +7,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-
-import org.hamcrest.core.SubstringMatcher;
 
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
@@ -24,6 +21,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  */
 public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNINodeDTO {
 	
+	private static final long serialVersionUID = 1L;
 	private final int SCALE_MAX = 4;
 	private final int SCALE_MIN = 0;
 	// number of pixels the icon will change on scaling operations

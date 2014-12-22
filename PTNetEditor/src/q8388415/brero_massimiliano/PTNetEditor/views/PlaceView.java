@@ -7,7 +7,6 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import q8388415.brero_massimiliano.PTNetEditor.types.PTNIArcDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
@@ -23,7 +22,8 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  */
 public class PlaceView extends NodeView {
 
-    final private static String sourceIconStandard = "circle2.png";
+	private static final long serialVersionUID = 1L;
+	final private static String sourceIconStandard = "circle2.png";
     final private static String sourceIconSelected = "circle2_selected.png";
     final private static Dimension DEFAULT_SIZE = new Dimension(50, 70);
 	private static final int ICON_WIDTH = 35;

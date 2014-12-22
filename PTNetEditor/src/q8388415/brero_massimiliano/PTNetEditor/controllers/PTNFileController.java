@@ -2,7 +2,6 @@ package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
 import java.io.File;
 
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNetContructionException;
@@ -12,7 +11,6 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNFileReader;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNFileWriter;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIFileListener;
-import q8388415.brero_massimiliano.PTNetEditor.utils.PNMLWriter;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
@@ -32,10 +30,8 @@ public class PTNFileController implements PTNIFileListener {
 	private PTNDesktop desktop = null;
 	private PTNNet net;
 	private PTNFileReader readModel;
-	private PNMLWriter xmlWriter;
 	private static File lastOpenedFile = null;
 	private static File lastSavedFile = null;
-	private File destinationFile = null;
 
 	/**
 	 * 

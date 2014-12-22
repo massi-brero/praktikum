@@ -1,13 +1,10 @@
 package q8388415.brero_massimiliano.PTNetEditor;
 
-import java.io.File;
-
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
-import q8388415.brero_massimiliano.PTNetEditor.utils.PTNParser;
 import q8388415.brero_massimiliano.PTNetEditor.views.PTNMenu;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNControlPanel;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
@@ -22,10 +19,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.MainFrame;
 public class PTNBootstrap {
 
     private static PTNBootstrap bootstrap;
-    private PTNParser parser;
-    private File sourceFile;
     private static Boolean isRunning = false;
-
     public PTNBootstrap() {
     }
 
@@ -46,8 +40,6 @@ public class PTNBootstrap {
      */
     public void init() {
 
-        sourceFile = new File("src\\snippet\\Kaffee.pnml");
-        
         /**
          * Here the net is instantiates which basically all of the components will use.
          */

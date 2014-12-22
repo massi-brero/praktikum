@@ -1,7 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.controllers;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -18,7 +17,6 @@ import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNSimulationException
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNSimulationInterpreter;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIModeListener;
-import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNArcHelper;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;

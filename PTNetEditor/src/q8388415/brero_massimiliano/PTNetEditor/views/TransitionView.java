@@ -23,6 +23,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  */
 public class TransitionView extends NodeView implements PTNINodeDTO {
 
+	private static final long serialVersionUID = 1L;
 	PTNDesktopController listener;
 	final private static String sourceIconStandard = "rectangle2.png";
 	final private static String sourceIconSelected = "rectangle2_selected.png";

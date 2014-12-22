@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.awt.Point;
 import java.util.HashMap;
-import java.util.Hashtable;
 
 import org.junit.After;
 import org.junit.Before;

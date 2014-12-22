@@ -13,7 +13,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.security.auth.login.AppConfigurationEntry;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -21,12 +20,10 @@ import javax.swing.SwingUtilities;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
-import q8388415.brero_massimiliano.PTNetEditor.models.PTNArc;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIArcDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIModeListener;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
-import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNodeHelper;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
@@ -54,6 +51,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.ResizeDesktopWindow
  */
 public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseListener {
 
+	private static final long serialVersionUID = 1L;
 	private final int DEFAULT_HEIGHT = 400;
 	private final int DEFAULT_WIDTH = 600;
 	private ArrayList<NodeView> nodes;
@@ -61,7 +59,6 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	private PTNDesktopController desktopController;
 	private PTNAppController appController;
 	private PTNNet net;
-	private PTNNodeHelper nodeHelper;
 	// Using a Hashtable instead of an ArrayList like nodes makes it easier to
 	// identify arcs by id for our drawing operations.
 	private Hashtable<String, ArcView> arcs;
@@ -87,7 +84,6 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		this.appController = appController;
 		desktopController = new PTNDesktopController(this, net);
 		netController = new PTNNetController(net, this);
-		nodeHelper = new PTNNodeHelper(this, net);
 		
 		/**
 		 * setup listeners

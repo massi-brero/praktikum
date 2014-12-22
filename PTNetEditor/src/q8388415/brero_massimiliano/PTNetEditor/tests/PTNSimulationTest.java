@@ -22,6 +22,7 @@ public class PTNSimulationTest {
 	private PTNNet net;
 	private PTNPlace node1, node4, node5;
 	private PTNTransition node2, node3;
+	@SuppressWarnings("unused")
 	private PTNArc arc1, arc2, arc3, arc4;
 	private PTNNetController netHandler;
 

@@ -18,9 +18,7 @@ import q8388415.brero_massimiliano.PTNetEditor.utils.PNMLWriter;
  */
 public class PTNFileWriter {
 
-	private PNMLWriter writer = null;
 	private PTNNet net;
-	private File file = null;
 	private PNMLWriter pnmlWriter;
 
 	public PTNFileWriter(PTNNet net) {
@@ -36,8 +34,6 @@ public class PTNFileWriter {
 	 * @throws PTNWriteException
 	 */
 	public void writePNMLFile(File file) throws PTNWriteException {
-
-		writer = new PNMLWriter(file);
 
 		pnmlWriter = new PNMLWriter(file);
 		pnmlWriter.startXMLDocument();
