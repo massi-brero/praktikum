@@ -60,7 +60,7 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 
 		this.setLocationRelativeTo(nodeView);
 		this.setFocusable(false);
-		this.setLayout(new GridLayout(2,1));
+		this.setResizable(false);
 		
 		if (null != incomingArcs && 0 < incomingArcs.size())
 			this.basePanel.add(this.setupIncomingArcsPanel());
@@ -68,9 +68,9 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 		if (null != outgoingArcs && 0 < outgoingArcs.size())
 			this.basePanel.add(this.setupOutgoingArcsPanel());
 		
+		basePanel.add(this.getOkButton());
 		basePanel.setLayout(new BoxLayout(basePanel, BoxLayout.Y_AXIS));
 		this.getContentPane().add(basePanel);
-		this.getContentPane().add(this.getOkButton());
 		this.pack();
 		
 	}

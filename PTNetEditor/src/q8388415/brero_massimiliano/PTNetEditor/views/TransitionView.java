@@ -29,8 +29,8 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 	final private static String sourceIconSelected = "/resources/elements/rectangle2_selected.png";
 	final private String sourceIconActivated = "/resources/elements/rectangle2_activated.png";
 	private Icon iconActivated;
-	private static final int ICON_WIDTH = 17;
-	private static final int ICON_HEIGHT = 34;
+	private static final int ICON_WIDTH = 16;
+	private static final int ICON_HEIGHT = 32;
 	private Boolean isActivated = false;
 	/**
 	 * Current scaling factor for nodes' components

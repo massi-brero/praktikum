@@ -20,6 +20,21 @@ import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNetValidator;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 
+/**
+ * Dialog window to change the node's attributes.
+ * For a place the use may change:
+ * <ul>
+ * <li>node name</li>
+ * <li>token number</li>
+ * </ul><br />
+ * For a transition:
+ * <ul>
+ * <li>node name</li>
+ * </ul>
+ * 
+ * @author Laptop
+ *
+ */
 public class EditNodeWindow extends JDialog implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
@@ -28,15 +43,23 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	private JTextField token;
     private Boolean isInformationToBeSent = false;
 	private NodeView sourceNode;
-	private Dimension BUTTON_SIZE = new Dimension(50, 20);
-	private Dimension WINDOW_SIZE = new Dimension(200, 100);
+	private Dimension BUTTON_SIZE = new Dimension(40, 20);
+	private Dimension WINDOW_SIZE_PLACE = new Dimension(200, 90);
+	private Dimension WINDOW_SIZE_TRANSITION = new Dimension(200, 60);
 	
 	public EditNodeWindow(NodeView node) {
 
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(node);
+		this.setResizable(false);
 		panel = new JPanel();
-		panel.setPreferredSize(WINDOW_SIZE);
+		
+		// 
+		if (node.getType() == PTNNodeTypes.STELLE)
+			panel.setPreferredSize(WINDOW_SIZE_PLACE);
+		else 
+			panel.setPreferredSize(WINDOW_SIZE_TRANSITION);
+			
 		panel.setLayout(new GridLayout(0,2));
 		this.setFocusable(false);
 		this.sourceNode = node;
@@ -57,7 +80,7 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 		this.addToPanel(new JLabel("Knoten-Label"));
 		this.addToPanel(nameLabel);
 		
-		if (node instanceof PlaceView) {
+		if (node .getType() == PTNNodeTypes.STELLE) {
 			String tokenNumber = this.getSourceNode().getText();
 			tokenNumber = tokenNumber == ((PlaceView)node).getDOTSign() ? "1" : 
 							(tokenNumber == "" ? "0" : this.getSourceNode().getText());
@@ -68,7 +91,7 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 		
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(this);
-		okButton.setPreferredSize(BUTTON_SIZE);
+		okButton.setMaximumSize(BUTTON_SIZE);
 		this.addToPanel(okButton);
 		
 		JButton cancelButton = new JButton("Abbrechen");

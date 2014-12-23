@@ -26,8 +26,8 @@ public class PlaceView extends NodeView {
 	final private static String sourceIconStandard = "/resources/elements/circle2.png";
     final private static String sourceIconSelected = "/resources/elements/circle2_selected.png";
     final private static Dimension DEFAULT_SIZE = new Dimension(50, 70);
-	private static final int ICON_WIDTH = 35;
-	private static final int ICON_HEIGHT = 35;
+	private static final int ICON_WIDTH = 34;
+	private static final int ICON_HEIGHT = 34;
     private int token = 0;
     /**
 	 * Current scaling factor for nodes' components.

@@ -49,6 +49,7 @@ public class NewNodeWindow extends JDialog implements ActionListener {
         panel.setLayout(new GridLayout(0, 2));
         this.setAtDesktopDefaultPosition();
         this.setFocusable(false);
+        this.setResizable(false);
         /**
          * Do nothing because we could still have incorrect data in some of the fields.
          */

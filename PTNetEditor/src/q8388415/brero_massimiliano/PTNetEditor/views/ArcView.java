@@ -33,6 +33,7 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 	private String id;
 	private Boolean selected = false;
 	private final Color DEFAULT_COLOR = Color.GRAY;
+	private final Color SELECTED_COLOR = Color.decode("#E89B15");
 	private Color color;
 	private Graphics desktopGraphics = null;
 	private double scale;
@@ -208,7 +209,7 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 	public void setSelected(Boolean s) {
 		this.selected = s;
 		if (selected)
-			this.setColor(Color.ORANGE);
+			this.setColor(SELECTED_COLOR);
 		else
 			this.setColor(DEFAULT_COLOR);
 		this.updateArc();

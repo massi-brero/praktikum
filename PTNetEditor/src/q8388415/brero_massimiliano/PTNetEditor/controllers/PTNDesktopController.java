@@ -377,7 +377,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	@Override
 	public void startSimulationMode() {
 		isInSimulationMode = true;
-		desktop.deleteSelectedArcs();
+		desktop.deselectArcs();
 		desktop.deselectNodes();
 	}
 

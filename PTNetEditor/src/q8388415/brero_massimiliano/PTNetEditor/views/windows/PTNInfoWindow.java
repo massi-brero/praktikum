@@ -47,6 +47,7 @@ public class PTNInfoWindow extends JDialog implements ActionListener {
         panel.setLayout(new GridLayout(0, 2));
         this.setAtDesktopDefaultPosition();
         this.setFocusable(false);
+        this.setResizable(false);
         /**
          * Do nothing because we could still have incorrect data in some of the fields.
          */
@@ -127,7 +128,8 @@ public class PTNInfoWindow extends JDialog implements ActionListener {
         if (e.getActionCommand().equals("Zeichnen")) {
 
                 if (types.getSelectedItem() == PTNNodeTypes.STELLE && !PTNNetValidator.isValidToken(token.getText())) {
-                        JOptionPane.showConfirmDialog(this, "Bitte geben Sie eine Zahl zwischen 0-999 ein.", "Token Fehler", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showConfirmDialog(this, "Bitte geben Sie eine Zahl zwischen 0-999 ein.", "Token Fehler", 
+                        								JOptionPane.PLAIN_MESSAGE);
                 } else {
                     isInformationToBeSent = true;
                     this.dispose();                 
