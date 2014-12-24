@@ -90,7 +90,7 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 
 		this.isActivated = isActivated;
 		this.updateIcon();
-		this.updateIconSize(TransitionView.currentTransitionScale);
+		this.updateIconSize();
 		
 	}
 

@@ -115,7 +115,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 		else
 			setIcon(iconStandard);
 		
-		this.updateIconSize(scale);
+		this.updateIconSize();
 	}
 
 
@@ -167,7 +167,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	 */
 	protected void updateSize(int factor) {
 
-		this.updateIconSize(factor);
+		this.updateIconSize();
 		//We have to increase height by factor 2 so our node label text will keep its distance from the icon.
 		this.setSize(this.getWidth() + changeWidth * factor, this.getHeight() + changeHeight * 2 * factor);
 		this.updateLabelTextSize(factor);
@@ -179,7 +179,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	 * Updates size of node pic.
 	 * @param factor float scaling value
 	 */
-	protected void updateIconSize(int factor) {
+	protected void updateIconSize() {
 
 		// by reseting the icon we won't loose on quality due to scaling fractions when we have repeated scaling operations
 		this.updateIcon();
