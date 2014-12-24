@@ -103,7 +103,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 		else
 			setIcon(iconStandard);
 
-		this.updateIconSize(scale);
+		//this.updateIconSize(scale);
 	}
 
 

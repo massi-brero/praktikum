@@ -5,6 +5,7 @@ import java.awt.Image;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
@@ -60,7 +61,7 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 		if (0 < TransitionView.currentTransitionScale)
 			this.updateSize(TransitionView.currentTransitionScale);
 		this.setType(PTNNodeTypes.TRANSITION);
-		nameLabel.setBounds(+500, -5, 10, 20);
+		nameLabel.setVerticalTextPosition(JLabel.NORTH);
 		
 	}
 
