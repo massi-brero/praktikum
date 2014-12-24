@@ -391,12 +391,20 @@ public class PTNNet {
 
 	/**
 	 * 
-	 * @param node
+	 * @param node 
 	 */
 	public void removeNode(PTNNode node) {
 		
 		this.getNodes().remove(node.getId());
 		
+	}
+	
+	/**
+	 * 
+	 * @param arc
+	 */
+	public void removeArc(PTNArc arc) {
+		this.getArcs().remove(arc.getId());
 	}
 
 	/**

@@ -28,7 +28,7 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 	final private static String sourceIconStandard = "/resources/elements/rectangle2.png";
 	final private static String sourceIconSelected = "/resources/elements/rectangle2_selected.png";
 	final private String sourceIconActivated = "/resources/elements/rectangle2_activated.png";
-	private Icon iconActivated;;
+	private Icon iconActivated;
 	private Boolean isActivated = false;
 	/**
 	 * Current scaling factor for nodes' components
@@ -38,11 +38,11 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 	 * Current size of this node family
 	 */
 	protected static Dimension currentSize = null;
-
 	private final static Dimension DEFAULT_SIZE = new Dimension(70, 70);
 
 	public TransitionView(String id) {
 		super(id, sourceIconStandard, sourceIconSelected, 16, 32);
+		this.changeWidth = 2;
 		iconActivated = new ImageIcon(TransitionView.class.getResource(sourceIconActivated));
 		this.init();
 	}

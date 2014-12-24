@@ -280,6 +280,7 @@ public class PTNNetController implements Runnable {
 
        if (arcHelper.isAlreadyOnDesktop(normalizedSourceLocation, normalizedTargetLocation)) {
             arcHelper.showErrorPaneDoubleArc();
+            net.removeArc(arcModel);
         } else {
 
             ArcView arcView = new ArcView(id, normalizedSourceLocation, normalizedTargetLocation, this);

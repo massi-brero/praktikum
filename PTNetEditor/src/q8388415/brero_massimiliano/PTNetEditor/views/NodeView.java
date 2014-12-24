@@ -25,8 +25,8 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	private final int SCALE_MAX = 4;
 	private final int SCALE_MIN = 0;
 	// number of pixels the icon will change on scaling operations
-	private final int CHANGE_WIDTH = 4;
-	private final int CHANGE_HEIGHT = 4;
+	protected int changeWidth = 4;
+	protected int changeHeight = 4;
 	protected ImageIcon iconStandard;
 	protected ImageIcon iconSelected;
 	protected JLabel nameLabel;
@@ -114,7 +114,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 			setIcon(iconSelected);
 		else
 			setIcon(iconStandard);
-		System.out.println(scale);
+		
 		this.updateIconSize(scale);
 	}
 
@@ -169,7 +169,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 
 		this.updateIconSize(factor);
 		//We have to increase height by factor 2 so our node label text will keep its distance from the icon.
-		this.setSize(this.getWidth() + CHANGE_WIDTH * factor, this.getHeight() + CHANGE_HEIGHT * 2 * factor);
+		this.setSize(this.getWidth() + changeWidth * factor, this.getHeight() + changeHeight * 2 * factor);
 		this.updateLabelTextSize(factor);
 		this.repaint();
 		
@@ -183,9 +183,9 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 
 		// by reseting the icon we won't loose on quality due to scaling fractions when we have repeated scaling operations
 		this.updateIcon();
-
+		System.out.println(changeHeight);
 		Image image = ((ImageIcon) this.getIcon()).getImage();
-		image = image.getScaledInstance(iconWidth + CHANGE_WIDTH * scale, iconHeight + CHANGE_HEIGHT * scale, Image.SCALE_SMOOTH);
+		image = image.getScaledInstance(iconWidth + changeWidth * scale, iconHeight + changeHeight * scale, Image.SCALE_SMOOTH);
 		this.setIcon(new ImageIcon(image));
 	}
 
