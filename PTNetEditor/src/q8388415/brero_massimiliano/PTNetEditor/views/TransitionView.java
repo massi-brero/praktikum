@@ -1,7 +1,6 @@
 package q8388415.brero_massimiliano.PTNetEditor.views;
 
 import java.awt.Dimension;
-import java.awt.Image;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -29,9 +28,7 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 	final private static String sourceIconStandard = "/resources/elements/rectangle2.png";
 	final private static String sourceIconSelected = "/resources/elements/rectangle2_selected.png";
 	final private String sourceIconActivated = "/resources/elements/rectangle2_activated.png";
-	private Icon iconActivated;
-	private static final int ICON_WIDTH = 16;
-	private static final int ICON_HEIGHT = 32;
+	private Icon iconActivated;;
 	private Boolean isActivated = false;
 	/**
 	 * Current scaling factor for nodes' components
@@ -45,14 +42,13 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 	private final static Dimension DEFAULT_SIZE = new Dimension(70, 70);
 
 	public TransitionView(String id) {
-		super(id, sourceIconStandard, sourceIconSelected);
+		super(id, sourceIconStandard, sourceIconSelected, 16, 32);
 		iconActivated = new ImageIcon(TransitionView.class.getResource(sourceIconActivated));
 		this.init();
 	}
 
 	private void init() {
 		
-		this.customizeIcon();
 		setSize(DEFAULT_SIZE);
 		TransitionView.currentSize = TransitionView.currentSize == null ? DEFAULT_SIZE : TransitionView.currentSize;
         scale = TransitionView.currentTransitionScale;
@@ -95,7 +91,6 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 		this.isActivated = isActivated;
 		this.updateIcon();
 		this.updateIconSize(TransitionView.currentTransitionScale);
-		this.customizeIcon();
 		
 	}
 
@@ -142,15 +137,6 @@ public class TransitionView extends NodeView implements PTNINodeDTO {
 	@Override
 	public void setSelected(boolean selected) {
 		super.setSelected(selected);
-		this.customizeIcon();
 	}
-	
-	@Override
-	protected void customizeIcon() {
-    	Image image = ((ImageIcon) this.getIcon()).getImage();
-		image = image.getScaledInstance(ICON_WIDTH, ICON_HEIGHT, Image.SCALE_SMOOTH);
-    	this.setIcon(new ImageIcon(image));
-	}
-
 
 }

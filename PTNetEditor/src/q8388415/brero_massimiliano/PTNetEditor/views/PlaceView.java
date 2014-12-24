@@ -2,9 +2,7 @@ package q8388415.brero_massimiliano.PTNetEditor.views;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
@@ -26,8 +24,6 @@ public class PlaceView extends NodeView {
 	final private static String sourceIconStandard = "/resources/elements/circle2.png";
     final private static String sourceIconSelected = "/resources/elements/circle2_selected.png";
     final private static Dimension DEFAULT_SIZE = new Dimension(50, 70);
-	private static final int ICON_WIDTH = 34;
-	private static final int ICON_HEIGHT = 34;
     private int token = 0;
     /**
 	 * Current scaling factor for nodes' components.
@@ -40,7 +36,7 @@ public class PlaceView extends NodeView {
     private final String DOT_SIGN = "\u2022";
 
     public PlaceView(String id, int token) {
-        super(id, sourceIconStandard, sourceIconSelected);
+        super(id, sourceIconStandard, sourceIconSelected, 34, 34);
         this.init();
         this.updateToken(token);
         
@@ -55,7 +51,6 @@ public class PlaceView extends NodeView {
      */
     private void init() {
 
-    	this.customizeIcon();
     	this.setSize(DEFAULT_SIZE);
         PlaceView.currentSize = PlaceView.currentSize == null ? DEFAULT_SIZE : PlaceView.currentSize;
         scale = PlaceView.currentPlaceScale;
@@ -159,15 +154,6 @@ public class PlaceView extends NodeView {
 	@Override
 	public void setSelected(boolean selected) {
 		super.setSelected(selected);
-		this.customizeIcon();
-	}
-
-	@Override
-	protected void customizeIcon() {
-    	Image image = ((ImageIcon) this.getIcon()).getImage();
-		image = image.getScaledInstance(ICON_WIDTH, ICON_HEIGHT, Image.SCALE_SMOOTH);
-    	this.setIcon(new ImageIcon(image));
-		
 	}
 
 }
