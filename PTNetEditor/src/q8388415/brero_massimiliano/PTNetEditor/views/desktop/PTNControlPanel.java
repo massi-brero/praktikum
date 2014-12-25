@@ -40,6 +40,7 @@ public class PTNControlPanel extends JPanel {
 	private final String PLACE_ICON = "/resources/icons/size-place-icon.png";
 	private final String TRANSITION_ICON = "/resources/icons/size-rectangle-icon.png";
 	private final String ARROW_ICON = "/resources/icons/size-arrow-icon.png";
+	private final String ALL_NODES__ICON = "/resources/icons/size-nodes-icon.png";
 
 	public static PTNControlPanel getInstance() {
 
@@ -63,14 +64,15 @@ public class PTNControlPanel extends JPanel {
 		// add enlargement Panels
 		placeSizePanel = new PTNEnlargementPanel("Stellen", PLACE_ICON);
 		transitionSizePanel = new PTNEnlargementPanel("Transitionen", TRANSITION_ICON);
-		allNodesSizePanel = new PTNEnlargementPanel("Alle Knoten", "");
+		allNodesSizePanel = new PTNEnlargementPanel("Alle Knoten", ALL_NODES__ICON);
 		arrowHeadSizePanel = new PTNEnlargementPanel("Pfeilspitzen", ARROW_ICON);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 
+		controllerPanel.add(arrowHeadSizePanel);
 		controllerPanel.add(placeSizePanel);
 		controllerPanel.add(transitionSizePanel);
-		controllerPanel.add(arrowHeadSizePanel);
 		controllerPanel.add(allNodesSizePanel);
+		
 
 		this.setSize(new Dimension((int)(this.desktop.getSize().getWidth()), 20));
 		

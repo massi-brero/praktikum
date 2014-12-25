@@ -116,6 +116,7 @@ public class PTNMenu extends JMenuBar {
 		menu.setMnemonic('D');
 		JMenuItem item1 = new JMenuItem("Schreibtisch vergrößern");
 		JMenuItem item2 = new JMenuItem("Schreibtisch löschen");
+		JMenuItem item3 = new JMenuItem("Beenden");
 		
 		
 		item1.setIcon(this.getIcon("/resources/icons/desktop-size.png"));
@@ -138,9 +139,18 @@ public class PTNMenu extends JMenuBar {
 			}
 		});
 		
+		item3.setIcon(this.getIcon("/resources/icons/exit-icon.png"));
+		item3.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		
 		
 		menu.add(item1);
 		menu.add(item2);
+		menu.add(item3);
 		
 		return menu;
 	}
