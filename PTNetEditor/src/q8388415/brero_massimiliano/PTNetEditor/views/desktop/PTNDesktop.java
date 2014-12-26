@@ -178,12 +178,13 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	@Override
 	public void paintComponent(Graphics g) {
 
-		super.paintComponent(g);
-		
-		synchronized (arcs) {
-			drawArcs(g);
+		synchronized (nodes) {
+			super.paintComponent(g);
+			synchronized (arcs) {
+				drawArcs(g);
+			}
 		}
-		
+
 		if (getSize().width > maxSize.width || getSize().height > maxSize.height) {
 
 			if (getSize().width > maxSize.width)
@@ -203,13 +204,17 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	 */
 	@Override
 	public void paintImmediately(Rectangle bounds) {
-		super.paintImmediately(bounds);
-		drawArcs(this.getGraphics());
+		synchronized (nodes) {
+			synchronized (arcs) {
+				super.paintImmediately(bounds);
+				drawArcs(this.getGraphics());
+			}
+		}
 	}
 
 	/**
 	 * Draws all arcs currently in arcs hashTable. There'a monitor on arcs just
-	 * in case tanother thread (like in desktop controller) is manipulating the
+	 * in case another thread (like in desktop controller) is manipulating the
 	 * list while this method is called at the same time.
 	 * 
 	 * @param g
@@ -394,13 +399,13 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	public void deleteSelectedNodes() {
 
 		Iterator<NodeView> it = getNodeViews().iterator();
-		/** 
-		* We store the nodes we want to delete so we don't manipulate the
-		* iterator and remove stuff while it's still going through our list
-		*/
+		/**
+		 * We store the nodes we want to delete so we don't manipulate the
+		 * iterator and remove stuff while it's still going through our list
+		 */
 		ArrayList<NodeView> nodesToRemove = new ArrayList<NodeView>();
 
-		synchronized(nodes) {		
+		synchronized (nodes) {
 			if (!getNodeViews().isEmpty()) {
 				while (it.hasNext()) {
 					NodeView node = (NodeView) it.next();
@@ -410,17 +415,18 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 						node.setVisible(false);
 					}
 				}
-				
+
 				it = nodesToRemove.iterator();
 				// now we remove them nodes from our precious list
+
 				while (it.hasNext()) {
 					netController.removeNodeAndArcs(it.next());
 				}
-				
+				this.repaint();
 			}
 		}
 	}
-	
+
 	/**
 	 * Removes selected arcs and tells the controller to erase their models too
 	 * and update the net.
@@ -450,10 +456,9 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 				while (it.hasNext()) {
 					netController.removeArcFromNetAndDesktop(it.next().getKey());
 				}
-				
+				this.repaint();
 			}
 		}
-
 
 	}
 

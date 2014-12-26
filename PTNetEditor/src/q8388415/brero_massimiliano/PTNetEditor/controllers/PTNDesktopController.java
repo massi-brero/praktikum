@@ -313,11 +313,11 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	}
 
 	/**
-	 * A monitor on both the views list ensures that only
-     * one thread may manipulate those lists at the same time.
-     * 
-     * @see PTNDesktop
-     * @see PTNNetController
+	 * A monitor on both view lists (nodes and arcs) ensures that only one
+	 * thread may manipulate those lists at the same time.
+	 * 
+	 * @see PTNDesktop
+	 * @see PTNNetController
 	 */
 	@Override
 	public void run() {
@@ -334,25 +334,29 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 			 */
 			if (PTNAppController.deselectAll) {
 				synchronized (desktop.getArcViews()) {
-					desktop.deselectNodes();
-					desktop.deselectArcs();
-					PTNAppController.deselectAll = false;
-					desktop.getArcViews().notifyAll();
+					synchronized (desktop.getNodeViews()) {
+						desktop.deselectNodes();
+						desktop.deselectArcs();
+						PTNAppController.deselectAll = false;
+						desktop.getArcViews().notifyAll();
+						desktop.getNodeViews().notifyAll();
+					}
 				}
 			} else if (PTNAppController.deleteSelection && (desktop.hasSelectedNodes() || desktop.hasSelectedArcs())) {
-
 				PTNAppController.deleteSelection = false;
-				synchronized (desktop.getArcViews()) {
-					if (JOptionPane.OK_OPTION == (JOptionPane.showConfirmDialog(desktop, "Wollen Sie die Elemente wirklich löschen?", "Löschen", JOptionPane.WARNING_MESSAGE))) {
-						desktop.deleteSelectedArcs();
-						desktop.deleteSelectedNodes();
-						desktop.getArcViews().notifyAll();
-					}
+				if (JOptionPane.OK_OPTION == (JOptionPane.showConfirmDialog(desktop, "Wollen Sie die Elemente wirklich löschen?", "Löschen", JOptionPane.WARNING_MESSAGE))) {
+					synchronized (desktop.getArcViews()) {
+						synchronized (desktop.getNodeViews()) {
+							desktop.deleteSelectedArcs();
+							desktop.deleteSelectedNodes();
+							desktop.getArcViews().notifyAll();
+							desktop.getNodeViews().notifyAll();
 
+						}
+					}
 				}
 			}
 		}
-
 	}
 
 	private void resetCurrentDraggingPosition() {

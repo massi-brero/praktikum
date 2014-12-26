@@ -216,7 +216,6 @@ public class PTNNetController implements Runnable {
         net.removeNode(node);
         desktop.getNodeViews().remove(nodeView);
 
-        desktop.paintImmediately(desktop.getBounds());
     }
 
     /**
@@ -255,9 +254,6 @@ public class PTNNetController implements Runnable {
             arc = it.next().getValue();
             this.removeArcFromNetAndDesktop(arc.getId());
         }
-
-        desktop.repaint();
-
     }
 
     /**
@@ -357,7 +353,7 @@ public class PTNNetController implements Runnable {
         while (true) {
             
             try {
-                Thread.sleep(100);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 // continue waiting even if interrupted
             }
@@ -387,7 +383,6 @@ public class PTNNetController implements Runnable {
                 			PTNAppController.redrawArcs = false;
                 			
                 		}
-            			arcs.notifyAll();
 					}
                         arcViewList.notifyAll();
 				}

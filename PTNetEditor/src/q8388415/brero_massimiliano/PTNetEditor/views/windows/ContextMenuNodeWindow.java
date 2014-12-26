@@ -50,12 +50,7 @@ public class ContextMenuNodeWindow extends JPopupMenu implements MouseListener, 
 	public void mouseClicked(java.awt.event.MouseEvent e) {}
 
 	@Override
-	public void mousePressed(java.awt.event.MouseEvent e) {
-		if (nodeView.getLocationOnScreen() != null)
-			this.setLocation(nodeView.getLocationOnScreen());
-		else
-			this.setLocation(e.getPoint());
-	}
+	public void mousePressed(java.awt.event.MouseEvent e) {}
 
 	@Override
 	public void mouseReleased(java.awt.event.MouseEvent e) {
@@ -81,7 +76,4 @@ public class ContextMenuNodeWindow extends JPopupMenu implements MouseListener, 
 		this.setLocation(nodeView.getLocationOnScreen());
 	}
 
-
-
-	
 }
