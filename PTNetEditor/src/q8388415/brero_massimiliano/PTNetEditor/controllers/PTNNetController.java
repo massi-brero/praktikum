@@ -47,6 +47,7 @@ public class PTNNetController implements Runnable {
 
     /**
      * Setting up nodes when application reads a PNML file.
+     * Needs a set up net model as base.
      * 
      * @return void
      */

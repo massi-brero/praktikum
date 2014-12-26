@@ -183,7 +183,6 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 
 		// by reseting the icon we won't loose on quality due to scaling fractions when we have repeated scaling operations
 		this.updateIcon();
-		System.out.println(changeHeight);
 		Image image = ((ImageIcon) this.getIcon()).getImage();
 		image = image.getScaledInstance(iconWidth + changeWidth * scale, iconHeight + changeHeight * scale, Image.SCALE_SMOOTH);
 		this.setIcon(new ImageIcon(image));

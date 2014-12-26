@@ -54,7 +54,7 @@ public class ResizeDesktopWindow extends JDialog implements ActionListener {
 		this.addToPanel(widthField);
 		
 		heightField = new JTextField(String.valueOf((int)currentSize.getHeight()), 20);
-		this.addToPanel(new JLabel("heightField"));
+		this.addToPanel(new JLabel("Höhe"));
 		this.addToPanel(heightField);
 		
 		

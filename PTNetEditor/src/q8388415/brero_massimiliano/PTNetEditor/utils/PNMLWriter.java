@@ -82,8 +82,8 @@ public final class PNMLWriter {
      * @throws PTNWriteException 
      */
     public void startXMLDocument() throws PTNWriteException {
-	System.out.println(pnmlDatei);
-        try {
+
+    	try {
             FileOutputStream fos = new FileOutputStream(pnmlDatei);
             XMLOutputFactory factory = XMLOutputFactory.newInstance();
             writer = factory.createXMLStreamWriter(fos, "UTF-8");

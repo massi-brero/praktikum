@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -187,14 +188,40 @@ public class PTNNodeHelper implements ActionListener {
 	}
 	
 	/**
-	 * Generates a unique id concatenating id prefix and number of nodes 
-	 * added so far +1.
+	 * Generates a unique id concatenating id prefix and a random number.
+	 * It also checks id number is already present
 	 * 
 	 * @return
 	 * 		String new id for an arc
 	 */
 	public String generateId() {
-		return PREFIX_ID.concat(String.valueOf(net.getNumberOfNodes()+1));
+
+		Boolean idIsUnique = true;
+		HashMap<String, PTNNode> nodes = net.getNodes();
+        PTNNode node = null;
+        int number = 0;
+        String id = "";
+		
+		do {
+			idIsUnique = true;
+			number = (int)(Math.random()*1E6);
+			id = PREFIX_ID.concat(String.valueOf(number));
+	        Iterator<Map.Entry<String, PTNNode>> it = nodes.entrySet().iterator();
+			
+			while (it.hasNext()) {
+				node = it.next().getValue();
+
+				if (id.equals(node.getId())) {
+					idIsUnique = false;
+					break;
+				}
+
+			}
+			
+		} while (!idIsUnique);
+		
+		
+		return id;
 	}
 
 	/**

@@ -3,6 +3,7 @@ package q8388415.brero_massimiliano.PTNetEditor.utils;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -321,13 +322,39 @@ public class PTNArcHelper {
 	}
 
 	/**
-	 * Generates a unique id concatenating id prefix and number of arcs added so
-	 * far +1.
+	 * Generates a unique id concatenating id prefix and a random number.
+	 * It also checks id number is already present
 	 * 
-	 * @return String new id for an arc
+	 * @return
+	 * 		String new id for an arc
 	 */
 	public String generateId() {
-		return PREFIX_ID.concat(String.valueOf(net.getNumberOfArcs() + 1));
+
+		Boolean idIsUnique = true;
+		HashMap<String, PTNArc> arcs = net.getArcs();
+        PTNArc arc = null;
+        int number = 0;
+        String id = "";
+		
+		do {
+			number = (int)(Math.random()*1E6);
+			id = PREFIX_ID.concat(String.valueOf(number));
+	        Iterator<Map.Entry<String, PTNArc>> it = arcs.entrySet().iterator();
+			
+			while (it.hasNext()) {
+				arc = it.next().getValue();
+				
+				if (id.equals(arc.getId())) {
+					idIsUnique = false;
+					break;
+				}
+
+			}
+			
+		} while (!idIsUnique);
+		
+		
+		return id;
 	}
 
 	/**
