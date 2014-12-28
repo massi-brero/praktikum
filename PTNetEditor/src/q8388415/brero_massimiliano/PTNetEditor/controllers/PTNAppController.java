@@ -83,16 +83,12 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
+	public void keyTyped(KeyEvent arg0) {}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String cmd = e.getActionCommand();
-		// System.out.println(cmd);
 
 		switch (cmd) {
 		case "Markierung aufheben":

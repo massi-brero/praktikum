@@ -38,7 +38,6 @@ public class PTNSimulationInterpreter {
 	 * @throws PTNSimulationException
 	 */
 	public void handleClick(TransitionView transitionView) throws PTNSimulationException {
-		
 		nodeHelper = new PTNNodeHelper(desktop, net);
 		HashMap<String, PTNNode> precedingPlaces = net.getPredecessors(transitionView.getId());
 		HashMap<String, PTNNode> succeedingPlaces = net.getSuccessors(transitionView.getId());
@@ -75,10 +74,14 @@ public class PTNSimulationInterpreter {
 	 * 
 	 * @see PTNTokenOperations
 	 * @param places
-	 * @param operation
+	 * 		Either preceding places which leads to an decrement of their tokens or
+	 * 		succeeding places whose tokens will be incremented.
+	 * @param operation {@link PTNTokenOperations}
+	 * 		INCREMENT or DECREMENT
 	 * @throws PTNSimulationException
 	 */
-	private void updateTokenOfPlaces(HashMap<String, PTNNode> places, PTNTokenOperations operation) throws PTNSimulationException {
+	private void updateTokenOfPlaces(HashMap<String, PTNNode> places, PTNTokenOperations operation) 
+			throws PTNSimulationException {
 		Iterator<Map.Entry<String, PTNNode>> it = places.entrySet().iterator();
 
 		while (it.hasNext()) {
@@ -107,6 +110,10 @@ public class PTNSimulationInterpreter {
 						((PTNPlace) node).setToken(--token);
 						((PlaceView) desktop.getNodeViewById(node.getId())).updateToken(token);
 					} else {
+						/**
+						 * This case should be already be inhibited by the controller.
+						 * If it's not a PTNSimulationException is thrown.
+						 */
 						simError = true;
 						throw new PTNSimulationException("Dieser Simulationsschritt ist nicht möglich");
 					}

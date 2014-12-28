@@ -1,10 +1,13 @@
 package q8388415.brero_massimiliano.PTNetEditor.views;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -30,7 +33,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	protected ImageIcon iconStandard;
 	protected ImageIcon iconSelected;
 	protected JLabel nameLabel;
-	protected final int LABEL_TEXT_LENGTH = 11;
+	protected final int LABEL_TEXT_LENGTH = 14;
 	private boolean selected = false;
 	protected int scale = 0;
 	final int scaleFactor = 1;
@@ -66,11 +69,13 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 		this.setLayout(new FlowLayout());
 		this.setDoubleBuffered(true);
 		//this.setBorder(BorderFactory.createLineBorder(Color.black));
+		//nameLabel.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.setHorizontalAlignment(JLabel.CENTER);
 		this.setOpaque(false);
 		this.setVerticalAlignment(JLabel.CENTER);
 		this.setHorizontalTextPosition(JLabel.CENTER);
 		this.setVerticalTextPosition(JLabel.CENTER);
+		nameLabel.setHorizontalTextPosition(JLabel.CENTER);
 	
 	}
 	
@@ -209,8 +214,12 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	
 	protected void updateLabelTextSize(int factor) {
 		int changeSize = factor;
+		int newWidth = this.getWidth();
 		Font nodeLabelFont = nameLabel.getFont();
+		nameLabel.setPreferredSize(new Dimension(this.getWidth() -2, nameLabel.getHeight()));
+
 		this.nameLabel.setFont(new Font(nodeLabelFont.getFontName(), Font.PLAIN, (int)(nodeLabelFont.getSize() + changeSize)));
+		nameLabel.setHorizontalAlignment(JLabel.CENTER);
 	}
 
 
