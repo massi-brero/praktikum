@@ -1,13 +1,11 @@
 package q8388415.brero_massimiliano.PTNetEditor.views;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -214,7 +212,6 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	
 	protected void updateLabelTextSize(int factor) {
 		int changeSize = factor;
-		int newWidth = this.getWidth();
 		Font nodeLabelFont = nameLabel.getFont();
 		nameLabel.setPreferredSize(new Dimension(this.getWidth() -2, nameLabel.getHeight()));
 
