@@ -73,8 +73,8 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 		this.setVerticalAlignment(JLabel.CENTER);
 		this.setHorizontalTextPosition(JLabel.CENTER);
 		this.setVerticalTextPosition(JLabel.CENTER);
-		nameLabel.setHorizontalTextPosition(JLabel.CENTER);
-	
+		System.out.println(nameLabel.getFontMetrics(nameLabel.getFont()).getHeight());
+			
 	}
 	
 	/**
@@ -105,6 +105,11 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	    this.setToolTipText(label);
 	    super.setName(adjustedLabel);
 		nameLabel.setText(adjustedLabel);
+		nameLabel.setHorizontalAlignment(JLabel.CENTER);
+		nameLabel.setPreferredSize(new Dimension(this.getWidth() - 2, 
+				nameLabel.getFontMetrics(nameLabel.getFont()).getHeight()));
+
+
 	}
 
 	public boolean getSelected() {
@@ -213,8 +218,8 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	protected void updateLabelTextSize(int factor) {
 		int changeSize = factor;
 		Font nodeLabelFont = nameLabel.getFont();
-		nameLabel.setPreferredSize(new Dimension(this.getWidth() -2, nameLabel.getHeight()));
-
+		nameLabel.setPreferredSize(new Dimension(this.getWidth() -2, 
+												 nameLabel.getFontMetrics(nameLabel.getFont()).getHeight()));
 		this.nameLabel.setFont(new Font(nodeLabelFont.getFontName(), Font.PLAIN, (int)(nodeLabelFont.getSize() + changeSize)));
 		nameLabel.setHorizontalAlignment(JLabel.CENTER);
 	}
