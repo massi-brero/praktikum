@@ -73,7 +73,6 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 		this.setVerticalAlignment(JLabel.CENTER);
 		this.setHorizontalTextPosition(JLabel.CENTER);
 		this.setVerticalTextPosition(JLabel.CENTER);
-		System.out.println(nameLabel.getFontMetrics(nameLabel.getFont()).getHeight());
 			
 	}
 	

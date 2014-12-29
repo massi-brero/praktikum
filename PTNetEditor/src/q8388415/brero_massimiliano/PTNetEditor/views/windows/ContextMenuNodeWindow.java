@@ -73,7 +73,8 @@ public class ContextMenuNodeWindow extends JPopupMenu implements MouseListener, 
 
 	@Override
 	public void ancestorMoved(AncestorEvent event) {
-		this.setLocation(nodeView.getLocationOnScreen());
+		if (this.isVisible())
+			this.setLocation(nodeView.getLocationOnScreen());
 	}
 
 }

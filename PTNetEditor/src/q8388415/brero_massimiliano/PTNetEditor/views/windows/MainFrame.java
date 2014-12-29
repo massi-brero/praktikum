@@ -69,10 +69,10 @@ public class MainFrame extends JFrame implements PTNIModeListener {
 	 */
 	@Override
 	public void startSimulationMode() {
+		
 		controlPanel.setVisible(false);
 		menu.setBackground(Color.RED);
-		menu.add(simLabel);
-		
+		menu.add(simLabel);		
 		menu.switchOffNodeMenu();
 		menu.switchOffFileMenu();
 
@@ -84,8 +84,7 @@ public class MainFrame extends JFrame implements PTNIModeListener {
 	@Override
 	public void startEditorMode() {
 
-		controlPanel.setVisible(true);
-		
+		controlPanel.setVisible(true);		
 		menu.setBackground(null);
 		menu.remove(simLabel);
 		menu.switchOnNodeMenu();
