@@ -105,7 +105,7 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 		Polygon p = this.getArrowHeadPolygon();
 
 		/**
-		* This methos allows us to set fixed anchor point, so we don't have
+		* This method allows us to set fixed anchor point, so we don't have
 		* to calculate for the "classic" translate method of AffineTransform.
 		* */
 		rotateTrans.setToIdentity();
@@ -127,8 +127,8 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 		// it would involve quite some translating computations and multiplying
 		// those matrices is also
 		// a little more complex than this simple but effective approach;
-		p.addPoint((int) (end.x - ARROW_SIZE_X * currentScale), (int) (end.y - ARROW_SIZE_Y * currentScale));
-		p.addPoint((int) (end.x - ARROW_SIZE_X * currentScale), (int) (end.y + ARROW_SIZE_Y * currentScale));
+		p.addPoint((int) (Math.round(end.x - ARROW_SIZE_X * currentScale)), (int) Math.round((end.y - ARROW_SIZE_Y * currentScale)));
+		p.addPoint((int) (Math.round(end.x - ARROW_SIZE_X * currentScale)), (int) Math.round((end.y + ARROW_SIZE_Y * currentScale)));
 
 		return p;
 	}
@@ -144,7 +144,9 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 	 * @return {@link Boolean}
 	 */
 	public Boolean contains(Point p) {
-		return Line2D.ptSegDist(this.getStart().x, this.getStart().y, this.getEnd().x, this.getEnd().y, p.getX(), p.getY()) < SENSITIVITY;
+		return Line2D.ptSegDist(this.getStart().x, this.getStart().y, 
+								this.getEnd().x, this.getEnd().y, 
+								p.getX(), p.getY()) < SENSITIVITY;
 	}
 
 	public Point getStart() {
