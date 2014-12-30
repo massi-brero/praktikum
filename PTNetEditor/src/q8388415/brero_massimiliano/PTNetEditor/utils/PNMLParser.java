@@ -236,10 +236,16 @@ public class PNMLParser {
                 y = attr.getValue();
             }
         }
-        if (x != null && y != null && lastId != null) {
-            setPosition(lastId, x, y);
+        if (x != null && !x.isEmpty()
+        		&& y != null && !y.isEmpty()) {
+        	if (Double.parseDouble(x) < 0 || Double.parseDouble(y) < 0) {
+        		String message = "Ein Element enthält ungültige Koordinaten! Einlesen wurde gestoppt.";
+        		System.err.println(message);
+                throw new PTNNetContructionException(message);   		
+        	}
+        		setPosition(lastId, x, y);
         } else {
-            String message = "Unvollst�ndige Position wurde verworfen!";
+            String message = "Unvollständige Position wurde verworfen! Einlesen wurde gestoppt.";
             System.err.println(message);
             throw new PTNNetContructionException(message);
         }
@@ -331,7 +337,7 @@ public class PNMLParser {
                     && target != null && !target.equals("")) {
             newArc(arcId, source, target);
         } else {
-            String message = "Unvollst�ndige Kante wurde verworfen! Das Einlesen wurde gestoppt!";
+            String message = "Unvollständige Kante wurde verworfen! Das Einlesen wurde gestoppt!";
             System.err.println(message);
             throw new PTNNetContructionException(message);
         }
@@ -403,8 +409,7 @@ public class PNMLParser {
      *      Beschriftungstext des Elements
      */
     public void setName(final String id, final String name) {
-        System.out.println("Setze den Namen des Elements " + id + " auf "
-                + name);
+        System.out.println("Setze den Namen des Elements " + id + " auf " + name);
     }
 
     /**

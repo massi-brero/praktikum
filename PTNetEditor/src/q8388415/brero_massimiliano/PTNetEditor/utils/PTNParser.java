@@ -109,8 +109,8 @@ public class PTNParser extends PNMLParser {
         PTNNode node = net.getNodeById(id);
 
         try {
-            int xPos = Integer.parseInt(x);
-            int yPos = Integer.parseInt(y);
+            int xPos = (int)Math.floor(Double.parseDouble(x));
+            int yPos = (int)Math.floor(Double.parseDouble(y));
 
             if (null != node) {
                 Point pos = new Point(xPos, yPos);
