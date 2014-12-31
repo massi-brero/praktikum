@@ -39,7 +39,7 @@ public class PlaceView extends NodeView {
         super(id, sourceIconStandard, sourceIconSelected, 34, 34);
         this.init();
         this.updateToken(token);
-        
+ 
     }
 
     /**
@@ -86,7 +86,6 @@ public class PlaceView extends NodeView {
      * @return void
      */
     public void updateToken(int token) {
-
         try {
 
             switch (token) {

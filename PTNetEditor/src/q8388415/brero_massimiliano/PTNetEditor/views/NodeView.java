@@ -1,11 +1,13 @@
 package q8388415.brero_massimiliano.PTNetEditor.views;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -66,11 +68,11 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 		this.initIcon();
 		this.setLayout(new FlowLayout());
 		this.setDoubleBuffered(true);
-		//this.setBorder(BorderFactory.createLineBorder(Color.black));
-		//nameLabel.setBorder(BorderFactory.createLineBorder(Color.black));
-		this.setHorizontalAlignment(JLabel.CENTER);
+//		this.setBorder(BorderFactory.createLineBorder(Color.black));
+//		nameLabel.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.setOpaque(false);
 		this.setVerticalAlignment(JLabel.CENTER);
+		this.setHorizontalAlignment(JLabel.CENTER);
 		this.setHorizontalTextPosition(JLabel.CENTER);
 		this.setVerticalTextPosition(JLabel.CENTER);
 			
@@ -85,6 +87,11 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 		this.setIcon(ic);
 	}
 	
+	/**
+	 * 
+	 * @return {@link JLabel}
+	 * 		Name label for this node thait will be rendered.
+	 */
 	public JLabel getNameLabel() {
 		return nameLabel;
 	}
@@ -111,10 +118,20 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 
 	}
 
+	/**
+	 * 
+	 * @return Boolean
+	 */
 	public boolean getSelected() {
 		return selected;
 	}
 
+	/**
+	 * If a nodes' status is set on selected the icon will
+	 * be changed.
+	 * 
+	 * @param selected
+	 */
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 		if (selected)
@@ -126,14 +143,24 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	}
 
 
+	/**
+	 * @return {@link PTNNodeTypes}
+	 */
 	public PTNNodeTypes getType() {
 		return type;
 	}
 
+	/**
+	 * 
+	 * @param type {@link PTNNodeTypes}
+	 */
 	public void setType(PTNNodeTypes type) {
 		this.type = type;
 	}
 	
+	/**
+	 * 
+	 */
 	@Override
 	public void increaseScale() {
 		
@@ -144,6 +171,9 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 		
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public void decreaseScale() {
 		
@@ -154,6 +184,9 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 
 	}
 
+	/**
+	 * Increase or decrease scale.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -205,11 +238,19 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	    
 	}
 
+	/**
+	 * 
+	 * @return float
+	 */
 	public float getScale() {
 		return scale;
 	}
 
 
+	/**
+	 * 
+	 * @param scale int
+	 */
 	public void setScale(int scale) {
 		this.scale = scale;
 	}
@@ -217,17 +258,23 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	protected void updateLabelTextSize(int factor) {
 		int changeSize = factor;
 		Font nodeLabelFont = nameLabel.getFont();
-		nameLabel.setPreferredSize(new Dimension(this.getWidth() -2, 
+		nameLabel.setPreferredSize(new Dimension(this.getWidth() - 2, 
 												 nameLabel.getFontMetrics(nameLabel.getFont()).getHeight()));
 		this.nameLabel.setFont(new Font(nodeLabelFont.getFontName(), Font.PLAIN, (int)(nodeLabelFont.getSize() + changeSize)));
 		nameLabel.setHorizontalAlignment(JLabel.CENTER);
 	}
 
-
+	/**
+	 * @return String
+	 */
 	public String getId() {
 		return id;
 	}
 
+	/**
+	 * 
+	 * @param id String
+	 */
 	public void setId(String id) {
 		this.id = id;
 	}
