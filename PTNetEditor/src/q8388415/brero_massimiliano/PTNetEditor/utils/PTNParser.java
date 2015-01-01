@@ -86,21 +86,28 @@ public class PTNParser extends PNMLParser {
 
     }
 
+    /**
+     * If 2 arcs have the same id or the same source/target combination an {@link PTNNetContructionException}
+     * is thrown.
+     */
     @Override
     public void newArc(final String id, final String source, final String target) throws PTNNetContructionException {
         /**
          * TODO Abfangen von zwei Kanten mit gleicher Start/Ziel-Kombi.
          */
-        if (!usedIdArcs.contains(id)) {
-            usedIdArcs.add(id);
-            arcList.add(new ArcInformationListItem(id, source, target));
+        if (usedIdArcs.contains(id)) {
+        	throw new PTNNetContructionException("Die Kanten-ID " + id + " wurde mehrfach vergeben");
+        } else if (sourceTargetCombinationAlreadyExists(id, source, target)){
+        	throw new PTNNetContructionException("Die Kante " + id + " existiert bereits unter einer anderen ID");
         } else {
-            throw new PTNNetContructionException("Die Kanten-ID " + id + " wurde mehrfach vergeben");
+        	usedIdArcs.add(id);
+            arcList.add(new ArcInformationListItem(id, source, target));
         }
 
     }
 
-    @Override
+
+	@Override
     /**
      * If no node with the given id was found we choose to throw an error,
      * because something definitely went wrong.
@@ -179,13 +186,44 @@ public class PTNParser extends PNMLParser {
         maxWidth = pos.getX() > maxWidth ? pos.getX() : maxWidth;
 
     }
+    
+    /**
+     * 
+     * Checks if there already is an arc with the same source/target combination
+     * but different id.
+     * 
+     * @param id String
+     * @param source arcList
+     * @param target arcList
+     * @return Boolean
+     */
+	private boolean sourceTargetCombinationAlreadyExists(String id, String source, String target) {
+		Boolean combiExists = false;
+		
+		if (!id.isEmpty() && !source.isEmpty() && !target.isEmpty()) {
+			Iterator<ArcInformationListItem> it = arcList.iterator();
+			
+			while (it.hasNext()) {
+				ArcInformationListItem arc = it.next();
+				if (arc.getSource().equals(source) 
+						&& arc.getTarget().equals(target)
+							&& !arc.getId().equals(id)) {
+					combiExists = true;
+					break;
+				}
+				
+			}
+			
+		}
+		return combiExists;
+	}
 
     /**
      * Generates arcs after parsing finished. Here we check if the 2 nodes
      * needed for our arc really exists. Otherwise an Exception will be thrown.
      * @throws PTNNetContructionException 
      */
-    public void handleParsingFinished() throws PTNNetContructionException {
+    protected void handleParsingFinished() throws PTNNetContructionException {
 
         Iterator<ArcInformationListItem> it = arcList.iterator();
         ArcInformationListItem item;

@@ -170,7 +170,7 @@ public class PNMLParser {
      *  Added hook for final works when XML was successfully parsed.
      * @throws PTNNetContructionException 
      */
-    public void handleParsingFinished() throws PTNNetContructionException {}
+    protected void handleParsingFinished() throws PTNNetContructionException {}
 
     /**
      * Diese Methode behandelt den Start neuer XML Elemente, in dem der Name des
