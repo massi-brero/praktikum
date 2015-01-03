@@ -18,8 +18,15 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.MainFrame;
  */
 public class PTNBootstrap {
 
+	/**
+	 * Object needed for main class to start application non-statically.
+	 */
     private static PTNBootstrap bootstrap;
+    /**
+     * Check if we already have an instance running.
+     */
     private static Boolean isRunning = false;
+    
     public PTNBootstrap() {
     }
 
@@ -53,7 +60,6 @@ public class PTNBootstrap {
         controlPanel.initialize(desktop, appControl);
         final PTNMenu menu = new PTNMenu(desktop, appControl, net);
 
-        this.setUpModeListeners();
         
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -64,10 +70,5 @@ public class PTNBootstrap {
         });
 
     }
-
-	private void setUpModeListeners() {
-		// TODO Auto-generated method stub
-		
-	}
     
 }

@@ -69,7 +69,8 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 	/**
 	 * Basic operations will be put in the controller, like initializing
-	 * attributes for buffered painting;
+	 * attributes for buffered painting. Adds needed listeners to Controllers
+	 * to identify desktop events.
 	 * 
 	 * @param appControl
 	 * @param net
