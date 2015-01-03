@@ -14,6 +14,12 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNPlace;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
+/**
+ * 
+ * 
+ * @author Laptop
+ *
+ */
 public class PTNParser extends PNMLParser {
 
     /**

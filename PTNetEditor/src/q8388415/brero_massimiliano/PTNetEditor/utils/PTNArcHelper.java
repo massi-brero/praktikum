@@ -27,7 +27,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 /**
  * Offers methods for dealing with arc computations, like normalizing their
- * start and end point.
+ * start and end point. It's technically a delegate for Desktop and net controller.
  * 
  * @author Laptop
  *
@@ -75,15 +75,14 @@ public class PTNArcHelper {
 	/**
 	 * Checks if node is source or target an delegates to the respective method.
 	 * 
-	 * @param centeredLocation
-	 *            Type: Point. Point right in the middle of the node icon.
-	 * @param source
-	 *            Type: PTNINodeDTO. Information about the node.
-	 * @param normalizeSource
-	 *            Type Boolean. Is normalization needed for starting or ending
-	 *            point of arc?
-	 * @return type: Point. New starting and ending points with the calculated
-	 *         offset.
+	 * @param centeredLocation Point 
+	 * 		Point right in the middle of the node icon.
+	 * @param source PTNINodeDTO
+	 * 		Information about the node.
+	 * @param normalizeSource Boolean P
+	 * 		Is the node a source or a target?
+	 * @return type: Point. 
+	 * 		New starting and ending points with the calculated offset.
 	 */
 	private Point addOffset(PTNArc arc, Boolean normalizeSource) {
 
@@ -181,13 +180,13 @@ public class PTNArcHelper {
 	 * or else we may get a little space between the arcs starting and ending
 	 * point and the icon image itself.
 	 * 
-	 * @param centeredLocation
-	 *            Type: Point. Point right in the middle of the node icon.
+	 * @param centeredLocation Point
+	 * 		Point right in the middle of the node icon.
 	 * @param nodeView
-	 * @param normalizeSource
-	 *            Type Boolean. Is node starting or ending point of arc?
-	 * @return type: Point. New starting and ending points with the calculated
-	 *         offset.
+	 * @param normalizeSource Boolean
+	 * 		Is node starting or ending point of arc?
+	 * @return Point
+	 * 		New starting and ending points with the calculated offset.
 	 */
 	private Point addOffsetToPlace(PTNArc arc, Boolean normalizeSource) {
 
@@ -219,13 +218,12 @@ public class PTNArcHelper {
 
 	/**
 	 * Computes and returns the gradient between two nodes.
+	 * It uses {@link Math#atan2(double)} which according to java
+	 * may not be to accurate at times.
 	 * 
-	 * @param source
-	 *            {@link PTNNode}
-	 * @param target
-	 *            {@link PTNNode}
-	 * @return 
-	 * 		{@link Double} Gradient between starting and ending point.
+	 * @param source {@link PTNNode}
+	 * @param target {@link PTNNode}
+	 * @return  {@link Double} Gradient between starting and ending point.
 	 */
 	private double getGradient(PTNNode source, PTNNode target) {
 		Point centeredLocationSource = this.getCenteredLocation(source);
@@ -237,10 +235,9 @@ public class PTNArcHelper {
 	/**
 	 * Calculates  location right in the middle of the node.
 	 * 
-	 * @param node
-	 * 		{@link PTNINodeDTO}
-	 * @return
-	 * 		{@link Point} center of Node.
+	 * @param node {@link PTNINodeDTO}
+	 * @return {@link Point} 
+	 * 		Center of Node.
 	 */
 	public Point getCenteredLocation(PTNINodeDTO node) {
 		
@@ -258,7 +255,7 @@ public class PTNArcHelper {
 
 	/**
 	 * 
-	 * @param arcView
+	 * @param arcView {@link ArcView}
 	 *            Adds an arc as scale listener.
 	 */
 	public void addArcListener(ArcView arcView) {
@@ -296,6 +293,10 @@ public class PTNArcHelper {
 
 	}
 
+	/**
+	 * If the user tries to draw an arc that this Error window will pop up.
+	 * It will also show if theres an arc with identical start and and end point.
+	 */
 	public void showErrorPaneDoubleArc() {
 		JOptionPane.showConfirmDialog(desktop, "Diese Kante existiert bereits oder sie überlappt sich exakt mit einer existierenden!", "Schon vorhanden.",
 				JOptionPane.PLAIN_MESSAGE);
@@ -360,8 +361,7 @@ public class PTNArcHelper {
 	/**
 	 * Checks if an arc on the desktop was clicked and updates its selection state.
 	 * 
-	 * @param 
-	 * 		MouseEvent
+	 * @param MouseEvent
 	 */
 	public void handleArcSelection(MouseEvent e) {
 

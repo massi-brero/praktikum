@@ -30,6 +30,9 @@ public class PTNFileController implements PTNIFileListener {
 	private PTNDesktop desktop = null;
 	private PTNNet net;
 	private PTNFileReader readModel;
+	/**
+	 * Needed to remember which folder was opened last time.
+	 */
 	private static File lastOpenedFile = null;
 	private static File lastSavedFile = null;
 
@@ -46,8 +49,11 @@ public class PTNFileController implements PTNIFileListener {
 	}
 
 	/**
-     * 
-     */
+	 * File listener method. Calls {@link PTNFileController#writeFileDialog()}
+	 * 
+	 * @return int
+	 * 		Returns 0 if everything went smoothly.
+	 */
 	@Override
 	public int writeToFile(PTNNet net) {
 		
@@ -57,8 +63,9 @@ public class PTNFileController implements PTNIFileListener {
 	}
 
 	/**
-	 * Calls read method in file model. So views do not really have to know the
-	 * file model. And we don not need to make a model a listener. If there was
+	 * File listener method. Calls read method in file model. 
+	 * So views do not really have to know the file model. And we do 
+	 * not need to make a model a listener. If there was
 	 * an error while reading the method will stop the reading process.
 	 * 
 	 * @return void
@@ -167,8 +174,9 @@ public class PTNFileController implements PTNIFileListener {
 	/**
 	 * Check if user really wants to overwrite an existing file;
 	 * 
-	 * @param file
-	 * @return
+	 * @param File
+	 * @return Boolean
+	 * 		True if ressource shall be saved false in all other cases.
 	 */
 	private Boolean confirmSave(File file) {
 
@@ -188,12 +196,21 @@ public class PTNFileController implements PTNIFileListener {
 
 	}
 	
-
+	/**
+	 * Error Warning while writing. Message will be given by model.
+	 * 
+	 * @param message String
+	 */
 	private void callWriteWarning(String message) {
 		JOptionPane.showConfirmDialog(desktop, message, "Schreibfehler", JOptionPane.WARNING_MESSAGE);
 
 	}
 	
+	/**
+	 * Error Warning while reading. Message will be given by model.
+	 * 
+	 * @param message String
+	 */
 	private void callNetContructionWarning(String message) {
 		JOptionPane.showConfirmDialog(desktop, message, "Import Fehler", JOptionPane.WARNING_MESSAGE);
 	}

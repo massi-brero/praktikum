@@ -16,19 +16,35 @@ import q8388415.brero_massimiliano.PTNetEditor.utils.PTNParser;
  */
 public class PTNFileReader {
 
+	/**
+	 * {@link PTNParser}
+	 */
     private PTNParser parser = null;
+    /**
+     * Needed to update the desktop to the net that is described in the file.
+     */
     private Dimension desktopSize = null;
 
+    /**
+     * Getter 
+     * @return {@link PTNParser}
+     */
     public PTNParser getParser() {
         return parser;
     }
 
+    /**
+     * Setter
+     * @param parser {@link PTNParser}
+     */
     public void setParser(PTNParser parser) {
         this.parser = parser;
     }
 
     /**
      * Reads file and builds the net that is used throughout this application.
+     * The desktop size is set according to {@link PTNParser#getMaxHeight()}
+     * and {@link PTNParser#getMaxWidth()}.
      * 
      * @param pnm
      *            PNML file
@@ -48,14 +64,25 @@ public class PTNFileReader {
 
 
     }
+    
+    /**
+     * Getter
+     * 
+     * @return Dimension
+     * 		The size we need to display the net that was parsed.
+     */
     public Dimension getDesktopSize() {
         return desktopSize;
     }
 
+   /**
+    * Setter
+    * 
+    * @param desktopSize Dimension
+    * 		The size we need to display the net that was parsed.
+    */
     public void setDesktopSize(Dimension desktopSize) {
         this.desktopSize = desktopSize;
     }
 
-    
-    
 }

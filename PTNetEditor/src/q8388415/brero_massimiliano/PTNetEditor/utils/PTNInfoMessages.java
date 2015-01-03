@@ -1,7 +1,8 @@
 package q8388415.brero_massimiliano.PTNetEditor.utils;
 
 /**
- *  A simple Container for information messages that can be called in a static manner.
+ *  A simple Container for information messages used more than once 
+ *  that can be called in a static manner.
  * 
  * @author Laptop
  *

@@ -10,6 +10,9 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 /**
  * 
  * Base class where all the net business logic is in. 
+ * This model knows actually the net structure or the predeccessors or soccessors
+ * of all nodes.
+ * It also sets the transtions' activation status.
  * 
  * Protocol: If the node and arc list are to be used in another thread (like net or desktop
  * controller) a monitor must be put on those lists.
@@ -19,7 +22,13 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  */
 public class PTNNet {
 	
+	/**
+	 * All nodes in the net.
+	 */
 	private HashMap<String,PTNNode> nodes;
+	/**
+	 * All arcs in the net.
+	 */
 	private HashMap<String,PTNArc> arcs;
 	
 	public PTNNet() {
@@ -30,48 +39,44 @@ public class PTNNet {
 	}
 	
 	/**
+	 * Getter
 	 * 
-	 * @param id
-	 * 		{@link String}
-	 * @return
-	 * 		{@link PTNNode}N
+	 * @param id String
+	 * @return {@link PTNNode}
 	 */
 	public PTNNode getNodeById(String id) {
 		return nodes.get(id);
 	}
 	
 	/**
+	 * Getter
 	 * 
-	 * @param id
-	 * 		{@link String}
-	 * @return
-	 * 		{@link PTNArc}
+	 * @param id String
+	 * @return {@link PTNArc}
 	 */
 	public PTNArc getArcById(String id) {
 		return arcs.get(id);
 	}
 	
 	/**
-	 * @return
-	 * 		int
+	 * Returns surprisingly actually the number of nodes contained in the net.
+	 * @return int
 	 */
 	public int getNumberOfNodes() {
 		return nodes.size();
 	}
 	
 	/**
-	 * 
-	 * @return
-	 * 		int
+	 * Returns surprisingly actually the number of arcs contained in the net.
+	 * @return int
 	 */
 	public int getNumberOfArcs() {
 		return arcs.size();
 	}
 	
 	/**
-	 * 
-	 * @return
-	 * 		int
+	 * Returns surprisingly actually the number of place nodes contained in the net.
+	 * @return int
 	 */
 	public int numberOfPlaces() {
 		
@@ -79,9 +84,8 @@ public class PTNNet {
 	}
 	
 	/**
-	 * 
-	 * @return
-	 * 		int
+	 * Returns surprisingly actually the number of transition nodes contained in the net.
+	 * @return int
 	 */
 	public int numberOfTransitions() {
 		
@@ -89,29 +93,27 @@ public class PTNNet {
 	}
 
 	/**
+	 * Getter
 	 * 
-	 * @return
-	 * 		HashMap<String,PTNNode>
+	 * @return HashMap<String,PTNNode>
 	 */
 	public HashMap<String,PTNNode> getNodes() {
 		return nodes;
 	}
 	
 	/**
+	 * Getter
 	 * 
-	 * @return
-	 * 		HashMap<String,PTNArc>
+	 * @return HashMap<String,PTNArc>
 	 */
 	public HashMap<String,PTNArc> getArcs() {
 		return arcs;
 	}
 	
 	/**
-	 * 
-	 * @param id
-	 * 		{@link String}
-	 * @return
-	 * 		HashMap<String,PTNNode> Successors of a node with the given id.
+	 * @param id String
+	 * @return HashMap<String,PTNNode> 
+	 * 		Successors of a node with the given id.
 	 */
 	public HashMap<String,PTNNode> getSuccessors(String id) {
 		PTNArc arc;
@@ -130,10 +132,8 @@ public class PTNNet {
 	
 	/**
 	 * 
-	 * @param id
-	 * 		{@link String}
-	 * @return
-	 * 		HashMap<String,PTNNode> Nodes the arcs are coming from.
+	 * @param id String HashMap<String,PTNNode> 
+	 * 		Nodes the arcs are coming from.
 	 */
 	public HashMap<String,PTNNode> getPredecessors(String id) {
 		PTNArc arc;
@@ -152,9 +152,12 @@ public class PTNNet {
 	
 	/**
 	 * Returns all incoming or outgoing arcs in a directed graph for a given node.
-	 * @param node
-	 * @param direction PTNArcDirection: incoming/outgoing
+	 * 
+	 * @param node {@link PTNNode}
+	 * @param direction PTNArcDirection
+	 * 		incoming/outgoing
 	 * @return
+	 * 		HashMap<String, PTNArc>
 	 */
 	private HashMap<String, PTNArc> getIncomingOutgoingArcs(PTNNode node,
 			PTNArcDirections direction) {
@@ -184,9 +187,9 @@ public class PTNNet {
 	}
 	
 	/**
+	 * Uses {@link PTNNet#getIncomingOutgoingArcs(PTNNode, PTNArcDirections)}
 	 * 
-	 * @param node
-	 * 		{@link PTNNode}
+	 * @param node {@link PTNNode}
 	 * @return
 	 * 		HashMap<String, PTNArc>
 	 */
@@ -195,9 +198,9 @@ public class PTNNet {
 	}
 	
 	/**
+	 * 	 * Uses {@link PTNNet#getIncomingOutgoingArcs(PTNNode, PTNArcDirections)}
 	 * 
-	 * @param node
-	 * 		{@link PTNNode}
+	 * @param node {@link PTNNode}
 	 * @return
 	 * 		HashMap<String, PTNArc>
 	 */
@@ -207,10 +210,9 @@ public class PTNNet {
 	
 	/**
 	 * 
-	 * @param id
-	 * 		{@link String}
-	 * @return
-	 * 		int
+	 * @param id {@link String}
+	 * @return int
+	 * 		Number of nodes connected with an outgoing arc.
 	 */
 	public int getNumberOfSuccessors(String id) {
 		return 1;
@@ -218,7 +220,8 @@ public class PTNNet {
 	
 	/**
 	 * Returns true if net contains a node with given id.
-	 * @param id
+	 * 
+	 * @param id String
 	 * @return Boolean
 	 */
 	public boolean hasNodeWithId(String id) {
@@ -227,8 +230,9 @@ public class PTNNet {
 	
 	/**
 	 * Returns true if net contains given node object
+	 * 
 	 * @param PTNNode n
-	 * @return
+	 * @return Boolean
 	 */
 	public boolean hasNode(PTNNode n) {
 		return nodes.containsValue(n);
@@ -236,6 +240,7 @@ public class PTNNet {
 	
 	/**
 	 * Returns true if net contains an arc with given id.
+	 * 
 	 * @param id
 	 * @return Boolean
 	 */
@@ -245,6 +250,7 @@ public class PTNNet {
 	
 	/**
 	 * Returns true if net contains given arc object.
+	 * 
 	 * @param PTNNode n
 	 * @return
 	 */
@@ -255,6 +261,7 @@ public class PTNNet {
 	/**
 	 * When we add a new arc and the target is a transition node we have to
 	 * check if activation status of that node must be changed.
+	 * 
 	 * @param PTNArc a
 	 */
 	public void addArc(PTNArc a) {
@@ -276,6 +283,7 @@ public class PTNNet {
 	 * 2. If the transition is activated and the source node has at least one token we 
 	 *    will leave the transition status activated. If the source node has no tokens 
 	 *    we have to set the activation status to false.
+	 * 3. Any new transition is activated by default.
 	 *    
 	 * @param arc 
 	 * 
@@ -304,9 +312,9 @@ public class PTNNet {
 
 	/**
 	 * 
-	 * @param 
-	 * 		PTNNode n ...	New node. Can be a place or a transition. If it's a transition's
-	 * 						status will be set to activated.
+	 * @param PTNNode n 
+	 * 		New node. Can be a place or a transition. If it's a transition's
+	 * 		status will be set to activated.
 	 */
 	public void addNode(PTNNode n) {
 		nodes.put(n.getId(), n);
@@ -317,7 +325,8 @@ public class PTNNet {
 	
 	
 	/**
-	 * Checks wether source aand target are two different kinds of nodes.
+	 * Checks wether source and target are two different kinds of nodes.
+	 * 
 	 * @param source
 	 * @param target
 	 * @return true if nodes are different types
@@ -352,13 +361,13 @@ public class PTNNet {
 	
 	/**
 	 * Delegate method for getArcsBySource(PTNNode source) and getArcsByTarget(PTNNode source).
-	 * (Ok, we could put that into two methods. But since the code would be almsot identical
+	 * (Ok, we could put that into two methods. But since the code would be almost identical
 	 * it seemed apt to use the switch isSource)
 	 *
-	 * @param node
+	 * @param node {@link PTNNode}
 	 * @param isSource
 	 * 		Boolean source or target given?
-	 * @return
+	 * @return <HashMap<String, PTNArc>
 	 */
 	private HashMap<String, PTNArc> getArcsBySourceOrTarget(PTNNode node, Boolean isSource) {
 		
@@ -391,7 +400,7 @@ public class PTNNet {
 
 	/**
 	 * 
-	 * @param node 
+	 * @param node {@link PTNNode}
 	 */
 	public void removeNode(PTNNode node) {
 		
@@ -401,14 +410,15 @@ public class PTNNet {
 	
 	/**
 	 * 
-	 * @param arc
+	 * @param arc {@link PTNArc}
 	 */
 	public void removeArc(PTNArc arc) {
 		this.getArcs().remove(arc.getId());
 	}
 
 	/**
-	 * Empties nodes and arcs lists.
+	 * Empties nodes and arcs lists. 
+	 * Most be called whenever we empty the desktop or parse a file.
 	 */
     public void reset() {
         nodes = new HashMap<String,PTNNode>();

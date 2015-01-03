@@ -8,11 +8,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.JPopupMenu;
+
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNInitializationException;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNode;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
+import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
@@ -36,12 +39,23 @@ public class PTNNodeHelper implements ActionListener {
 	private ContextMenuNodeWindow cMenu = null;
 	final private String PREFIX_ID = "PTNNode_";	
 	
+	/**
+	 * 
+	 * @param desktop {@link PTNDesktop}
+	 * @param net {@link PTNNet}
+	 */
 	public PTNNodeHelper(PTNDesktop desktop, PTNNet net) {
 		this.desktop = desktop;
 		this.net = net;
 		controlPanel = PTNControlPanel.getInstance();
 	}
 	
+	/**
+	 * Adds a scale listener {@link PTNIScaleListener} to a
+	 * place node. So view will react to scale events.
+	 * 
+	 * @param place {@link PlaceView}
+	 */
 	public void addPlaceListener(PlaceView place) {
 		
 		try {
@@ -53,6 +67,12 @@ public class PTNNodeHelper implements ActionListener {
 		
 	}
 	
+	/**
+	 * Adds a scale listener {@link PTNIScaleListener} to a
+	 * transition node. So view will react to scale events.
+	 * 
+	 * @param transition {@link TransitionView}
+	 */
 	public void addTransitionListener(TransitionView transition) {
 		
 		try {
@@ -65,6 +85,13 @@ public class PTNNodeHelper implements ActionListener {
 	}
 	
 	/**
+	 * Generates a context menu for given node. Adds needed listeners to this
+	 * {@link JPopupMenu} and will so make sure that the context menu: *
+	 * <ul>
+	 * <li>gets mouse events</li>
+	 * <li>disappears with a click on the desktop (or the control panel)</li>
+	 * <li>moves with the main frame</li>
+	 * </ul>
 	 * 
 	 * @param source
 	 */
@@ -77,6 +104,13 @@ public class PTNNodeHelper implements ActionListener {
 		controlPanel.addMouseListener(cMenu);
 	}
 
+	/**
+	 * Handles the two kinds of dialogs coming from the node's context menu:
+	 * <ul>
+	 * <li>changing node attributes</li>
+	 * <li>deleting arcs</li>
+	 * </ul>
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -93,6 +127,10 @@ public class PTNNodeHelper implements ActionListener {
 		
 	}
 
+	/**
+	 * Handles the dialogs coming from the node's context menu
+	 * for changing node attributes like name or token number.
+	 */
 	private void handleChangeAttributesDialog() {
 		
 		if (null != cMenu)
@@ -104,6 +142,10 @@ public class PTNNodeHelper implements ActionListener {
 		
 	}
 	
+	/**
+	 * Handles the dialogs coming from the node's context menu
+	 * when user wants to delete some or all incoming and outgoing arcs.
+	 */
 	private void handleDeleteArcsDialog() {
 		if (null != cMenu)
 			cMenu.setVisible(false);
@@ -115,11 +157,12 @@ public class PTNNodeHelper implements ActionListener {
 
     /**
      * Prepares a new node view so it my be displayed on the desktop.
-     * A new transtion view's status wil be set to activated.
+     * A new transition view's status will be set to activated.
      * 
-     * @param name
-     * @param nodeView
-     * @param nodeLocation
+     * @param name String
+     * 		Node name.
+     * @param nodeView {@link NodeView}
+     * @param nodeLocation Point
      */
     public void initNodeView(String name, NodeView nodeView, Point nodeLocation) {
         nodeView.setName(name);
@@ -133,6 +176,7 @@ public class PTNNodeHelper implements ActionListener {
     }
     
     /**
+     * Sets the new location in node model when node was moved or created.
      * 
      * @param nodeView
      */
@@ -169,8 +213,8 @@ public class PTNNodeHelper implements ActionListener {
      * changed, e. g. after an arc has been deleted.
      * Accepts either node views or node models.
      * 
-     * @param sourceView2
-     * 		PTNINodeDTO ... So we may pass either a node view or a node model.
+     * @param sourceView2 {@link PTNINodeDTO}
+     * 		By using {@link PTNINodeDTO} we may pass either a node view or a node model.
      */
 	public void updateTransitionState(PTNINodeDTO node) {
 		
@@ -191,8 +235,8 @@ public class PTNNodeHelper implements ActionListener {
 	 * Generates a unique id concatenating id prefix and a random number.
 	 * It also checks id number is already present
 	 * 
-	 * @return
-	 * 		String new id for an arc
+	 * @return String
+	 * 		New id for an arc.
 	 */
 	public String generateId() {
 
@@ -229,9 +273,9 @@ public class PTNNodeHelper implements ActionListener {
 	 * This way a new node is places after a double click where the user 
 	 * would expect it.
 	 * 
-	 * @param location
-	 * 		Point
-	 * @return
+	 * @param location Point
+	 * @return Point 
+	 * 		The center of the node.
 	 */
 	public Point centerNodeLocation(PTNINodeDTO nodeInformation) {
 		Dimension size = null;
@@ -254,11 +298,12 @@ public class PTNNodeHelper implements ActionListener {
 	
 	/**
 	 * Checks if an icon in a node contains the given point.
+	 * We use this when we want to make sure that an method is only called when the mouse is 
+	 * right on the icon and not somewhere else in the node's JLabel object.
 	 * 
-	 * @param sourceNodeView
-	 *            {@link NodeView} The coordinates relative to the node#s JLabel are used here.
-	 * @param point
-	 *            {@link Point} 
+	 * @param sourceNodeView {@link NodeView} 
+	 * 		The coordinates are those relative to the node's JLabel (0,0) point.
+	 * @param point {@link Point} 
 	 * @return {@link Boolean}
 	 */
 	public boolean iconContainsPoint(NodeView sourceNodeView, Point point) {

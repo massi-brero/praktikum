@@ -25,8 +25,16 @@ import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 /**
- * This controller handles net related operations like update and set-up
- * operations. 
+ * This is a crucial controller for this application. 
+ * <ul>
+ * <li>It basically synchronizes and controls all data updates for nodes and arcs resulting <br/>
+ * 		from drawing actions. (Adding and Removing elements)</li>
+* <li>It handles all the data sync between models and views.</li>
+* <li>It also controls the initial set up (also when loading a pnml file)</li>
+* <li>It also syncs the arc redrawing. This of course could be done by the Desktop controller.<br/> 
+* 		But since it involves updating the models when arcs are deleted this is the better place.
+* 		This is done in an extra thread so computation happens in an parallel thread to the Swing thread.</li>
+* </ul>
  * 
  * @author 8388415 - Massimiliano Brero
  * 
@@ -35,6 +43,9 @@ public class PTNNetController implements Runnable {
 
     private PTNNet net;
     private PTNDesktop desktop;
+    /**
+     * Delegates for some basic an repeatedly used node and arc operations
+     */
     private PTNArcHelper arcHelper;
     private PTNNodeHelper nodeHelper;
 
@@ -224,8 +235,7 @@ public class PTNNetController implements Runnable {
      * transition regardless if it's the source or the target of
      * the given arc.
      * 
-     * @param arc
-     *            PTNArc
+     * @param arc PTNArc
      */
     public void removeArcFromNetAndDesktop(String id) {
         PTNArc arcModel = net.getArcById(id);

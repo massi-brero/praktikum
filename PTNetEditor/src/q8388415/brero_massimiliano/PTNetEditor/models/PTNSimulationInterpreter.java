@@ -38,7 +38,13 @@ public class PTNSimulationInterpreter {
 	 * @throws PTNSimulationException
 	 */
 	public void handleClick(TransitionView transitionView) throws PTNSimulationException {
+		/**
+		 * Helper for basic node operations.
+		 */
 		nodeHelper = new PTNNodeHelper(desktop, net);
+		/**
+		 * List of Places preceeding or succeeding this transition
+		 */
 		HashMap<String, PTNNode> precedingPlaces = net.getPredecessors(transitionView.getId());
 		HashMap<String, PTNNode> succeedingPlaces = net.getSuccessors(transitionView.getId());
 
@@ -134,8 +140,8 @@ public class PTNSimulationInterpreter {
 	 * Updates transition that was clicked on an all transitions adjacent to its
 	 * succeeding places.
 	 * 
-	 * @param places
-	 * @param transition
+	 * @param places HashMap<String, PTNNode>
+	 * @param transition TransitionView
 	 */
 	private void updateTransitions(HashMap<String, PTNNode> places, TransitionView transitionView) {
 		/**
@@ -159,8 +165,8 @@ public class PTNSimulationInterpreter {
 	/**
 	 * Resets the place tokens after a simulation error occurred
 	 * 
-	 * @param backUpPrecedingPlaces
-	 * @param backUpSucceedingPlaces
+	 * @param backUpPrecedingPlaces HashMap<String, PTNINodeDTO>
+	 * @param backUpSucceedingPlaces HashMap<String, PTNNode>
 	 */
 	private void resetPlaceTokens(HashMap<String, PTNINodeDTO> backUpPlacesInformation, HashMap<String, PTNNode> affectedPlaces) {
 		PTNINodeDTO nodeInformation = null;
@@ -188,8 +194,7 @@ public class PTNSimulationInterpreter {
 	 * This method provides a deep clone copy as a PTNINode hash map for a
 	 * places has map. This way we can store old node states.
 	 * 
-	 * @param map
-	 *            HashMap<String, PTNNode>
+	 * @param map HashMap<String, PTNNode>
 	 * @return HashMap<String, PTNINodeDTO>
 	 */
 	private HashMap<String, PTNINodeDTO> backupNodeStates(HashMap<String, PTNNode> map) {

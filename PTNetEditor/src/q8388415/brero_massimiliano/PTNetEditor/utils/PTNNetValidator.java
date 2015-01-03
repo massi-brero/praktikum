@@ -3,7 +3,7 @@ package q8388415.brero_massimiliano.PTNetEditor.utils;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 
 /**
- * offers some quick to apply static methods to ensure our net is consistent 
+ * Offers some quick to apply static methods to ensure our net is consistent 
  * and does not violate any constraints.
  * 
  * @author Laptop
@@ -37,6 +37,7 @@ public class PTNNetValidator {
     }
     
     /**
+     * Checks basically if a negative width or height is given for the desktop.
      * 
      * @param width
      * 		int user input for desktop width
@@ -63,6 +64,12 @@ public class PTNNetValidator {
     	
     }
     
+    /**
+     * Uses {@link PTNNetValidator#isValidToken(int)}
+     * 
+     * @param token int
+     * @return Boolean
+     */
     public static Boolean isValidToken(int token) {
         
         return PTNNetValidator.isValidToken(String.valueOf(token));

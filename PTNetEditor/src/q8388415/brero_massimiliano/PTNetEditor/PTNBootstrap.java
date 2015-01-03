@@ -30,6 +30,10 @@ public class PTNBootstrap {
     public PTNBootstrap() {
     }
 
+    /**
+     * Starts application.
+     * @param args
+     */
     public static void main(String[] args) {
     	
     	if (!isRunning) {    		

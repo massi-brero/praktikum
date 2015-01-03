@@ -19,10 +19,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
  * 3. We can use them in Threads an do not have to set up a listener for each event
  * (select, draw etc.).
  * 
- * But we will use listener for changing between editor and simulation mode. 
- * Here more classes are involved and we do not want them to meddle with static variables.
- * 
- * The AppController 
+ * But we will use listeners for changing between editor and simulation mode. 
  * 
  * @author 8388415 - Massimiliano Brero
  * 
@@ -40,12 +37,22 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 	public static boolean deselectAll = false;
 	public static boolean selectMode = false;
 	public static boolean redrawArcs = false;
+	/**
+	 * Classes that must be notified when we change from editor to simulation
+	 * modus and vice versa.
+	 */
 	private ArrayList<PTNIModeListener> modeListeners;
 
+	/**
+	 * Standard Constructor
+	 */
 	public PTNAppController() {
 		modeListeners = new ArrayList<PTNIModeListener>();
 	}
 
+	/**
+	 * Key Listener override
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 
@@ -62,6 +69,9 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 
 	}
 
+	/**
+	 * Key Listener override
+	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
@@ -76,15 +86,27 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 		}
 	}
 
+	/**
+	 * Setter for static variable PTNAppController.moveNodes
+	 * @param b Boolean
+	 */
 	public static void setMoveNodes(boolean b) {
 
 		PTNAppController.moveNodes = b;
 
 	}
 
-	@Override
-	public void keyTyped(KeyEvent arg0) {}
-
+	/**
+	 * Sets static variables for:
+	 * <ul>
+	 * <li>deselect all</li>
+	 * <li>delete selection</li>
+	 * <li>increase scale</li>
+	 * <li>decrease scale</li>
+	 * <li>editor mode</li>
+	 * <li>simulation mode</li>
+	 * </ul>
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -115,28 +137,53 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 
 	}
 
+	/**
+	 * Getter.
+	 * @return
+	 */
 	public static boolean isSelectMode() {
 		return selectMode;
 	}
 
+	/**
+	 * Setter.
+	 * @param selectMode
+	 */
 	public static void setSelectMode(boolean selectMode) {
 		PTNAppController.selectMode = selectMode;
 	}
 
+	/**
+	 * Listener method for increasing elements.
+	 * Sets flag if it's time to redraw the arcs.
+	 */
 	@Override
 	public void increaseScale() {
 		redrawArcs = true;
 	}
 
+	/**
+	 * Listener method for decreasing elements.
+	 * Sets flag if it's time to redraw the arcs.
+	 */
 	@Override
 	public void decreaseScale() {
 		redrawArcs = true;
 	}
 
+	/**
+	 * Adds mode listener to PTNIModeListener list. So when Appcontroller
+	 * is notified that a mode change is fired it can inform the mode listeners.
+	 * @param listener {@link PTNIModeListener}
+	 */
 	public void addSimulationListener(PTNIModeListener listener) {
 		modeListeners.add(listener);
 	}
 
+	/**
+	 * 
+	 * @param listener
+	 */
 	public void removeSimulationListener(PTNIModeListener listener) {
 		modeListeners.remove(listener);
 	}
@@ -167,5 +214,11 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 		}
 
 	}
+	
+	/**
+	 * Not implemented.
+	 */
+	@Override
+	public void keyTyped(KeyEvent arg0) {}
 
 }

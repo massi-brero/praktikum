@@ -8,6 +8,7 @@ import java.awt.Point;
  * to pass node data. It is basically the public interface of our node views
  * and models, but this way we can use to pass node information regardless if
  * a method expects a node view or a node model type.
+ * If getters do not match any class attributes return null.
  * 
  * @author 8388415
  *

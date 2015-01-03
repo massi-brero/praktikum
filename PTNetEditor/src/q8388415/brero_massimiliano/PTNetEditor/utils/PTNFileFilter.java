@@ -4,6 +4,14 @@ import java.io.File;
 
 import q8388415.brero_massimiliano.PTNetEditor.types.AllowedFileTypes;
 
+/**
+ * Extends {@link javax.swing.filechooser.FileFilter}. 
+ * Only file of types defined in {@link AllowedFileTypes} are ...
+ * errr ... well ... allowed.
+ * 
+ * @author Laptop
+ *
+ */
 public class PTNFileFilter extends javax.swing.filechooser.FileFilter {
 
     @Override
@@ -28,6 +36,9 @@ public class PTNFileFilter extends javax.swing.filechooser.FileFilter {
         return false;
     }
 
+    /**
+     * @return String
+     */
     @Override
     public String getDescription() {
         return "Zulässige Dateitypen";

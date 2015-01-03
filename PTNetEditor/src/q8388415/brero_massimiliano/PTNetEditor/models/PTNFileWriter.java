@@ -19,6 +19,10 @@ import q8388415.brero_massimiliano.PTNetEditor.utils.PNMLWriter;
 public class PTNFileWriter {
 
 	private PTNNet net;
+	/**
+	 * {@link PNMLWriter}
+	 * Resource model or utility doing the actual writing work.
+	 */
 	private PNMLWriter pnmlWriter;
 
 	public PTNFileWriter(PTNNet net) {

@@ -27,7 +27,8 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 /**
  * This controller handles basic actions occurring in the desktop like mouse
  * dragging. It's also a thread since it will listen when it's time to delete
- * nodes.
+ * or deselect nodes and arcs. So the involving computations may occur in an own
+ * thread.
  * 
  * @author 8388415 - Massimiliano Brero
  *
@@ -45,12 +46,19 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 
 	public PTNDesktopController(PTNDesktop dt, PTNNet net) {
 
+
 		this.desktop = dt;
-		nodeHelper = new PTNNodeHelper(desktop, net);
-		arcHelper = new PTNArcHelper(desktop, net);
+		/**
+		 * Does all the thinking when we are in simulation mode.
+		 */
 		simInterpreter = new PTNSimulationInterpreter(desktop, net);
 		/**
-		 * Position of mouse when dragging.
+		 * Helpers for some basic operations on nodes and arcs.
+		 */
+		nodeHelper = new PTNNodeHelper(desktop, net);
+		arcHelper = new PTNArcHelper(desktop, net);
+		/**
+		 * Current Position of mouse when dragging.
 		 */
 		currentDraggingPosistion = DEFAULT_DRAGGING_POSITION;
 
@@ -60,8 +68,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	 * Handles when arcs are drawn or nodes shall be moved by dragging the mouse
 	 * after selecting them. Does nothing in simulation mode.
 	 * 
-	 * @param e
-	 * 		{@link MouseEvent}
+	 * @param e {@link M ouseEvent}
 	 */
 	@Override
 	public void mouseDragged(MouseEvent e) {
@@ -227,7 +234,16 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	}
 
 	/**
-	 * 
+	 * This method controls a couple of actions after mouse was clicked.
+	 * <ul>
+	 * <li>Helps drawing a arc:</li> 
+	 * 		<ul>
+	 * 			<li>Checks if source and target are a valid node combination </li>
+	 * 			<li>removes temporaririly drawn arcs./li>
+	 * 		</ul>
+	 * 		<li>Resets variables after dragging a node</li>
+	 * </ul>
+	 * @todo Eventually move node combination logic in a model when refactoring.
 	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
@@ -305,7 +321,12 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		return null;
 	}
 
-	// Draws an arc that is displayed until user inputs an correct id.
+	/**
+	 * Draws an arc that is displayed until user inputs an correct id.
+	 * 
+	 * @param source JComponent
+	 * @param target JComponent
+	 */
 	private void drawTempEdge(JComponent source, JComponent target) {
 		Point start = new Point(source.getLocation().x + source.getWidth() / 2, source.getLocation().y + source.getHeight() / 2);
 		Point end = new Point(target.getLocation().x + target.getWidth() / 2, target.getLocation().y + target.getHeight() / 2);
@@ -313,6 +334,8 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	}
 
 	/**
+	 * This controller thread handles deselection and delete actions
+	 * parallel to the Swing main thread.
 	 * A monitor on both view lists (nodes and arcs) ensures that only one
 	 * thread may manipulate those lists at the same time.
 	 * 
@@ -359,6 +382,10 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		}
 	}
 
+	/**
+	 * Default coordinates should be values where a node is not allowed to be drawn
+	 * like (-1, -1).
+	 */
 	private void resetCurrentDraggingPosition() {
 		currentDraggingPosistion = DEFAULT_DRAGGING_POSITION;
 	}
@@ -367,17 +394,19 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	 * Returns if the mouse pointer is still moving over the desktop or
 	 * left the desktop panel.
 	 * 
-	 * @param e
-	 * 		{@link MouseEvent} Mouse event whose coordinates should not
+	 * @param e {@link MouseEvent} 
+	 * 		Mouse event whose coordinates should not
 	 * 		be already translated.
-	 * @return
-	 * 		Boolean
+	 * @return Boolean
 	 */
 	private Boolean desktopContainsMousePointer(MouseEvent e) {
 		e = SwingUtilities.convertMouseEvent(e.getComponent(), e, desktop);
 		return desktop.contains(e.getPoint());
 	}
 	
+	/**
+	 * Arcs and nodes are deselected for sim mode.
+	 */
 	@Override
 	public void startSimulationMode() {
 		isInSimulationMode = true;
@@ -385,19 +414,34 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 		desktop.deselectNodes();
 	}
 
+	/**
+	 * isInSimulationMode is set to false.
+	 */
 	@Override
 	public void startEditorMode() {
 		isInSimulationMode = false;
 	}
 
+	/**
+	 * Not implemented
+	 */
 	@Override
 	public void mouseEntered(MouseEvent e) {}
 
+	/**
+	 * Not implemented
+	 */
 	@Override
 	public void mouseExited(MouseEvent e) {}
 
+	/**
+	 * Not implemented
+	 */
 	public void mouseClicked(MouseEvent e) {}
 
+	/**
+	 * Not implemented
+	 */
 	@Override
 	public void mouseMoved(MouseEvent e) {}
 

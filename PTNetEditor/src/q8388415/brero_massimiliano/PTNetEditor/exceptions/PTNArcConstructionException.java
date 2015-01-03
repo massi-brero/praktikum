@@ -11,10 +11,19 @@ public class PTNArcConstructionException extends Exception {
 	
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * 
+	 * @param message
+	 * @param cause
+	 */
 	public PTNArcConstructionException(String message, Exception cause) {
 		super(message, cause);
 	}
 
+	/**
+	 * 
+	 * @param message
+	 */
 	public PTNArcConstructionException(String message) {
 		super(message);
 	}
