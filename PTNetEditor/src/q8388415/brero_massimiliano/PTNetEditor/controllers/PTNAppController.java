@@ -26,12 +26,16 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
  */
 public class PTNAppController implements KeyListener, PTNIScaleListener {
 
+	/**
+	 * Location a node is placed when it is created by the menu ba option.
+	 */
+	public static final Point DEFAULT_NODE_LOCATION = new Point(0, 0);
+	
 	/*
 	 * Global values needed by other classes
 	 */
 	public static final String DEFAULT_TOKEN_NUMBER = "0";
 	public static final int MAX_TOKEN = 999;
-	public static final Point DEFAULT_NODE_LOCATION = new Point(0, 0);
 	public static boolean moveNodes = false;
 	public static boolean deleteSelection = false;
 	public static boolean deselectAll = false;

@@ -15,15 +15,38 @@ import javax.swing.JTextField;
 
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNetValidator;
 
+/**
+ * Dialog window that pops up whenever the desktop shall be enlarged.
+ * 
+ * @author q8388415 - Massimiliano Brero
+ *
+ */
 public class ResizeDesktopWindow extends JDialog implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Basic window params and vatriables.
+	 */
 	private JPanel panel;
 	private JTextField widthField;
 	private JTextField heightField;
+	
+	/**
+	 * Needed so not valid or empty paramaters are not sended erraneously.
+	 */
 	private Boolean isInformationToBeSent = false;
+	
+	/**
+	 * Current desktop size.
+	 */
 	private Dimension currentSize;
 	
+	/**
+	 * 
+	 * @param size Dimension
+	 * 		Current desktop size.
+	 */
 	public ResizeDesktopWindow(Dimension size) {
 
 		currentSize = size;
@@ -44,8 +67,7 @@ public class ResizeDesktopWindow extends JDialog implements ActionListener {
 	}
 	
 	/**
-	 * @ToDo sanitize token input!
-	 * @param node
+	 * Basic initialization like setting text fields, buttons and stuff.
 	 */
 	private void initializeDialog() {
 		
@@ -68,10 +90,20 @@ public class ResizeDesktopWindow extends JDialog implements ActionListener {
 			
 	}
 	
+	/**
+	 * Getter
+	 * 
+	 * @return JPanel
+	 */
 	public JPanel getPanel() {
 		return this.panel;
 	}
 	
+	/**
+	 * Adds single Components to main panel.
+	 * 
+	 * @param c {@link JComponent}
+	 */
 	public void addToPanel(JComponent c) {
 		this.getPanel().add(c);
 	}
@@ -97,7 +129,9 @@ public class ResizeDesktopWindow extends JDialog implements ActionListener {
 	        
 
 	/**
-	 * Send new desktop size from user input after validation.
+	 * @return Dimension
+	 * 		Sends new desktop size from user input after validation to caller.
+	 * 		Sends null is window is closed or dialog is canceled.
 	 */
 	public Dimension sendSize() {
 	    

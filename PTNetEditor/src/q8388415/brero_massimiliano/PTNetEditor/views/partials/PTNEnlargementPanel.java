@@ -24,7 +24,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
  * <li>optional button</li>
  * </ul>
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNEnlargementPanel extends JPanel {
@@ -70,6 +70,10 @@ public class PTNEnlargementPanel extends JPanel {
 		this("", "");
 	}
 
+	/**
+	 * 
+	 * @param iconPath String
+	 */
 	private void setIcon(String iconPath) {
 		
 		if (!iconPath.isEmpty()) {
@@ -84,6 +88,9 @@ public class PTNEnlargementPanel extends JPanel {
 
 	}
 
+	/**
+	 * 
+	 */
 	public void init() {
 		
 		plusButton.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -99,15 +106,28 @@ public class PTNEnlargementPanel extends JPanel {
 		
 	}
 	
+	/**
+	 * Getter.
+	 * 
+	 * @return JLabel
+	 * 		Label with text for this partial.
+	 */
 	public JLabel getLabel() {
 		return label;
 	}
 
+	/**
+	 * Setter.
+	 * 
+	 * @param JLabel
+	 * 		Label with text for this partial.
+	 */
 	public void setLabel(JLabel label) {
 		this.label = label;
 	}
 	
 	/**
+	 * Listeners for "+" and "-" button.
 	 * 
 	 * @param l ActionListener
 	 */
@@ -120,8 +140,8 @@ public class PTNEnlargementPanel extends JPanel {
 	
 	/**
 	 * This method ensures that our objects really have the methods for 
-	 * increasing an decreasing their size.
-	 * @param PTNIScaleListener l
+	 * increasing an decreasing their size
+	 * @param l {@link PTNIScaleListener}
 	 */
 	public void addScaleListener(PTNIScaleListener l) {
 		
@@ -129,10 +149,5 @@ public class PTNEnlargementPanel extends JPanel {
 		minusButton.addActionListener(l);
 				
 	}
-
-	
-	
-	
-	
 
 }

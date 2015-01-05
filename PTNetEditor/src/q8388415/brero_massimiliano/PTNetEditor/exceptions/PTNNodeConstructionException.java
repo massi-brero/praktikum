@@ -2,7 +2,7 @@ package q8388415.brero_massimiliano.PTNetEditor.exceptions;
 
 /**
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNNodeConstructionException extends Exception {

@@ -3,7 +3,7 @@ package q8388415.brero_massimiliano.PTNetEditor.exceptions;
 /**
  * Should be thrown whenever a problem with a node occurs.
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNNetContructionException extends Exception {

@@ -29,7 +29,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
  * Offers methods for dealing with arc computations, like normalizing their
  * start and end point. It's technically a delegate for Desktop and net controller.
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNArcHelper {

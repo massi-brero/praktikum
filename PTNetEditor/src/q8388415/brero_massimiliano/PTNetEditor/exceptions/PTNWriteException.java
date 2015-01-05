@@ -3,7 +3,7 @@ package q8388415.brero_massimiliano.PTNetEditor.exceptions;
 /**
  * Will be thread when a general or PNML special error occurs.
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNWriteException extends Exception {

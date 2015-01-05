@@ -12,7 +12,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  * container.
  * Derived from {@link PTNNode}.
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNTransition extends PTNNode {

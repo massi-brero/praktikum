@@ -6,7 +6,7 @@ import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
  * Offers some quick to apply static methods to ensure our net is consistent 
  * and does not violate any constraints.
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNNetValidator {

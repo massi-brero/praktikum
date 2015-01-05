@@ -20,6 +20,8 @@ import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionExc
 
 /**
  * Diese Klasse implementiert die Grundlage für einen einfachen PNML Parser.
+ * 
+ * @author q8388415 - Massimiliano Brero
  */
 public class PNMLParser {
 

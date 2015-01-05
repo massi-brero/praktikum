@@ -15,9 +15,9 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNTransition;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
 /**
+ * Parses PNML Files.
  * 
- * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNParser extends PNMLParser {
@@ -54,8 +54,11 @@ public class PTNParser extends PNMLParser {
 
     /**
      * 
-     * @param pnm
-     * @param net
+     * @param pnm File
+     * 		Path to file that has to be parsed.
+     * @param net {@link PTNNet}
+     * 		Net model constructed from parsed information. 
+     * 		The views will be set up from this model.
      */
     public PTNParser(File pnm, PTNNet net) {
         super(pnm);
@@ -65,6 +68,13 @@ public class PTNParser extends PNMLParser {
         this.net = net;
     }
 
+    /**
+     * Adds new place node to the net model. The id must be unique.
+     * Otherwise a {@link PTNNodeConstructionException} is thrown.
+     * 
+     * @param id String
+     * @throws PTNNodeConstructionException
+     */
     @Override
     public void newPlace(final String id) throws PTNNodeConstructionException {
 
@@ -79,6 +89,13 @@ public class PTNParser extends PNMLParser {
 
     }
 
+    /**
+     * Adds new transition node to the net model. The id must be unique.
+     * Otherwise a {@link PTNNodeConstructionException} is thrown.
+     * 
+	 * @param id String
+	 * @throws PTNNodeConstructionException
+     */
     @Override
     public void newTransition(String id) throws PTNNodeConstructionException{
 
@@ -87,20 +104,29 @@ public class PTNParser extends PNMLParser {
                 usedIdNodes.add(id);
                 net.addNode(transition);
             } else {
-                throw new PTNNodeConstructionException("Die Knoten-ID " + id + " wurde mehrfach vergeben");
+                throw new PTNNodeConstructionException("Die Knoten-ID " +  id + " wurde mehrfach vergeben");
             }
 
     }
 
     /**
-     * If 2 arcs have the same id or the same source/target combination an {@link PTNNetContructionException}
-     * is thrown.
+     * Adds new transition node to the net model. The id must be unique.
+     * Otherwise a {@link PTNNodeConstructionException} is thrown.
+     * If an arc with the same source/target combination already exists
+     * a {@link PTNNodeConstructionException} will be thrown either.
+     * 
+     * 
+     * @param id String
+     * 		The arcs id.
+     * @param source String
+     * 		ID of source node.
+     * @param target String
+     * 		ID of target node.
+     * @throws PTNNetContructionException
      */
     @Override
     public void newArc(final String id, final String source, final String target) throws PTNNetContructionException {
-        /**
-         * TODO Abfangen von zwei Kanten mit gleicher Start/Ziel-Kombi.
-         */
+
         if (usedIdArcs.contains(id)) {
         	throw new PTNNetContructionException("Die Kanten-ID " + id + " wurde mehrfach vergeben");
         } else if (sourceTargetCombinationAlreadyExists(id, source, target)){
@@ -113,11 +139,19 @@ public class PTNParser extends PNMLParser {
     }
 
 
-	@Override
+
     /**
      * If no node with the given id was found we choose to throw an error,
      * because something definitely went wrong.
+     * 
+     * @param id String 
+     * 		Node id for which we want to set the position.
+     * @param x String
+     * 		X coordinate that was read from pnml file.
+     * @param y String
+     * 		Y coordinate that was read from pnml file.
      */
+	@Override
     public void setPosition(final String id, final String x, final String y) {
         PTNNode node = net.getNodeById(id);
 
@@ -139,6 +173,15 @@ public class PTNParser extends PNMLParser {
 
     }
 
+	/**
+	 * 
+	 * Sets name for a node.
+	 * 
+	 * @param id String 
+	 * 		Node id for which we want to set the name.
+	 * @param name
+	 * 		Node name that was parsed.
+	 */
     @Override
     public void setName(final String id, final String name) {
         net.getNodeById(id).setName(name);
@@ -147,7 +190,14 @@ public class PTNParser extends PNMLParser {
     /**
      * Checks if the token fulfills our constraints. We simply ignore the token
      * attribute for a node that is not a place.
+     * Throws a {@link PTNNodeConstructionException}if the token number is not 
+     * within the range 0 - 999.
      * 
+     * @param id String
+     * 		Place id for which token number was parsed.
+     * @param marking String
+     * 		Token number.
+     * @throws {@link PTNNodeConstructionException}
      */
     @Override
     public void setMarking(final String id, final String marking) throws PTNNodeConstructionException {
@@ -165,15 +215,22 @@ public class PTNParser extends PNMLParser {
 
     /**
      * 
-     * @return
+     * Returns the height the net should have.
+     * This value represents the maximum y position of the nodes 
+     * parsed from the pnml file.
+     * 
+     * @return double
      */
     public double getMaxHeight() {
         return maxHeight;
     }
 
     /**
+     * Returns the width the net should have.
+     * This value represents the maximum x position of the nodes 
+     * parsed from the pnml file.
      * 
-     * @return
+     * @return double
      */
     public double getMaxWidth() {
         return maxWidth;
@@ -183,8 +240,8 @@ public class PTNParser extends PNMLParser {
      * Updates maxHeight and maxWidth. This way we know the dimensions dor our
      * desktop.
      * 
-     * @param pos
-     *            node position
+     * @param pos Point
+     *            Node position that was read.
      */
     private void updateMaxDimensions(Point pos) {
 
@@ -196,11 +253,15 @@ public class PTNParser extends PNMLParser {
     /**
      * 
      * Checks if there already is an arc with the same source/target combination
-     * but different id.
+     * but different id. Therefore the arcList containing all parsed arcs is 
+     * iterated.
      * 
      * @param id String
-     * @param source arcList
-     * @param target arcList
+     * 		The arc's id.
+     * @param source String
+     * 		The arc's source id.
+     * @param target String
+     * 		The arc's source id.
      * @return Boolean
      */
 	private boolean sourceTargetCombinationAlreadyExists(String id, String source, String target) {
@@ -227,6 +288,7 @@ public class PTNParser extends PNMLParser {
     /**
      * Generates arcs after parsing finished. Here we check if the 2 nodes
      * needed for our arc really exists. Otherwise an Exception will be thrown.
+     * 
      * @throws PTNNetContructionException 
      */
     protected void handleParsingFinished() throws PTNNetContructionException {

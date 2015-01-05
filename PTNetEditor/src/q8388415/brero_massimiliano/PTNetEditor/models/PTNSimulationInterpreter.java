@@ -15,6 +15,15 @@ import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
+/**
+ * Handles simulation events, i.e. when a transition was switched. 
+ * Only the PTNSimulationInterpreter knows the rules or what has exactly
+ * to happen when the app is in sim mode.
+
+ * 
+ * @author q8388415 - Massimiliano Brero
+ *
+ */
 public class PTNSimulationInterpreter {
 
 	protected PTNNet net;

@@ -32,21 +32,42 @@ import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
  * <li>node name</li>
  * </ul>
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class EditNodeWindow extends JDialog implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Node information. Token will be only displayed if type of node is place
+	 */
 	private JPanel panel;
 	private JTextField nameLabel;
 	private JTextField token;
+	
+	/**
+	 * Needed so not valid or empty paramaters are not sended erraneously.
+	 */
     private Boolean isInformationToBeSent = false;
+    
+    /**
+     * Node which "generated event".
+     */
 	private NodeView sourceNode;
+	
+	/**
+	 * basic window parameters
+	 */
 	private Dimension BUTTON_SIZE = new Dimension(40, 20);
 	private Dimension WINDOW_SIZE_PLACE = new Dimension(200, 90);
 	private Dimension WINDOW_SIZE_TRANSITION = new Dimension(200, 60);
 	
+	/**
+	 * 
+	 * @param node NodeView
+	 * 		Node which "generated event".
+	 */
 	public EditNodeWindow(NodeView node) {
 
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -71,8 +92,9 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	}
 	
 	/**
-	 * @ToDo sanitize token input!
-	 * @param node
+	 * Token input will bes sanitized!
+	 * 
+	 * @param node NodeView
 	 */
 	private void initializeDialog(NodeView node) {
 		
@@ -101,27 +123,43 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 			
 	}
 	
+	/**
+	 * Getter.
+	 * 
+	 * @return JPanel
+	 */
 	public JPanel getPanel() {
 		return this.panel;
 	}
 	
+	/**
+	 * Adds single components to main panel.
+	 * 
+	 * @param c JComponent
+	 */
 	public void addToPanel(JComponent c) {
 		this.getPanel().add(c);
 	}
 
+	/**
+	 * 
+	 * @return NodeView
+	 * 		Node whose attributes shall be changed.
+	 */
 	public NodeView getSourceNode() {
 		return this.sourceNode;
 	}
 
 
+	/**
+	 * First check if we have a valid token. We'll check that in this window
+     * because we need no further information for this check.
+     * 
+     * @param ActioEvent
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-	     /**
-         * First check if we have a valid token. We'll check that in this window
-         * because we need no further information for this check.
-         * 
-         */
         if (e.getActionCommand().equals("OK")) {
 
                 if (PTNNodeTypes.STELLE == sourceNode.getType() && !PTNNetValidator.isValidToken(token.getText())) {
@@ -137,8 +175,12 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * Updates node information from text fields and returns a DTO containing
-	 * new label text and token number;
+	 * 
+	 * @return {@link PTNINodeDTO}
+	 * 		Updates node information from text fields and returns a DTO containing
+	 * 		new label text and token number.
+	 * 		Token input will be validated. If window is closed or dialog canceled
+	 * 		method returns null.
 	 */
 	public PTNINodeDTO sendUpdatedNode() {
 

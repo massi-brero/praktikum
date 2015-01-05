@@ -5,7 +5,7 @@ package q8388415.brero_massimiliano.PTNetEditor.types;
  * arc data. This way we can use either node views oder node models
  * to pass arc data.
  * 
- * @author 8388415
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public interface PTNIArcDTO {

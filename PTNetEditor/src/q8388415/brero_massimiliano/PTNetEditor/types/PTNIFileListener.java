@@ -5,7 +5,7 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 /**
  * This type is used for a simple observer pattern.
  * 
- * @author brero
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public interface PTNIFileListener {

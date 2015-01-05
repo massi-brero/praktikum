@@ -14,6 +14,7 @@ import java.awt.geom.Line2D;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIArcDTO;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
+import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 /**
  * Visual reprensentation of an arc connecting 2 nodes. This class just knows
@@ -23,21 +24,50 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
  * of by the net controller and its delegates: the arc helper and the node
  * helper classes.
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 
+	/**
+	 * Basic data for this arc.
+	 */
 	private Point start;
 	private Point end;
 	private String id;
 	private Boolean selected = false;
+	
+	/**
+	 * Colors when state is default or changes to selected.
+	 */
 	private final Color DEFAULT_COLOR = Color.GRAY;
 	private final Color SELECTED_COLOR = Color.decode("#E89B15");
 	private Color color;
+	
+	/**
+	 * Graphics object of the {@link PTNDesktop} object.
+	 * We need it for drawing the arc.
+	 */
 	private Graphics desktopGraphics = null;
+	
+	/**
+	 * We have two (!) variables for scaling purposes.
+	 * 1. scale: Object variable: used for computation in this object
+	 * 2. current scale: Static and therefore holds information
+	 *    about actual scale value valid for all arcs on the desktop .
+	 *    will be updated arrowhead size was increased/decreased.
+	 *    
+	 * This way new arcs will be set up with the current scale value
+	 * set at runtime. To work correctly both values must be synchronized:
+	 * 1. When object is instantiated.
+	 * 2. When a scaling event occurs.
+	 */
 	private double scale;
 	private static double currentScale = 1.0;
+	
+	/**
+	 * Scaling limits
+	 */
 	private final double MAX_SIZE = 1.4;
 	private final double MIN_SIZE = 1;
 	private PTNNetController netController;
@@ -50,6 +80,16 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 	 */
 	private final double SENSITIVITY = 4.0;
 
+	/**
+	 * 
+	 * @param id String
+	 * 		Arc's id.
+	 * @param s Point
+	 * 		Point where the arc starts. This point is computed be the net controller.
+	 * @param e Point
+	 * 		Point where the arc ends. This point is computed be the net controller.
+	 * @param netController {@link PTNNetController}
+	 */
 	public ArcView(String id, Point s, Point e, PTNNetController netController) {
 
 		this.netController = netController;
@@ -68,7 +108,7 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 	 * to get the angle from the steepness. We need that so drawArrowHead can be
 	 * rotated and its tip always faces the right direction.
 	 * 
-	 * @param g
+	 * @param g {@link Graphics}
 	 *            The desktop's Graphics object to draw on.
 	 */
 	public void drawArc(Graphics g) {
@@ -95,9 +135,14 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 	 * Draws the arrow head at the end of the lines and rotates it according to
 	 * line position. The arrow head will always face the right direction.
 	 * 
-	 * @param g2
-	 * @param end
-	 * @param gradient
+	 * @param g2 {@link Graphics}
+	 * 		The dektop's graphics object we draw on.
+	 * @param end Point
+	 * 		The end of the arc where we set the arrowhead.
+	 * @param gradient double
+	 * 		Arc's gradient. We need it to set the correct rotation value 
+	 * 		for the arrowhead.
+	 * 
 	 */
 	private void drawArrowHead(Graphics2D g2, Point end, double gradient) {
 		
@@ -119,6 +164,10 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 
 	}
 
+	/**
+	 * Returns the arrowhead. Not transformed.
+	 * @return {@link Polygon}
+	 */
 	private Polygon getArrowHeadPolygon() {
 		Polygon p = new Polygon();
 		p.addPoint(end.x, end.y);
@@ -139,9 +188,8 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 	 * somebody clicks to mark a node an the click is near the node icon's
 	 * boundaries.
 	 * 
-	 * @param p
-	 *            {@link Point}
-	 * @return {@link Boolean}
+	 * @param p Point
+	 * @return Boolean
 	 */
 	public Boolean contains(Point p) {
 		return Line2D.ptSegDist(this.getStart().x, this.getStart().y, 
@@ -149,30 +197,67 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 								p.getX(), p.getY()) < SENSITIVITY;
 	}
 
+	/**
+	 * Getter 
+	 * 
+	 * @return Point
+	 * 		The arc's starting point.
+	 */
 	public Point getStart() {
 		return start;
 	}
 
+	/**
+	 * Setter
+	 * 
+	 * @param start Point
+	 */
 	public void setStart(Point start) {
 		this.start = start;
 	}
 
+	/**
+	 * Getter
+	 * 
+	 * @return Point
+	 * 		The arc's ending point.
+	 */
 	public Point getEnd() {
 		return end;
 	}
 
+	/**
+	 * Setter
+	 * @param end Point
+	 */
 	public void setEnd(Point end) {
 		this.end = end;
 	}
 
+	/**
+	 * Getter
+	 * 
+	 * @return id String
+	 * 		The arc's id.
+	 */
 	public String getId() {
 		return id;
 	}
 
+	/**
+	 * Setter
+	 * 
+	 * @param id String
+	 * 		The arc's id.
+	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 
+	/**
+	 * For listening to scaling events, i. e.
+	 * when the arrowhead shall be increased/decreased.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -185,6 +270,11 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 
 	}
 
+	/**
+	 * Since this class implements {@link PTNIScaleListener}
+	 * this method overrides the given method there.
+	 * Will increment scale and current scale.
+	 */
 	@Override
 	public void increaseScale() {
 
@@ -195,6 +285,11 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 		}
 	}
 
+	/**
+	 * Since this class implements {@link PTNIScaleListener}
+	 * this method overrides the given method there.
+	 * Will reduce scale and current scale.
+	 */
 	@Override
 	public void decreaseScale() {
 		if (scale > MIN_SIZE) {
@@ -204,10 +299,21 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 		}
 	}
 
+	 /**
+	  * Getter.
+	  * 
+	  * @return Boolean
+	  * 	is arc in selected state?
+	  */
 	public Boolean getSelected() {
 		return selected;
 	}
 
+	/**
+	 * If arc is selected its color will be changed.
+	 * 
+	 * @param s Boolean	
+	 */
 	public void setSelected(Boolean s) {
 		this.selected = s;
 		if (selected)
@@ -217,10 +323,21 @@ public class ArcView implements PTNIScaleListener, PTNIArcDTO {
 		this.updateArc();
 	}
 
+	/**
+	 * Getter. Current arc color (depending if it was selected
+	 * or not).
+	 * 
+	 * @return Color
+	 */
 	public Color getColor() {
 		return color;
 	}
 
+	/**
+	 * Setter.
+	 * 
+	 * @param color Color
+	 */
 	public void setColor(Color color) {
 		this.color = color;
 	}

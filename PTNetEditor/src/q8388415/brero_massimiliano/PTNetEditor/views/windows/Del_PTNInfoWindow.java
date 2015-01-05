@@ -22,7 +22,12 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNetValidator;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
-public class PTNInfoWindow extends JDialog implements ActionListener {
+/**
+ * 
+ * @author q8388415 - Massimiliano Brero
+ *
+ */
+public class Del_PTNInfoWindow extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	JMenuItem item;
@@ -37,10 +42,10 @@ public class PTNInfoWindow extends JDialog implements ActionListener {
 	private Dimension BUTTON_SIZE = new Dimension(50, 20);
 	private Dimension WINDOW_SIZE = new Dimension(200, 100);
 
-    public PTNInfoWindow(Point nodeLocation, PTNDesktop desktop) {
+    public Del_PTNInfoWindow(Point nodeLocation, PTNDesktop desktop) {
     }
     
-    public PTNInfoWindow(PTNDesktop desktop) {
+    public Del_PTNInfoWindow(PTNDesktop desktop) {
     	this.desktop = desktop;
         panel = new JPanel();
         panel.setPreferredSize(WINDOW_SIZE);

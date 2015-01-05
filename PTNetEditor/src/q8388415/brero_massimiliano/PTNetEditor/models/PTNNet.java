@@ -17,7 +17,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  * Protocol: If the node and arc list are to be used in another thread (like net or desktop
  * controller) a monitor must be put on those lists.
  *
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNNet {

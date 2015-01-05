@@ -29,21 +29,47 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNArcDirections;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIArcDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
 
+/**
+ * Offers tow lists of incoming and outgoing arcs for a node
+ * the user can choose from.
+ * 
+ * @author q8388415 - Massimiliano Brero
+ *
+ */
 public class DeleteArcWindow extends JDialog implements ItemListener, ActionListener {
 
 	private static final long serialVersionUID = 1L;
+	/**
+	 * View and model of the node to which the arc lists refer.
+	 */
 	private PTNNode node;
+	private NodeView nodeView;
+	
+	/**
+	 * Arcs that possibly deleted
+	 */
 	private HashMap<String, PTNArc> incomingArcs;
 	private HashMap<String, PTNArc> outgoingArcs;
 	private HashMap<String, PTNArc> allNodeArcs;
 	private HashMap<String, PTNIArcDTO> arcsToDelete;
+	
+	/**
+	 * Basic window variables and components
+	 */
 	private JPanel basePanel = new JPanel();
 	private final int BUTTON_HEIGHT = 30;
 	private final int BUTTON_WIDTH = 120;
 	private final int WIDTH = 120;
-	private NodeView nodeView;
 	private JPanel panel;
 
+	/**
+	 * 
+	 * @param net PTN net
+	 * 		Needed to get the corresponding node model (identified by
+	 * 		the view's id).
+	 * @param nodeView NodeView
+	 * 		The node for which "delete arcs" was selected from the context menu.
+	 */
 	public DeleteArcWindow(PTNNet net, NodeView nodeView) {
 		this.nodeView = nodeView;
 		allNodeArcs = new HashMap<String, PTNArc>();
@@ -56,6 +82,9 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 		this.init();
 	}
 
+	/**
+	 * get lists of incoming and outgoing arcs.
+	 */
 	private void init() {
 
 		this.setLocationRelativeTo(nodeView);
@@ -75,6 +104,11 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 		
 	}
 
+	/**
+	 * Getter 
+	 * 
+	 * @return {@link Component}
+	 */
 	private Component getOkButton() {
 		JPanel buttonPanel = new JPanel();
 		JButton ok = new JButton("Weg damit...");
@@ -90,8 +124,11 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 	/**
 	 * We will set the checkboxes' name to the arcs id. This way we may easily identify later on
 	 * which arcs shall be deleted.
-	 * @param direction
-	 * @return
+	 * 
+	 * @param direction {@link PTNArcDirections}
+	 * 
+	 * @return JPanel
+	 * 		The lists with the checkboxes for the arcs.
 	 */
 	private JPanel setupArcsPanel(PTNArcDirections direction) {
 		panel = new JPanel();
@@ -120,7 +157,12 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 		return panel;
 
 	}
-
+	/**
+	 * Sets up each one of the incoming/outgoing panels containing the checkbox lists.
+	 * 
+	 * @param arclist HashMap<String, PTNArc>
+	 * @param labelText String
+	 */
 	private void initPanel(HashMap<String, PTNArc> arclist, String labelText) {
 		
 		int maxLines = incomingArcs.size() >= outgoingArcs.size() ? incomingArcs.size() : outgoingArcs.size();
@@ -132,10 +174,18 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 		
 	}
 
+	/**
+	 * 
+	 * @return {@link JPanel}
+	 */
 	private JPanel setupIncomingArcsPanel() {
 		return this.setupArcsPanel(PTNArcDirections.incoming);
 	}
 
+	/**
+	 * 
+	 * @return {@link JPanel}
+	 */
 	private JPanel setupOutgoingArcsPanel() {
 		return this.setupArcsPanel(PTNArcDirections.outgoing);
 	}
@@ -180,16 +230,22 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 		
 	}
 
+	/**
+	 * Gets list of arcs user wants to delete from checked ckeckboxes.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		this.sendArcsToDelete();
 		this.dispose();
 	}
 
+	/**
+	 * Getter.
+	 * 
+	 * @return HashMap<String, PTNIArcDTO> 
+	 */
 	public HashMap<String, PTNIArcDTO> sendArcsToDelete() {
-
 			return arcsToDelete;
-
 	}
 
 }

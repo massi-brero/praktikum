@@ -7,7 +7,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIArcDTO;
  * Since the business logic is completely in {@link PTNNet} this is more of a data 
  * container.
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNArc implements PTNIArcDTO {

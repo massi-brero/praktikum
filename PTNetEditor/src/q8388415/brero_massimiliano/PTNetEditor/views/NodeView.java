@@ -1,13 +1,11 @@
 package q8388415.brero_massimiliano.PTNetEditor.views;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -19,32 +17,59 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  * Base Class for the node views. The node's name is displayed in an JLabel nameLabel
  * which is part of the sourrounding Jlabel representing the node.
  * 
- * @author brero
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNINodeDTO {
 	
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Basic node information. The name of the node has an own JLabel.
+	 * It is added to this nodes Jlabel which works as a container for
+	 * the name label.
+	 */
+	private boolean selected = false;
+	private PTNNodeTypes type;
+	private String id;
+	protected JLabel nameLabel;
+	protected final int LABEL_TEXT_LENGTH = 14;
+	
+	/**
+	 * Scale variables for object internal computations.
+	 */
+	protected int scale = 0;
+	final int scaleFactor = 1;
 	private final int SCALE_MAX = 4;
 	private final int SCALE_MIN = 0;
 	// number of pixels the icon will change on scaling operations
 	protected int changeWidth = 4;
 	protected int changeHeight = 4;
+	
+	/**
+	 * The icons the JLabel will load depending on its state.
+	 */
 	protected ImageIcon iconStandard;
 	protected ImageIcon iconSelected;
-	protected JLabel nameLabel;
-	protected final int LABEL_TEXT_LENGTH = 14;
-	private boolean selected = false;
-	protected int scale = 0;
-	final int scaleFactor = 1;
-	private PTNNodeTypes type;
-	private String id;
+
 	/*
 	 * Child Classes must override iconWidth and iconHeight.
 	 */
 	protected int iconWidth = 1;
 	protected int iconHeight = 1;
 
+	/**
+	 * 
+	 * @param id
+	 * 		Nodes id.
+	 * @param sourceStandardIcon String
+	 * 		Path to node image when in standard state.
+	 * @param sourceSelectedIcon
+	 * 		Path to node image when in selected state.
+	 * @param iconWidth int
+	 * 		Image width of node icon.
+	 * @param iconHeight int
+	 * 		Image height of node icon.
+	 */
 	public NodeView(String id, 
 					String sourceStandardIcon, 
 					String sourceSelectedIcon,
@@ -61,6 +86,9 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 
 	}
 	
+	/**
+	 * Basic initialization for all node types.
+	 */
 	private void init() {
 		
 		this.add(nameLabel);
@@ -80,7 +108,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	
 	/**
 	 * Sets image source path for icon representing this node type
-	 * @param $s String
+	 * @param s String
 	 */
 	public void setIconSource(ImageIcon ic) {
 		//@Todo check if path exists
@@ -88,14 +116,24 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	}
 	
 	/**
+	 * The mail JLabel of the node contains an extra Jlabel
+	 * for the node's name.
 	 * 
 	 * @return {@link JLabel}
-	 * 		Name label for this node thait will be rendered.
+	 * 		Name label for this node thit will be rendered.
 	 */
 	public JLabel getNameLabel() {
 		return nameLabel;
 	}
 
+	/**
+	 * We override the inherited method to use it for setting our node's name
+	 * that will also be displayed on the desktop. Therefore the JComponents name
+	 * is the same as for the node.
+	 * 
+	 * @param label 
+	 * 	Node and JComponent name.
+	 */
 	@Override
 	public void setName(String label) {
 		// name of JComponent is the same as that from the displayed label
@@ -119,14 +157,18 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	}
 
 	/**
+	 * Getter.
 	 * 
 	 * @return Boolean
+	 * 		Is node in selected state?
 	 */
 	public boolean getSelected() {
 		return selected;
 	}
 
 	/**
+	 * Setter.
+	 * 
 	 * If a nodes' status is set on selected the icon will
 	 * be changed.
 	 * 
@@ -144,22 +186,29 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 
 
 	/**
+	 * Getter
+	 * 
 	 * @return {@link PTNNodeTypes}
+	 * PTNNodeTypes.STELLE or PTNNodeTypes.TRANSITION
 	 */
 	public PTNNodeTypes getType() {
 		return type;
 	}
 
 	/**
+	 * Setter
 	 * 
 	 * @param type {@link PTNNodeTypes}
+	 * 		PTNNodeTypes.STELLE or PTNNodeTypes.TRANSITION
 	 */
 	public void setType(PTNNodeTypes type) {
 		this.type = type;
 	}
 	
 	/**
-	 * 
+	 * Since this class implements {@link PTNIScaleListener}
+	 * this method overrides the given method there.
+	 * Will increment scale by scaleFactor.
 	 */
 	@Override
 	public void increaseScale() {
@@ -172,7 +221,9 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	}
 
 	/**
-	 * 
+	 * Since this class implements {@link PTNIScaleListener}
+	 * this method overrides the given method there.
+	 * Will reduce scale by scaleFactor.
 	 */
 	@Override
 	public void decreaseScale() {
@@ -185,7 +236,10 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	}
 
 	/**
-	 * Increase or decrease scale.
+	 * Increase or decrease scale. Listens when an event from the 
+	 * corresponding control pane is fired.
+	 * 
+	 * @param ActionEvent
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -203,7 +257,9 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 
 	/**
 	 * Updates size of complete container according to given factor (including icon, text label ...).
-	 * @param factor float scaling value
+	 * 
+	 * @param factor float 
+	 * 		Scaling value by which node view shall be increased/decreased.
 	 */
 	protected void updateSize(int factor) {
 
@@ -217,7 +273,6 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	
 	/**
 	 * Updates size of node pic.
-	 * @param factor float scaling value
 	 */
 	protected void updateIconSize() {
 
@@ -239,15 +294,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	}
 
 	/**
-	 * 
-	 * @return float
-	 */
-	public float getScale() {
-		return scale;
-	}
-
-
-	/**
+	 * Setter.
 	 * 
 	 * @param scale int
 	 */
@@ -255,6 +302,12 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 		this.scale = scale;
 	}
 	
+	/**
+	 * When node is increased/decreased his name JLabel size will be
+	 * updated by this method.
+	 * 
+	 * @param factor
+	 */
 	protected void updateLabelTextSize(int factor) {
 		int changeSize = factor;
 		Font nodeLabelFont = nameLabel.getFont();
@@ -265,20 +318,28 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	}
 
 	/**
+	 * Getter.
+	 * 
 	 * @return String
+	 * 		The node's id.
 	 */
 	public String getId() {
 		return id;
 	}
 
 	/**
+	 * Setter.
 	 * 
 	 * @param id String
+	 * 		The node's id.
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 	
+	/**
+	 * Sets icon to the current width and height.
+	 */
 	protected void initIcon() {
 
 	    	Image image = ((ImageIcon) this.getIcon()).getImage();
@@ -287,6 +348,4 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 
 	}
 	
-	
-		
 }

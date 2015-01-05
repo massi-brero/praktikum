@@ -11,8 +11,12 @@ import javax.xml.stream.XMLStreamWriter;
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNWriteException;
 
 /**
+ * 
  * Diese Klasse implementiert eine einfache XML Ausgabe für
  * PNML Dateien.
+ * 
+ * @author q8388415 - Massimiliano Brero
+ *
  */
 public final class PNMLWriter {
 	

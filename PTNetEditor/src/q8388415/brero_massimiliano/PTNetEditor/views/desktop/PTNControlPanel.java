@@ -14,27 +14,43 @@ import q8388415.brero_massimiliano.PTNetEditor.views.partials.PTNEnlargementPane
 
 /**
  * Panel for scaling nodes and arrow heads. It's instantiated with a modified
- * singleton pattern since we need in in multiple classes e.g. to add scale
+ * singleton pattern since we need in it multiple classes e.g. to add scale
  * listeners for new nodes and arcs. Beware that PTNControlPanel must be
  * initialized before other classes may use it.
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNControlPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	/**
+	 * main panel
+	 */
 	private JPanel controllerPanel;
-	private PTNDesktop desktop = null;
-	private PTNAppController appController = null;
+	
+	/**
+	 * Sub panels
+	 */
 	private PTNEnlargementPanel placeSizePanel;
 	private PTNEnlargementPanel transitionSizePanel;
 	private PTNEnlargementPanel allNodesSizePanel;
 	private PTNEnlargementPanel arrowHeadSizePanel;
+	
+	/**
+	 * Listeners for scaling events. 
+	 */
+	private PTNDesktop desktop = null;
+	private PTNAppController appController = null;
+
+	/**
+	 * Singleton params.
+	 */
 	private static PTNControlPanel instance = null;
 	private Boolean isInitialized = false;
+	
 	/**
-	 * Icons for size panels.
+	 * Icons for size panels partial.
 	 * @return
 	 */
 	private final String PLACE_ICON = "/resources/icons/size-place-icon.png";
@@ -42,6 +58,12 @@ public class PTNControlPanel extends JPanel {
 	private final String ARROW_ICON = "/resources/icons/size-arrow-icon.png";
 	private final String ALL_NODES__ICON = "/resources/icons/size-nodes-icon.png";
 
+	/**
+	 * After being initialized other classes can get an instance of the control panel.
+	 * This may be the case when we want to add new nodes and arcs as listeners for scaling events.
+	 * 
+	 * @return PTNControlPanel
+	 */
 	public static PTNControlPanel getInstance() {
 
 		if (null == instance)
@@ -51,16 +73,27 @@ public class PTNControlPanel extends JPanel {
 
 	}
 
+	/**
+	 * This methods sets desktop an appController as listeners for
+	 * scaling events.
+	 * The app controller is responsible to set a flag so that other classes know
+	 * that the arcs must be redrawn because the node size has changed.
+	 * 
+	 * The arcs are listeners for themselves since they will be informed when their 
+	 * arrowhead size must be changed.
+	 * 
+	 * @param desktop
+	 * @param appController
+	 */
 	public void initialize(PTNDesktop desktop, PTNAppController appController) {
 		this.desktop = desktop;
 		this.appController = appController;
 		isInitialized = true;
 		
 		/**
-		 * Set up panel.
+		 * Set up panels.
 		 */
 		controllerPanel = new JPanel();
-
 		// add enlargement Panels
 		placeSizePanel = new PTNEnlargementPanel("Stellen", PLACE_ICON);
 		transitionSizePanel = new PTNEnlargementPanel("Transitionen", TRANSITION_ICON);
@@ -83,8 +116,10 @@ public class PTNControlPanel extends JPanel {
 		this.init();
 	}
 
+	/**
+	 * Sets up listeners when first initialized.
+	 */
 	public void init() {
-
 
 		this.setUpScaleListeners();
 

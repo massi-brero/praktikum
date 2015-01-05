@@ -13,6 +13,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -22,7 +23,6 @@ import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNDesktopController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNNetController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIArcDTO;
-import q8388415.brero_massimiliano.PTNetEditor.types.PTNIModeListener;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
 import q8388415.brero_massimiliano.PTNetEditor.views.ArcView;
 import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
@@ -35,13 +35,18 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.ResizeDesktopWindow
 
 /**
  * When we set up the desktop we'll translate our net structure into node views.
- * 1. We will draw our arcs direct from our net arcs.
+ * 1. We will draw our arcs direct from our net model.
+ * 2. This is also done by calling {@link PTNDesktop#reset()} and {@link PTNDesktop#init()}
+ *    whenever a file has been parsed.
  * 
- * 2. But every node model type will have its own view representation in an own
- * list for our node views. This way we may have to update nodes in the view
- * list and in our net model, but we'll gain on performance since we don't have
- * to iterate the complete net and re-add all buttons when some update action on
- * the nodes is due.
+ * Every node model type (place, transition) will have its own view representation in an own
+ * list for the node views. This way we may have to update nodes in the view
+ * list <strong>and</strong> in our net model but we separate views and model tier completely
+ * The synchronisation of models and views is is done by the {@link PTNNetController}.
+ * You find also the logic for adding and removing nodes there.
+ * 
+ * The computations for moving nodes or drawing arcs will be taken care of by 
+ * the {@link PTNDesktopController}
  * 
  * Protocol: If the node and arc list are to be used in another thread (like net or desktop
  * controller) a monitor must be put on those lists.
@@ -49,22 +54,32 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.ResizeDesktopWindow
  * @author 8388415 - Massimiliano Brero
  *
  */
-public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseListener {
+public class PTNDesktop extends JLayeredPane implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
 	private final int DEFAULT_HEIGHT = 400;
 	private final int DEFAULT_WIDTH = 600;
 	private ArrayList<NodeView> nodes;
+	
+	/**
+	 * The controllers doing the computation works when drawing or
+	 * whenever a synchronisation between views and models is due.
+	 */
 	private PTNNetController netController;
 	private PTNDesktopController desktopController;
 	private PTNAppController appController;
+	/**
+	 * The net model is just needed pass it to the instantiated controllers.
+	 * The desktop will not communicate directly with the models.
+	 */
 	private PTNNet net;
+	
 	// Using a Hashtable instead of an ArrayList like nodes makes it easier to
 	// identify arcs by id for our drawing operations.
 	private Hashtable<String, ArcView> arcs;
 
-	// biggest size of desktop so far; we need this to adapt the scroll pane's
-	// bars
+	// Biggest size of desktop so far; we need this to adapt the scroll pane's
+	// bars.
 	private Dimension maxSize;
 
 	/**
@@ -72,8 +87,10 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	 * attributes for buffered painting. Adds needed listeners to Controllers
 	 * to identify desktop events.
 	 * 
-	 * @param appControl
-	 * @param net
+	 * @param appControl {@link PTNAppController}
+	 * @param net PTNNet
+	 * 		The net model is just needed pass it to the instantiated controllers.
+	 * 		The desktop will not communicate directly with the models.
 	 */
 	public PTNDesktop(PTNAppController appController, PTNNet net) {
 
@@ -118,7 +135,9 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	}
 
 	/**
-	 * Set up the desktop and calls the set-up operations on the net controller
+	 * Set up the desktop and calls the set-up operations on the net controller.
+	 * This method will be called when starting the app or whenever a new file 
+	 * has been parsed.
 	 */
 	public void init() {		
 		this.reset();
@@ -135,7 +154,9 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	}
 
 	/**
-	 * deletes node and arc view lists and sets size to default values.
+	 * Deletes node and arc view lists and sets size to default values.
+	 * This method will be called whenever the desktiop is cleared or 
+	 * a pnml file has been parsed.
 	 * 
 	 * @return void
 	 */
@@ -172,7 +193,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	 * Computes the maximum size this pane had so we can adjust the ScrollPanes'
 	 * handles.
 	 * This method will also redraw the arcs on the desktop and therefore will
-	 * do that in an arc syncronized block.
+	 * do that in an arc synchronized block.
 	 * 
 	 * @return void
 	 */
@@ -200,8 +221,15 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	}
 
 	/**
-	 * @param
-	 * 		Rectangle
+	 * 
+	 * We use {@link JComponent#paintImmediately} whenever something has to be drawn faster
+	 * than maybe the Swing Event-Queue would allow.
+	 * An Example: Drawing an new arc by using mouse dragging.
+	 * 
+	 * @param Rectangle
+	 * 		The area we want to synchronize. We will always repaint the
+	 * 		complete desktop dince we do not have too much objects and 
+	 * 		those we have are not to complicated to draw.
 	 */
 	@Override
 	public void paintImmediately(Rectangle bounds) {
@@ -218,7 +246,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	 * in case another thread (like in desktop controller) is manipulating the
 	 * list while this method is called at the same time.
 	 * 
-	 * @param g
+	 * @param g Graphics
 	 */
 	public void drawArcs(Graphics g) {
 
@@ -234,12 +262,13 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	}
 
 	/**
-	 * Draws an arc and adds it to arcs if it's a new one that was just painted
+	 * Draws an arc and adds it to arc view list if it's a new one that was just painted.
 	 * by the user.
 	 * 
 	 * @param id
-	 * @param start
-	 * @param end
+	 * 		The new arc's id.
+	 * @param start Point
+	 * @param end Point
 	 */
 	public void updateArcs(String id, Point start, Point end) {
 
@@ -257,10 +286,11 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	}
 
 	/**
-	 * Overloads public void updateArcs(String id, Point start, Point end) so
-	 * methods can also directly use  arc view objects.
+	 * Overloads {@link PTNDesktop#updateArcs}(String id, Point start, Point end) so
+	 * methods can also directly use arc view objects.
 	 * 
-	 * @param arcView
+	 * @param arcView ArcView
+	 * 		Methods gets information directly from a freshly created arc view object.
 	 */
 	public void updateArcs(ArcView arcView) {
 
@@ -279,6 +309,8 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 	/**
 	 * If id is "newArc" an arc with a non valid target will be deleted.
+	 * "newArc" is a kind of temporary id given by the controller to identify easily
+	 * arcs that are not yet in the desktops arc list.
 	 * 
 	 * @param String id
 	 */
@@ -296,9 +328,10 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	}
 
 	/**
+	 * Getter.
 	 * 
-	 * @return
-	 * 		Hashtable<String, ArcView> ... Arcs current visible on desktop.
+	 * @return Hashtable<String, ArcView>  
+	 *		 All Arcs currently visible on desktop.
 	 */
 	public Hashtable<String, ArcView> getArcViews() {
 		return this.arcs;
@@ -306,6 +339,8 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 	/**
 	 * This method allows us to create new nodes in other classes.
+	 * The {@link PTNDesktopController} will be called everytime
+	 * a node i dragged or an arc has to be drawn.
 	 * 
 	 * @return
 	 */
@@ -335,7 +370,7 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	}
 	
 	/**
-	 * Returns whether we have some selected nodes or none. So we may move or
+	 * Returns whether we have some selected arcs or none. So we may move or
 	 * delete them at once.
 	 * 
 	 * @return boolean
@@ -393,8 +428,8 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 
 	/**
-	 * Removes selected nodes and the connected arcs. Call controller method
-	 * {@link PTNNetController#removeNodeAndArcs(NodeView) }to erase their 
+	 * Removes selected nodes and the connected arcs. Calls controller method
+	 * {@link PTNNetController#removeNodeAndArcs(NodeView) to erase their 
 	 * models too and update the net.
 	 */
 	public void deleteSelectedNodes() {
@@ -412,7 +447,6 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 					NodeView node = (NodeView) it.next();
 					if (node.getSelected()) {
 						nodesToRemove.add(node);
-						// TODO richtig löschen!?
 						node.setVisible(false);
 					}
 				}
@@ -466,21 +500,39 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	/**
 	 * Stub for redrawing all incoming and outgoing arcs for a node that has
 	 * been moved.
-	 * There'a monitor on arcs just in case tanother thread (like in desktop controller)
-	 * is manipulating the list while this method is called at the same time.
 	 * 
-	 * @param source
+	 * @param source {@link NodeView}
 	 */
 	public void redrawArcs(NodeView source) {
 			netController.updateArcsForNode(source);			
+	}
+	
+	/**
+	 * This method works as connection between desktopController which handles
+	 * the drawing event and netController which does the net building work after
+	 * user wants to add a new arc. 
+	 * It will then repaint the desktop and update the complete net view. This method 
+	 * would then - in a next development stage - show briefly a label that informs 
+	 * the user that an arc was successfully added to the net.
+	 * 
+	 * @param source {@link NodeView}
+	 * @param target {@link NodeView}
+	 */
+	public void addNewArc(NodeView source, NodeView target) {
+
+		netController.addNewArc(source, target);
+		this.paintImmediately(this.getBounds());
+
 	}
 
 	/**
 	 * Each dialog has its own corresponding window. Since this windows shall be
 	 * modal we will call them from our desktop instead of simply calling them
 	 * from the controller.
+	 * 
+	 * @param source {@link NodeView}
+	 * 		Node whose attributes have to be changed.
 	 */
-
 	public void callNodeAttributeDialog(NodeView source) {
 
 		EditNodeWindow popUp = new EditNodeWindow(source);
@@ -494,28 +546,13 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 			// so our arcs won't be obscured
 			this.paintImmediately(this.getBounds());
 		}
-
 	}
 
 	/**
-	 * This method works as connection between desktopController which handles
-	 * the drawing event an netController which does the net building work after
-	 * user wants to add a new arc. It will then repaint the desktop and update
-	 * the complete net view. This method would then - in a further development
-	 * loop - show briefly a label that informs the user that an arc was
-	 * successfully added to the net.
+	 * Dialog window when a new node shall be added.
 	 * 
-	 * 
-	 * @param source
-	 * @param target
+	 * @param nodeLocation
 	 */
-	public void addNewArc(NodeView source, NodeView target) {
-
-		netController.addNewArc(source, target);
-		this.paintImmediately(this.getBounds());
-
-	}
-
 	public void callNewNodeDialog(Point nodeLocation) {
 
 		NewNodeWindow popUp = new NewNodeWindow(nodeLocation, this);
@@ -537,6 +574,9 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 	}
 
+	/**
+	 * Dialog window requesting the width an height of the enlarged desktop.
+	 */
 	public void callResizeDesktopDialog() {
 
 		ResizeDesktopWindow popUp = new ResizeDesktopWindow(this.getPreferredSize());
@@ -557,10 +597,12 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 	}
 
-	/*
-	 * initializes Dialog for deleting Arcs. Since we want to delete them both
+	/**
+	 * Stars Dialog for deleting Arcs. Since we want to delete them both
 	 * from our view and from the net model, we will pass them to the controller
 	 * and let him do the job.
+	 * 
+	 * @param NodeView
 	 */
 	public void callDeleteArcsDialog(NodeView sourceView) {
 
@@ -581,9 +623,15 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 	}
 
 	/**
+	 * Getter
 	 * 
 	 * @param id
-	 * @return
+	 * 		The id of the node this method shall look up.
+	 * @return {@link NodeView}
+	 * 		Corresponding Node if an node with that id exists
+	 * 		in the desktop's node list.
+	 * 		Null if it does not (Even though NULL may generally not be
+	 * 		a too nice return value...)
 	 */
 	public NodeView getNodeViewById(String id) {
 
@@ -601,17 +649,12 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 
 	}
 
-	@Override
-	public void startSimulationMode() {
-
-	}
-
-	@Override
-	public void startEditorMode() {
-		// TODO Auto-generated method stub
-
-	}
-
+	/**
+	 * Event registered when user wants to create a new node by
+	 * double clicking on desktop.
+	 * 
+	 * @param e {@link MouseEvent}
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() == 2) {
@@ -623,15 +666,27 @@ public class PTNDesktop extends JLayeredPane implements PTNIModeListener, MouseL
 		
 	}
 
+	/**
+	 * Not implemented.
+	 */
 	@Override
 	public void mousePressed(MouseEvent e) {}
 
+	/**
+	 * Not implemented.
+	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {}
 
+	/**
+	 * Not implemented.
+	 */
 	@Override
 	public void mouseEntered(MouseEvent e) {}
 
+	/**
+	 * Not implemented.
+	 */
 	@Override
 	public void mouseExited(MouseEvent e) {}
 

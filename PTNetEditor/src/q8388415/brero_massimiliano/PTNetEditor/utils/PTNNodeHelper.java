@@ -27,7 +27,8 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.ContextMenuNodeWind
 /**
  * Offers methods for dealing with node computations, like getting an instance of the control panel
  * for adding listeners for new nodes. Kind of a lightweight delegate class.
- * @author Laptop
+ * 
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNNodeHelper implements ActionListener {

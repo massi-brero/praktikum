@@ -28,23 +28,50 @@ import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
  * <li>information</li>
  * </ul>
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNMenu extends JMenuBar {
 
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * For calling dialog windows on desktop.
+	 */
 	private PTNDesktop desktop;
+	
+	/**
+	 * The net object is needed for setting liteners, writing
+	 * reseting desktop...
+	 */
 	private PTNNet net;
+	
+	/**
+	 * Main listener for the menu ribbon.
+	 */
 	private PTNAppController appControl;
+	
+	/**
+	 * Default size
+	 */
 	public static final int HEIGHT = 20;
 	public static final int WIDTH = 500;
+	
+	/**
+	 * The sub menus
+	 */
 	private JMenu desktopMenu;
 	private JMenu nodeMenu;
 	private JMenu fileMenu;
 	private JMenu modusMenu;
 	private JMenu infoMenu;
 
+	/**
+	 * 
+	 * @param desktop {@link PTNDesktop}
+	 * @param appC PTNAppController
+	 * @param net {@link PTNNet}
+	 */
 	public PTNMenu(PTNDesktop desktop, PTNAppController appC, PTNNet net) {
 
 		this.desktop = desktop;
@@ -54,6 +81,9 @@ public class PTNMenu extends JMenuBar {
 
 	}
 
+	/**
+	 * Will initialize and set all submenus.
+	 */
 	private void init() {
 
 		desktopMenu = this.initDesktopMenu();
@@ -71,6 +101,14 @@ public class PTNMenu extends JMenuBar {
 
 	}
 
+	/*
+	 * Adds info menu.
+	 * <ul>
+	 * <li>Information about the App</li>
+	 * <li>Credits</li>
+	 * </ul>
+	 * @return JMenu
+	 */
 	private JMenu addInfoMenu() {
 
 		JMenu menu = new JMenu("Info");
@@ -110,6 +148,16 @@ public class PTNMenu extends JMenuBar {
 
 	}
 
+	/*
+	 * Adds desktop submenu.
+	 * <ul>
+	 * <li>Increase desktop</li>
+	 * <li>Delete desktop</li>
+	 * <li>End App</li>
+	 * </ul>
+	 * 
+	 * @return JMenu
+	 */
 	private JMenu initDesktopMenu() {
 		
 		JMenu menu = new JMenu("Schreibtisch");
@@ -155,6 +203,15 @@ public class PTNMenu extends JMenuBar {
 		return menu;
 	}
 
+	/**
+	 * Adds standard submenu.
+	 * <ul>
+	 * <li>deselect all</li>
+	 * <li>delete selected</li>
+	 * <li>new node</li>
+	 * </ul>
+	 * @return JMenu
+	 */
 	private JMenu initStandardMenu() {
 
 		JMenu menu = new JMenu("Bearbeiten");
@@ -187,9 +244,16 @@ public class PTNMenu extends JMenuBar {
 
 	}
 
+	/*
+	 * Adds file submenu.
+	 * <ul>
+	 * <li>read from file</li>
+	 * <li>write to file</li>
+	 * </ul>
+	 * @return JMenu
+	 */
 	private JMenu initFileMenu() {
-		final PTNFileController fileListener = new PTNFileController(desktop,
-				net);
+		final PTNFileController fileListener = new PTNFileController(desktop, net);
 		JMenu menu = new JMenu("Datei");
 		menu.setMnemonic('D');
 		JMenuItem item1 = new JMenuItem("Datei öffnen");
@@ -218,6 +282,14 @@ public class PTNMenu extends JMenuBar {
 
 	}
 
+	/**
+	 * Adds modus menu to switch between editor and simulation modus.
+	 * <ul>
+	 * <li>editor modus</li>
+	 * <li>sim modus/li>
+	 * </ul>
+	 * @return JMenu
+	 */
 	private JMenu initModusMenu() {
 
 		ButtonGroup group = new ButtonGroup();
@@ -242,8 +314,11 @@ public class PTNMenu extends JMenuBar {
 	}
 	
 	/**
+	 * Icons for submenus.
+	 * 
 	 * @param iconPath String
 	 * 		Path to the icon. Must be relative to root (src):
+	 * 
 	 * @return {@link ImageIcon}
 	 * 		
 	 */

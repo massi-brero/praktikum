@@ -13,16 +13,37 @@ import q8388415.brero_massimiliano.PTNetEditor.views.PTNSimAlertLabel;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNControlPanel;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
+/**
+ * Main window for desktop, menu bar and controll panel.
+ * 
+ * @author q8388415 - Massimiliano Brero
+ *
+ */
 public class MainFrame extends JFrame implements PTNIModeListener {
 
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Components displayed
+	 */
 	private PTNDesktop desktop;
 	private PTNControlPanel controlPanel;
 	private JScrollPane scPane = null;
 	private PTNMenu menu;
+	/**
+	 * Shown only when we're in sim mode.
+	 */
 	private PTNSimAlertLabel simLabel;
+	
 	private final String title = "8388415 - Massimiliano Brero";
 
+	/**
+	 * The parameters are given by the Bootstrapping process.
+	 * That will also initialize those objects.
+	 * 
+	 * @param desktop {@link PTNDesktop}
+	 * @param controlPanel {@link PTNControlPanel}
+	 * @param menu {@link PTNMenu}
+	 */
 	public MainFrame(PTNDesktop desktop, PTNControlPanel controlPanel, PTNMenu menu) {
 		
 		this.menu = menu;
@@ -40,7 +61,9 @@ public class MainFrame extends JFrame implements PTNIModeListener {
 		
 	}
 
-
+	/**
+	 * Initializes simulation Text panel.
+	 */
 	private void setUpSimPanel() {
 		simLabel = new PTNSimAlertLabel();
 		String simText = "<html><font color='white'>"+ simLabel.getText() + "</font></html>";
@@ -49,7 +72,9 @@ public class MainFrame extends JFrame implements PTNIModeListener {
 
 	}
 
-
+	/**
+	 * Sets up scroll pane an add desktop to that.
+	 */
 	private void setupScrollPane() {
 		scPane = new JScrollPane();
 		JViewport viewport = new JViewport();
@@ -57,6 +82,11 @@ public class MainFrame extends JFrame implements PTNIModeListener {
 		scPane.setViewportView(viewport);
 	}
 
+	/**
+	 * Getter.
+	 * 
+	 * @return {@link PTNDesktop}
+	 */
 	public PTNDesktop getPTNDesktop() {
 		return this.desktop;
 	}
@@ -90,8 +120,6 @@ public class MainFrame extends JFrame implements PTNIModeListener {
 		menu.switchOnNodeMenu();
 		menu.switchOnFileMenu();
 		
-
 	}
-
 
 }

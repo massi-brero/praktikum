@@ -13,7 +13,7 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.MainFrame;
 /**
  * This class starts the application.
  * 
- * @author 8388415 - Massimiliano Brero
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNBootstrap {
@@ -69,7 +69,6 @@ public class PTNBootstrap {
             public void run() {
             	MainFrame mainframe = new MainFrame(desktop, controlPanel, menu);
             	appControl.addSimulationListener(mainframe);
-            	appControl.addSimulationListener(desktop);
             }
         });
 

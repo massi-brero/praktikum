@@ -3,7 +3,7 @@ package q8388415.brero_massimiliano.PTNetEditor.exceptions;
 /**
  * Use this when a invalid simulation action occurs.
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PTNSimulationException extends Exception {

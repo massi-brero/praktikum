@@ -10,7 +10,7 @@ import java.awt.Point;
  * a method expects a node view or a node model type.
  * If getters do not match any class attributes return null.
  * 
- * @author 8388415
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public interface PTNINodeDTO {

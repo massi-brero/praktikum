@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
  * to manipulate the net or elements every time a node or arrowhead size 
  * changes.
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public interface PTNIScaleListener extends ActionListener {

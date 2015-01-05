@@ -1,6 +1,7 @@
 package q8388415.brero_massimiliano.PTNetEditor.views.windows;
 
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JMenuItem;
@@ -16,15 +17,23 @@ import q8388415.brero_massimiliano.PTNetEditor.views.NodeView;
  * Vanishes when focus user clicks somewhere else on the desktop or
  * on the control panel.
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class ContextMenuNodeWindow extends JPopupMenu implements MouseListener, AncestorListener {
 	
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Listener(s) for the context menu options.
+	 */
 	ActionListener listener;
 	NodeView nodeView;
 
+	/**
+	 * @param listener {@link ActionListener}
+	 * @param nodeView {@link NodeView}
+	 * 		Node view for whom the context menu was called.
+	 */
 	public ContextMenuNodeWindow(ActionListener listener, NodeView nodeView) {
 		this.nodeView = nodeView;
 		this.listener = listener;
@@ -33,6 +42,9 @@ public class ContextMenuNodeWindow extends JPopupMenu implements MouseListener, 
 		this.setLocation(nodeView.getLocationOnScreen());
 	}
 
+	/**
+	 * Basic initialization.
+	 */
 	private void init() {
 		this.requestFocusInWindow(true);
 		JMenuItem menu1 = new JMenuItem("Attribute ändern");
@@ -46,35 +58,64 @@ public class ContextMenuNodeWindow extends JPopupMenu implements MouseListener, 
 		
 	}
 
-	@Override
-	public void mouseClicked(java.awt.event.MouseEvent e) {}
-
-	@Override
-	public void mousePressed(java.awt.event.MouseEvent e) {}
-
+	/**
+	 * Hide context menu when a click on desktop or control panel occured.
+	 * 
+	 * @param e {@link MouseEvent}
+	 */
 	@Override
 	public void mouseReleased(java.awt.event.MouseEvent e) {
 		if (!isPopupTrigger(e)) {
 			this.setVisible(false);
 		}
 	}
-
-	@Override
-	public void mouseEntered(java.awt.event.MouseEvent e) {}
-
-	@Override
-	public void mouseExited(java.awt.event.MouseEvent e) {}
-
-	@Override
-	public void ancestorAdded(AncestorEvent event) {}
-
-	@Override
-	public void ancestorRemoved(AncestorEvent event) {}
-
+	
+	/**
+	 * Move context menu with when desktop(Main frame are dragged over the monitor.
+	 * @param AncestorEvent
+	 */
 	@Override
 	public void ancestorMoved(AncestorEvent event) {
 		if (this.isVisible())
 			this.setLocation(nodeView.getLocationOnScreen());
 	}
+	
+	/**
+	 * Not implemented.
+	 */
+	@Override
+	public void mouseClicked(java.awt.event.MouseEvent e) {}
+
+	/**
+	 * Not implemented.
+	 */
+	@Override
+	public void mousePressed(java.awt.event.MouseEvent e) {}
+
+	/**
+	 * Not implemented.
+	 */
+	@Override
+	public void mouseEntered(java.awt.event.MouseEvent e) {}
+
+	/**
+	 * Not implemented.
+	 */
+	@Override
+	public void mouseExited(java.awt.event.MouseEvent e) {}
+
+	/**
+	 * Not implemented.
+	 */
+	@Override
+	public void ancestorAdded(AncestorEvent event) {}
+
+	/**
+	 * Not implemented.
+	 */
+	@Override
+	public void ancestorRemoved(AncestorEvent event) {}
+
+
 
 }

@@ -10,31 +10,50 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
 /**
  * Represents the view of a place node.
- * PlaceView#currentTransitionScale and PlaceView#currentSize are used to keep track of the 
- * actual size an scaling factor of this node type, e g. for other classes who need to know about the current size of
- * node an his icon. The attribute scale inherited
+ * PlaceView#currentTransitionPlaceling factor of this node type, e g. for other classes who need 
+ * to know about the current size of node an his icon. The attribute scale inherited
  * from NodeView is used for internal scaling process.
  * Thus those two are synchronized in each from NodeView derived class.
- * @author Laptop
+ * 
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public class PlaceView extends NodeView {
 
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Paths to icon images which are "loaded" depending on the node#s state.
+	 */
 	final private static String sourceIconStandard = "/resources/elements/circle2.png";
     final private static String sourceIconSelected = "/resources/elements/circle2_selected.png";
     final private static Dimension DEFAULT_SIZE = new Dimension(50, 70);
     private int token = 0;
     /**
 	 * Current scaling factor for nodes' components.
+	 * Is static so it can be used globally for newly created nodes
+	 * or when other classes need informations about the current place scale.
 	 */
     private static int currentPlaceScale = 0;
 	/**
 	 * Current size of this node family
+	 * Is static so it can be used globally for newly created nodes
+	 * or when other classes need informations about the current place size.
 	 */
     private static Dimension currentSize = null;
+    
+    /**
+     * DOT sign used when toekn number = 1.
+     */
     private final String DOT_SIGN = "\u2022";
 
+    /**
+     * 
+     * @param id String
+     * 		This node's id.
+     * @param token int
+     * 		Number of tokens.
+     */
     public PlaceView(String id, int token) {
         super(id, sourceIconStandard, sourceIconSelected, 34, 34);
         this.init();
@@ -66,13 +85,17 @@ public class PlaceView extends NodeView {
     /**
      * Adopts token label to scale and updates global scale info for this node
      * type.
+     * 
+     * @param factor int
+     * 		factor by which the size must be increased/decreased.
      */
     @Override
     public void updateSize(int factor) {
     	
         int addSize = factor * 2;
         Font tokenFont = this.getFont();
-        this.setFont(new Font(tokenFont.getFontName(), Font.PLAIN, (int) (tokenFont.getSize() + addSize)));
+        this.setFont(new Font(tokenFont.getFontName(), Font.PLAIN, 
+        					  (int) (tokenFont.getSize() + addSize)));
         super.updateSize(factor);
         PlaceView.currentPlaceScale = scale;
         PlaceView.currentSize = this.getSize();
@@ -80,10 +103,14 @@ public class PlaceView extends NodeView {
     }
 
     /**
+     * Setter. Depending on the value the token number will be displayed...
+     * <ul>
+     * <li>not at all when value = 0</li>
+     * <li>as DOT when value = 1</li>
+     * <li>as figures when value is between 2 and 999  </li>
+     * </ul>
      * 
-     * 
-     * @param text
-     * @return void
+     * @param token int
      */
     public void updateToken(int token) {
         try {
@@ -127,8 +154,8 @@ public class PlaceView extends NodeView {
     
     /**
      * 
-     * @return
-     * 		Dimension size of this node type.
+     * @return Dimension
+     * 		 Current size of this node type.
      */
 	public static Dimension getCurrentSize() {
 		if (null == currentSize)
@@ -137,19 +164,32 @@ public class PlaceView extends NodeView {
 			return currentSize;
 	}
 
+	/**
+	 * Getter
+	 * 
+	 * @return String
+	 */
 	@Override
 	public String getNodeName() {
 		return this.getName();
 	}
 
 	/**
+	 * Getter.
 	 * Returns token. Also a {@link PTNINodeDTO} method.
+	 * 
+	 * @return Integer
 	 */
 	@Override
 	public Integer getToken() {
 		return token;
 	}
 	
+	/**
+	 * Setter.
+	 * 
+	 * @param selected Boolean
+	 */
 	@Override
 	public void setSelected(boolean selected) {
 		super.setSelected(selected);

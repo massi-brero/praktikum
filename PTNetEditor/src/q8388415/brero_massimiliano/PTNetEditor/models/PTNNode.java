@@ -11,7 +11,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  * we may use it as data store object.
  * {@link PTNINodeDTO}
  * 
- * @author brero
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public abstract class PTNNode implements PTNINodeDTO {

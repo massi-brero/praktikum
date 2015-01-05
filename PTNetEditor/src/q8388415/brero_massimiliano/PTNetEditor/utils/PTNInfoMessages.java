@@ -4,7 +4,7 @@ package q8388415.brero_massimiliano.PTNetEditor.utils;
  *  A simple Container for information messages used more than once 
  *  that can be called in a static manner.
  * 
- * @author Laptop
+ * @author q8388415 - Massimiliano Brero
  *
  */
 public final class PTNInfoMessages {
