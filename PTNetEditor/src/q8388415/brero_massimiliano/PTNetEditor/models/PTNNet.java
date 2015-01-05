@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.xml.transform.Source;
+
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNArcDirections;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 
@@ -26,6 +28,7 @@ public class PTNNet {
 	 * All nodes in the net.
 	 */
 	private HashMap<String,PTNNode> nodes;
+	
 	/**
 	 * All arcs in the net.
 	 */
@@ -231,7 +234,7 @@ public class PTNNet {
 	/**
 	 * Returns true if net contains given node object
 	 * 
-	 * @param PTNNode n
+	 * @param n PTNNode
 	 * @return Boolean
 	 */
 	public boolean hasNode(PTNNode n) {
@@ -251,8 +254,8 @@ public class PTNNet {
 	/**
 	 * Returns true if net contains given arc object.
 	 * 
-	 * @param PTNNode n
-	 * @return
+	 * @param n PTNNode
+	 * @return {@link PTNNode}
 	 */
 	public boolean hasArc(PTNNode n) {
 		return arcs.containsValue(n);
@@ -262,7 +265,7 @@ public class PTNNet {
 	 * When we add a new arc and the target is a transition node we have to
 	 * check if activation status of that node must be changed.
 	 * 
-	 * @param PTNArc a
+	 * @param a PTNArc
 	 */
 	public void addArc(PTNArc a) {
 		
@@ -312,7 +315,7 @@ public class PTNNet {
 
 	/**
 	 * 
-	 * @param PTNNode n 
+	 * @param n PTNNode
 	 * 		New node. Can be a place or a transition. If it's a transition's
 	 * 		status will be set to activated.
 	 */
@@ -338,8 +341,8 @@ public class PTNNet {
 	/**
 	 * Returns all arcs that have the given source.
 	 * 
-	 * @param source
-	 * @return
+	 * @param source PTNNode
+	 * @return HashMap<String, PTNArc>
 	 */
 	public HashMap<String, PTNArc> getArcsBySource(PTNNode source) {
 		
@@ -350,8 +353,8 @@ public class PTNNet {
 	/**
 	 * Returns all arcs that have the given target.
 	 * 
-	 * @param source
-	 * @return
+	 * @param source PTNNode
+	 * @return HashMap<String, PTNArc> 
 	 */
 	public HashMap<String, PTNArc> getArcsByTarget(PTNNode source) {
 		
@@ -365,8 +368,8 @@ public class PTNNet {
 	 * it seemed apt to use the switch isSource)
 	 *
 	 * @param node {@link PTNNode}
-	 * @param isSource
-	 * 		Boolean source or target given?
+	 * @param isSource Bolean
+	 * 		source or target given?
 	 * @return <HashMap<String, PTNArc>
 	 */
 	private HashMap<String, PTNArc> getArcsBySourceOrTarget(PTNNode node, Boolean isSource) {
@@ -430,8 +433,7 @@ public class PTNNet {
      * Activates a transition and returns true if every predecessors
      * has at least one token or if there are no predecessors at all.
      * 
-     * @param PTNTransition
-     * 		transition
+     * @param transition PTNTransition
      * @return Boolean
      * 		True if transition is now activated, else false.
      */

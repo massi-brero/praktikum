@@ -68,7 +68,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	 * Handles when arcs are drawn or nodes shall be moved by dragging the mouse
 	 * after selecting them. Does nothing in simulation mode.
 	 * 
-	 * @param e {@link M ouseEvent}
+	 * @param e {@link MouseEvent}
 	 */
 	@Override
 	public void mouseDragged(MouseEvent e) {
@@ -243,7 +243,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 	 * 		</ul>
 	 * 		<li>Resets variables after dragging a node</li>
 	 * </ul>
-	 * @todo Eventually move node combination logic in a model when refactoring.
+	 * todo Eventually move node combination logic in a model when refactoring.
 	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {

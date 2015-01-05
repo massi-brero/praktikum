@@ -135,8 +135,7 @@ public class PlaceView extends NodeView {
     
     /**
      * Sets all current size information to its default values.
-     * We need that e.g. when reading a file an importing 
-     * @ return void
+     * We need that e.g. when reading a file an importing
      */
     public static void resetSize() {
     	PlaceView.currentSize = DEFAULT_SIZE;

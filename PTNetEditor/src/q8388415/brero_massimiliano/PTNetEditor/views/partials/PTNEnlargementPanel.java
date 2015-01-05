@@ -119,7 +119,7 @@ public class PTNEnlargementPanel extends JPanel {
 	/**
 	 * Setter.
 	 * 
-	 * @param JLabel
+	 * @param label JLabel
 	 * 		Label with text for this partial.
 	 */
 	public void setLabel(JLabel label) {

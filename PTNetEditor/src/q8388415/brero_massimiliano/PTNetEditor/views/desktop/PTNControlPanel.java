@@ -51,7 +51,6 @@ public class PTNControlPanel extends JPanel {
 	
 	/**
 	 * Icons for size panels partial.
-	 * @return
 	 */
 	private final String PLACE_ICON = "/resources/icons/size-place-icon.png";
 	private final String TRANSITION_ICON = "/resources/icons/size-rectangle-icon.png";
@@ -161,7 +160,8 @@ public class PTNControlPanel extends JPanel {
 
 	/**
 	 * Adds an individual node view as a listener.
-	 * @param place {@link TransitionView}
+	 * 
+	 * @param transition {@link TransitionView}
 	 * 		Transition observing change scale events 
 	 * 		that will update its size when event for this node type 
 	 * 		is fired.

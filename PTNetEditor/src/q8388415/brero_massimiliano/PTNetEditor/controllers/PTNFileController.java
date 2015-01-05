@@ -68,8 +68,6 @@ public class PTNFileController implements PTNIFileListener {
 	 * not need to make a model a listener. If there was
 	 * an error while reading the method will stop the reading process.
 	 * 
-	 * @return void
-	 * 
 	 */
 	@Override
 	public void readFromFile(PTNNet net) {

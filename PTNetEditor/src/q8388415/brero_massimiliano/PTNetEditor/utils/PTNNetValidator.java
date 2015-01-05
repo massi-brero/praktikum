@@ -16,7 +16,7 @@ public class PTNNetValidator {
 	 * which would be an integer from 0 to 999;
 	 * 
 	 * @param token
-	 * @return
+	 * @return Boolean
 	 */
     public static Boolean isValidToken(String token) {
         

@@ -192,8 +192,6 @@ public class Del_PTNInfoWindow extends JDialog implements ActionListener {
     
     /**
      * Places this window always in the upper left corner of the desktop.
-     * 
-     * @return
      */
     private void setAtDesktopDefaultPosition() {
 		int offsetX = 10;

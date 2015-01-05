@@ -108,7 +108,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	
 	/**
 	 * Sets image source path for icon representing this node type
-	 * @param s String
+	 * @param ic ImageIcon
 	 */
 	public void setIconSource(ImageIcon ic) {
 		//@Todo check if path exists
@@ -239,7 +239,7 @@ public abstract class NodeView extends JLabel implements PTNIScaleListener, PTNI
 	 * Increase or decrease scale. Listens when an event from the 
 	 * corresponding control pane is fired.
 	 * 
-	 * @param ActionEvent
+	 * @param e ActionEvent
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {

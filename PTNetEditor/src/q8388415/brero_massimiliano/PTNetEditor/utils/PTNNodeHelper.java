@@ -94,7 +94,7 @@ public class PTNNodeHelper implements ActionListener {
 	 * <li>moves with the main frame</li>
 	 * </ul>
 	 * 
-	 * @param source
+	 * @param sourceView {@link NodeView}
 	 */
 	public void handleContextmenu(NodeView sourceView) {
 		this.sourceView = sourceView;
@@ -189,7 +189,8 @@ public class PTNNodeHelper implements ActionListener {
     /**
      * When the token attribute of a place has been changed, this methods checks
      * if the state of succeeding transitions must be updated.
-     * @param sourceView2 
+     * 
+     * @param source {@link PTNINodeDTO}
      * 
      */
     public void updateAdjacentTransitionsState(PTNINodeDTO source) {
@@ -214,7 +215,7 @@ public class PTNNodeHelper implements ActionListener {
      * changed, e. g. after an arc has been deleted.
      * Accepts either node views or node models.
      * 
-     * @param sourceView2 {@link PTNINodeDTO}
+     * @param node {@link PTNINodeDTO}
      * 		By using {@link PTNINodeDTO} we may pass either a node view or a node model.
      */
 	public void updateTransitionState(PTNINodeDTO node) {
@@ -274,7 +275,7 @@ public class PTNNodeHelper implements ActionListener {
 	 * This way a new node is places after a double click where the user 
 	 * would expect it.
 	 * 
-	 * @param location Point
+	 * @param nodeInformation {@link PTNINodeDTO}
 	 * @return Point 
 	 * 		The center of the node.
 	 */

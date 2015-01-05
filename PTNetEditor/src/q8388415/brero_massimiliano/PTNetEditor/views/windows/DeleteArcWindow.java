@@ -198,7 +198,7 @@ public class DeleteArcWindow extends JDialog implements ItemListener, ActionList
 	 * 
 	 * @param arc
 	 * @param direction
-	 * @return
+	 * @return String
 	 */
 	private String getArcInformationAsString(PTNArc arc, PTNArcDirections direction) {
 

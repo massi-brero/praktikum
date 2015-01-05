@@ -72,7 +72,7 @@ public class ContextMenuNodeWindow extends JPopupMenu implements MouseListener, 
 	
 	/**
 	 * Move context menu with when desktop(Main frame are dragged over the monitor.
-	 * @param AncestorEvent
+	 * @param event AncestorEvent
 	 */
 	@Override
 	public void ancestorMoved(AncestorEvent event) {

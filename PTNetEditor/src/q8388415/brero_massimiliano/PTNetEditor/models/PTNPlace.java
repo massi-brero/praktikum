@@ -50,7 +50,7 @@ public class PTNPlace extends PTNNode {
 	/**
 	 * Getter
 	 * 
-	 * @ret int
+	 * @return int
 	 */
 	public Integer getToken() {
 		return token;

@@ -143,9 +143,9 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 
 	/**
 	 * Getter.
-	 * @return
+	 * @return Boolean
 	 */
-	public static boolean isSelectMode() {
+	public static Boolean isSelectMode() {
 		return selectMode;
 	}
 

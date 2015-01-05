@@ -155,7 +155,7 @@ public class EditNodeWindow extends JDialog implements ActionListener {
 	 * First check if we have a valid token. We'll check that in this window
      * because we need no further information for this check.
      * 
-     * @param ActioEvent
+     * @param e ActionEvent
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {

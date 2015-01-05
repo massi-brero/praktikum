@@ -272,9 +272,9 @@ public class PTNArcHelper {
 	/**
 	 * Check if there's already such an arc with identical start and end points.
 	 * 
-	 * @param start
-	 * @param end
-	 * @return
+	 * @param start Point
+	 * @param end Point
+	 * @return Boolean
 	 */
 	public Boolean isAlreadyOnDesktop(Point start, Point end) {
 		Hashtable<String, ArcView> arcViews = desktop.getArcViews();
@@ -307,10 +307,9 @@ public class PTNArcHelper {
 	 * Prepares arc to be shown in view. This method will also activate the
 	 * target node view if the corresponding model node is activated.
 	 * 
-	 * @param id
-	 * @param normalizedSourceLocation
-	 * @param normalizedTargetLocation
-	 * @param netControl
+	 * @param arcView {@link ArcView}
+	 * @param targetModel {@link PTNNode}
+	 * @param targetView {@link NodeView}
 	 */
 	public void initArcView(ArcView arcView, PTNNode targetModel, NodeView targetView) {
 
@@ -361,7 +360,7 @@ public class PTNArcHelper {
 	/**
 	 * Checks if an arc on the desktop was clicked and updates its selection state.
 	 * 
-	 * @param MouseEvent
+	 * @param e MouseEvent
 	 */
 	public void handleArcSelection(MouseEvent e) {
 

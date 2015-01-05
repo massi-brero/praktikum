@@ -87,7 +87,7 @@ public class PTNDesktop extends JLayeredPane implements MouseListener {
 	 * attributes for buffered painting. Adds needed listeners to Controllers
 	 * to identify desktop events.
 	 * 
-	 * @param appControl {@link PTNAppController}
+	 * @param appController {@link PTNAppController}
 	 * @param net PTNNet
 	 * 		The net model is just needed pass it to the instantiated controllers.
 	 * 		The desktop will not communicate directly with the models.
@@ -157,8 +157,6 @@ public class PTNDesktop extends JLayeredPane implements MouseListener {
 	 * Deletes node and arc view lists and sets size to default values.
 	 * This method will be called whenever the desktiop is cleared or 
 	 * a pnml file has been parsed.
-	 * 
-	 * @return void
 	 */
 	public void reset() {
 		nodes = new ArrayList<NodeView>();
@@ -194,8 +192,6 @@ public class PTNDesktop extends JLayeredPane implements MouseListener {
 	 * handles.
 	 * This method will also redraw the arcs on the desktop and therefore will
 	 * do that in an arc synchronized block.
-	 * 
-	 * @return void
 	 */
 	@Override
 	public void paintComponent(Graphics g) {
@@ -226,7 +222,7 @@ public class PTNDesktop extends JLayeredPane implements MouseListener {
 	 * than maybe the Swing Event-Queue would allow.
 	 * An Example: Drawing an new arc by using mouse dragging.
 	 * 
-	 * @param Rectangle
+	 * @param bounds Rectangle
 	 * 		The area we want to synchronize. We will always repaint the
 	 * 		complete desktop dince we do not have too much objects and 
 	 * 		those we have are not to complicated to draw.
@@ -312,7 +308,7 @@ public class PTNDesktop extends JLayeredPane implements MouseListener {
 	 * "newArc" is a kind of temporary id given by the controller to identify easily
 	 * arcs that are not yet in the desktops arc list.
 	 * 
-	 * @param String id
+	 * @param id String
 	 */
 	public void removeArc(String id) {
 
@@ -342,7 +338,7 @@ public class PTNDesktop extends JLayeredPane implements MouseListener {
 	 * The {@link PTNDesktopController} will be called everytime
 	 * a node i dragged or an arc has to be drawn.
 	 * 
-	 * @return
+	 * @param nodeView NodeView
 	 */
 	public void addListenertoNode(NodeView nodeView) {
 		nodeView.addMouseMotionListener(desktopController);
@@ -429,7 +425,7 @@ public class PTNDesktop extends JLayeredPane implements MouseListener {
 
 	/**
 	 * Removes selected nodes and the connected arcs. Calls controller method
-	 * {@link PTNNetController#removeNodeAndArcs(NodeView) to erase their 
+	 * {@link PTNNetController#removeNodeAndArcs} to erase their 
 	 * models too and update the net.
 	 */
 	public void deleteSelectedNodes() {
@@ -602,7 +598,7 @@ public class PTNDesktop extends JLayeredPane implements MouseListener {
 	 * from our view and from the net model, we will pass them to the controller
 	 * and let him do the job.
 	 * 
-	 * @param NodeView
+	 * @param sourceView NodeView
 	 */
 	public void callDeleteArcsDialog(NodeView sourceView) {
 
