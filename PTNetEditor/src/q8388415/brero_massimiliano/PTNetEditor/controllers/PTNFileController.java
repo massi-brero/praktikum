@@ -33,8 +33,7 @@ public class PTNFileController implements PTNIFileListener {
 	/**
 	 * Needed to remember which folder was opened last time.
 	 */
-	private static File lastOpenedFile = null;
-	private static File lastSavedFile = null;
+	private static File lastOpenedFilePath = null;
 
 	/**
 	 * 
@@ -43,7 +42,7 @@ public class PTNFileController implements PTNIFileListener {
 	 */
 	public PTNFileController(PTNDesktop desktop, PTNNet net) {
 		readModel = new PTNFileReader();
-		lastOpenedFile = new File("");
+		lastOpenedFilePath = new File("");
 		this.desktop = desktop;
 		this.net = net;
 	}
@@ -78,9 +77,9 @@ public class PTNFileController implements PTNIFileListener {
 		if (true == this.openFileDialog()) {
 			try {
 				
-				if (null != lastOpenedFile) {
+				if (null != lastOpenedFilePath) {
 					net.reset();
-					readModel.readFromFile(lastOpenedFile, net);
+					readModel.readFromFile(lastOpenedFilePath, net);
 				}
 				
 				desktop.init();
@@ -102,11 +101,11 @@ public class PTNFileController implements PTNIFileListener {
 	 */
 	private Boolean openFileDialog() {
 
-		PTNFileChooser fileDialog = new PTNFileChooser(lastOpenedFile.getParent());
+		PTNFileChooser fileDialog = new PTNFileChooser(lastOpenedFilePath.getParent());
 		int val = fileDialog.showDialog(desktop, "Netz-Datei wählen");
 
 		if (0 == val) {
-			lastOpenedFile = fileDialog.getSelectedFile();
+			lastOpenedFilePath = fileDialog.getSelectedFile();
 			return true;
 		} 
 		
@@ -126,21 +125,21 @@ public class PTNFileController implements PTNIFileListener {
 	private void writeFileDialog() {
 
 		PTNFileChooser fileDialog = new PTNFileChooser();
-		fileDialog.setCurrentDirectory(lastSavedFile);
+		fileDialog.setCurrentDirectory(lastOpenedFilePath);
 
 		int val = fileDialog.showSaveDialog(desktop);
 
 		if (0 == val) {
-			lastSavedFile = fileDialog.getSelectedFile();
+			lastOpenedFilePath = fileDialog.getSelectedFile();
 
 			//
-			if (null != lastSavedFile) {
-				this.correctPNMLExtension(lastSavedFile);
+			if (null != lastOpenedFilePath) {
+				this.correctPNMLExtension(lastOpenedFilePath);
 
-				if (confirmSave(lastSavedFile)) {
+				if (confirmSave(lastOpenedFilePath)) {
 					PTNFileWriter writeModel = new PTNFileWriter(net);
 					try {
-						writeModel.writePNMLFile(lastSavedFile);
+						writeModel.writePNMLFile(lastOpenedFilePath);
 					} catch (PTNWriteException e) {
 						this.callWriteWarning(e.getMessage());
 					}
@@ -164,7 +163,7 @@ public class PTNFileController implements PTNIFileListener {
 
 		if (-1 == filePath.lastIndexOf(".pnml")) {
 			int index = -1 == filePath.lastIndexOf(".") ? filePath.length() : filePath.lastIndexOf(".");
-			lastSavedFile = new File(filePath.substring(0, index) + pnmlExtension);
+			lastOpenedFilePath = new File(filePath.substring(0, index) + pnmlExtension);
 		}
 
 	}

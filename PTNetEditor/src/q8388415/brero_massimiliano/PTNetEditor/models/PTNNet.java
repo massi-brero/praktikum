@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.xml.transform.Source;
-
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNArcDirections;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
 

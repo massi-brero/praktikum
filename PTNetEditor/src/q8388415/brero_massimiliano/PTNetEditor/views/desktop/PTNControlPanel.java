@@ -98,7 +98,7 @@ public class PTNControlPanel extends JPanel {
 		transitionSizePanel = new PTNEnlargementPanel("Transitionen", TRANSITION_ICON);
 		allNodesSizePanel = new PTNEnlargementPanel("Alle Knoten", ALL_NODES__ICON);
 		arrowHeadSizePanel = new PTNEnlargementPanel("Pfeilspitzen", ARROW_ICON);
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
 		controllerPanel.add(arrowHeadSizePanel);
 		controllerPanel.add(placeSizePanel);
@@ -109,7 +109,7 @@ public class PTNControlPanel extends JPanel {
 		this.setSize(new Dimension((int)(this.desktop.getSize().getWidth()), 20));
 		
 		this.add(controllerPanel);
-		setDoubleBuffered(true);
+		this.setDoubleBuffered(true);
 		
 		//add listeners
 		this.init();
@@ -119,9 +119,7 @@ public class PTNControlPanel extends JPanel {
 	 * Sets up listeners when first initialized.
 	 */
 	public void init() {
-
 		this.setUpScaleListeners();
-
 	}
 
 	/**

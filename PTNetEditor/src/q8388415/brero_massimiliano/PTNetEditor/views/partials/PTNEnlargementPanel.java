@@ -33,7 +33,6 @@ public class PTNEnlargementPanel extends JPanel {
 	private JLabel label;
 	private JButton plusButton;
 	private JButton minusButton;
-	final int START_WIDTH = 170;
 	final int START_HEIGHT = 20;
 	final int BUTTON_WIDTH = 15;
 	final int BUTTON_HEIGHT = 15;
@@ -54,12 +53,18 @@ public class PTNEnlargementPanel extends JPanel {
 		plusButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 10));
 		plusButton.setMargin(new Insets(0, 0, 2, 0));
 		plusButton.setText("+");
+		plusButton.setVerticalTextPosition(JButton.CENTER);
+		plusButton.setHorizontalTextPosition(JButton.CENTER);
 		plusButton.setFocusable(false);
+		
 		minusButton = new JButton("minusButton");
 		minusButton.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 10));
 		minusButton.setMargin(new Insets(0, 0, 0, 0));
 		minusButton.setText("-");
+		minusButton.setVerticalTextPosition(JButton.CENTER);
+		minusButton.setHorizontalTextPosition(JButton.CENTER);
 		minusButton.setFocusable(false);
+		//this.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.init();
 	}
 	
@@ -71,7 +76,7 @@ public class PTNEnlargementPanel extends JPanel {
 	}
 
 	/**
-	 * 
+	 * Setter.
 	 * @param iconPath String
 	 */
 	private void setIcon(String iconPath) {
@@ -89,13 +94,13 @@ public class PTNEnlargementPanel extends JPanel {
 	}
 
 	/**
-	 * 
+	 * Basis initialization.
 	 */
 	public void init() {
 		
 		plusButton.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
 		minusButton.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-		this.setPreferredSize(new Dimension(START_WIDTH, START_HEIGHT));
+		this.setCustomSize();
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		this.add(label);
@@ -106,6 +111,15 @@ public class PTNEnlargementPanel extends JPanel {
 		
 	}
 	
+	/**
+	 * Sets size so label with icon + 2 buttons will fit in this panel.
+	 */
+	protected void setCustomSize() {
+		int vSpace = 40;
+		int width = label.getPreferredSize().width + 2 * BUTTON_WIDTH + vSpace;
+		this.setPreferredSize(new Dimension(width, START_HEIGHT));
+	}
+
 	/**
 	 * Getter.
 	 * 
@@ -124,6 +138,8 @@ public class PTNEnlargementPanel extends JPanel {
 	 */
 	public void setLabel(JLabel label) {
 		this.label = label;
+		this.setCustomSize();
+		this.repaint();
 	}
 	
 	/**
