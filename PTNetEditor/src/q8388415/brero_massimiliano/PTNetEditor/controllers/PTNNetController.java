@@ -224,6 +224,7 @@ public class PTNNetController implements Runnable {
         
         net.removeNode(node);
         desktop.getNodeViews().remove(nodeView);
+        desktop.remove(nodeView);
 
     }
 
