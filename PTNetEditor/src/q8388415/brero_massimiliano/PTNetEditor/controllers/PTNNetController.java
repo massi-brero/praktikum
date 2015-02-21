@@ -239,7 +239,7 @@ public class PTNNetController implements Runnable {
     public void removeArcFromNetAndDesktop(String id) {
         PTNArc arcModel = net.getArcById(id);
         desktop.removeArc(id);
-        net.getArcs().remove(id);
+        net.removeArc(id);
 
        /**
         *  Check which transition status has to be updated. Arc model is now removed from the list but we still 

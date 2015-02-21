@@ -431,6 +431,16 @@ public class PTNNet implements Serializable {
 		this.getArcs().remove(arc.getId());
 		changeListener.firePropertyChange("arc_removed", arc, null);	
 	}
+	
+	/**
+	 * Overloads {@link PTNNet#removeArc(PTNArc arc)}. 
+	 * This way we can delete an arc by using its id.
+	 * 
+	 * @param arc {@link PTNArc}
+	 */
+	public void removeArc(String id) {
+		this.removeArc(this.getArcs().get(id));	
+	}
 
 	/**
 	 * Empties nodes and arcs lists. 

@@ -43,6 +43,12 @@ public class PTNAppController implements KeyListener, PTNIScaleListener, Propert
 	public static boolean deselectAll = false;
 	public static boolean selectMode = false;
 	public static boolean redrawArcs = false;
+	
+	/*
+	 * This variables allows us to check if the net was saved after a change occurred.
+	 */
+	private boolean newestStateSaved = true;
+	
 	/**
 	 * Classes that must be notified when we change from editor to simulation
 	 * modus and vice versa.
@@ -230,6 +236,7 @@ public class PTNAppController implements KeyListener, PTNIScaleListener, Propert
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		
+		this.newestStateSaved = false;
 		System.out.println(evt.getPropertyName());
 		
 	}
