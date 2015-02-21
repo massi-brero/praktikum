@@ -427,6 +427,7 @@ public class PTNNet implements Serializable {
 	 * @param arc {@link PTNArc}
 	 */
 	public void removeArc(PTNArc arc) {
+		System.out.println("remove the arc");
 		this.getArcs().remove(arc.getId());
 		changeListener.firePropertyChange("arc_removed", arc, null);	
 	}
