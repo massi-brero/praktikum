@@ -4,6 +4,8 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -24,7 +26,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
  * @author 8388415 - Massimiliano Brero
  * 
  */
-public class PTNAppController implements KeyListener, PTNIScaleListener {
+public class PTNAppController implements KeyListener, PTNIScaleListener, PropertyChangeListener {
 
 	/**
 	 * Location a node is placed when it is created by the menu ba option.
@@ -224,5 +226,12 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 	 */
 	@Override
 	public void keyTyped(KeyEvent arg0) {}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		
+		System.out.println(evt.getPropertyName());
+		
+	}
 
 }

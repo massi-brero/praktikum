@@ -130,7 +130,7 @@ public class PTNMenu extends JMenuBar {
 		});
 
 		item2.setIcon(this.getIcon("/resources/icons/credits-icon.png"));
-		System.out.println(PTNInfoMessages.getCredits());
+		//System.out.println(PTNInfoMessages.getCredits());
 		item2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

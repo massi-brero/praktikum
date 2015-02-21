@@ -63,6 +63,7 @@ public class PTNBootstrap {
         final PTNControlPanel controlPanel = PTNControlPanel.getInstance();
         controlPanel.initialize(desktop, appControl);
         final PTNMenu menu = new PTNMenu(desktop, appControl, net);
+        this.initializeListeners(net,appControl);
 
         
         SwingUtilities.invokeLater(new Runnable() {
@@ -73,5 +74,19 @@ public class PTNBootstrap {
         });
 
     }
+
+    /**
+     * Initial setup of controllers, views and models that have to 
+     * listen to each other.
+     * 
+     * @param appControl 
+     * @param net 
+     */
+	private void initializeListeners(PTNNet net, PTNAppController appControl) {
+
+		if (net != null && appControl != null)
+			net.addPropertyChangeListener(appControl);
+		
+	}
     
 }

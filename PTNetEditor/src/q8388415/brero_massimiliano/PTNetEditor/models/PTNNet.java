@@ -1,5 +1,8 @@
 package q8388415.brero_massimiliano.PTNetEditor.models;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -20,8 +23,13 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  * @author q8388415 - Massimiliano Brero
  *
  */
-public class PTNNet {
+public class PTNNet implements Serializable {
 	
+	/**
+	 * default value
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * All nodes in the net.
 	 */
@@ -31,11 +39,13 @@ public class PTNNet {
 	 * All arcs in the net.
 	 */
 	private HashMap<String,PTNArc> arcs;
+	transient private PropertyChangeSupport changeListener;
 	
 	public PTNNet() {
 		
 		nodes = new HashMap<String,PTNNode>();
 		arcs = new HashMap<String,PTNArc>();
+		changeListener = new PropertyChangeSupport(this);
 		
 	}
 	
@@ -271,6 +281,7 @@ public class PTNNet {
 			this.updateActivationAfterAddingNewPredecessor(a, (PTNTransition)a.getTarget());
 		
 		arcs.put(a.getId(), a);
+		changeListener.firePropertyChange("arc_added", null, a);	
 	}
 
 	/**
@@ -322,6 +333,9 @@ public class PTNNet {
 		
 		if (n.getType() == PTNNodeTypes.TRANSITION)
 			this.activateTransition((PTNTransition)n);
+
+		changeListener.firePropertyChange("node_added", null, n);		
+		
 	}
 	
 	
@@ -403,10 +417,9 @@ public class PTNNet {
 	 * 
 	 * @param node {@link PTNNode}
 	 */
-	public void removeNode(PTNNode node) {
-		
+	public void removeNode(PTNNode node) {	
 		this.getNodes().remove(node.getId());
-		
+		changeListener.firePropertyChange("node_removed", node, null);		
 	}
 	
 	/**
@@ -415,6 +428,7 @@ public class PTNNet {
 	 */
 	public void removeArc(PTNArc arc) {
 		this.getArcs().remove(arc.getId());
+		changeListener.firePropertyChange("arc_removed", arc, null);	
 	}
 
 	/**
@@ -458,6 +472,22 @@ public class PTNNet {
 		
 		return isActivated;
 		
+	}
+	
+	/**
+	 * 
+	 * @param l {@link PropertyChangeListener}
+	 */
+	public void addPropertyChangeListener(PropertyChangeListener l) {
+		changeListener.addPropertyChangeListener(l);
+	}
+	
+	/**
+	 * 
+	 * @param l {@link PropertyChangeListener}
+	 */
+	public void removePropertyChangeListener(PropertyChangeListener l) {
+		changeListener.removePropertyChangeListener(l);
 	}
 
 }
