@@ -1,5 +1,8 @@
 package q8388415.brero_massimiliano.PTNetEditor.models;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -12,7 +15,7 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  * Base class where all the net business logic is in. 
  * This model knows actually the net structure or the predeccessors or soccessors
  * of all nodes.
- * It also sets the transtions' activation status.
+ * It also sets the transitions' activation status.
  * 
  * Protocol: If the node and arc list are to be used in another thread (like net or desktop
  * controller) a monitor must be put on those lists.
@@ -20,8 +23,13 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  * @author q8388415 - Massimiliano Brero
  *
  */
-public class PTNNet {
+public class PTNNet implements Serializable {
 	
+	/**
+	 * default value
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * All nodes in the net.
 	 */
@@ -31,11 +39,13 @@ public class PTNNet {
 	 * All arcs in the net.
 	 */
 	private HashMap<String,PTNArc> arcs;
+	transient private PropertyChangeSupport changeListenerSupport;
 	
 	public PTNNet() {
 		
 		nodes = new HashMap<String,PTNNode>();
 		arcs = new HashMap<String,PTNArc>();
+		changeListenerSupport = new PropertyChangeSupport(this);
 		
 	}
 	
@@ -271,6 +281,7 @@ public class PTNNet {
 			this.updateActivationAfterAddingNewPredecessor(a, (PTNTransition)a.getTarget());
 		
 		arcs.put(a.getId(), a);
+		changeListenerSupport.firePropertyChange("arc_added", null, a);	
 	}
 
 	/**
@@ -316,17 +327,23 @@ public class PTNNet {
 	 * @param n PTNNode
 	 * 		New node. Can be a place or a transition. If it's a transition's
 	 * 		status will be set to activated.
+	 * 		It also adds all existing property change listener to the new
+	 * 		node. This way node changes can be tracked too.
 	 */
 	public void addNode(PTNNode n) {
 		nodes.put(n.getId(), n);
 		
 		if (n.getType() == PTNNodeTypes.TRANSITION)
 			this.activateTransition((PTNTransition)n);
+
+		//Inform all listeners that we have a new node
+		changeListenerSupport.firePropertyChange("node_added", null, n);		
+		
 	}
 	
 	
 	/**
-	 * Checks wether source and target are two different kinds of nodes.
+	 * Checks whether source and target are two different kinds of nodes.
 	 * 
 	 * @param source
 	 * @param target
@@ -403,10 +420,9 @@ public class PTNNet {
 	 * 
 	 * @param node {@link PTNNode}
 	 */
-	public void removeNode(PTNNode node) {
-		
+	public void removeNode(PTNNode node) {	
 		this.getNodes().remove(node.getId());
-		
+		changeListenerSupport.firePropertyChange("node_removed", node, null);		
 	}
 	
 	/**
@@ -414,7 +430,19 @@ public class PTNNet {
 	 * @param arc {@link PTNArc}
 	 */
 	public void removeArc(PTNArc arc) {
+		System.out.println("remove the arc");
 		this.getArcs().remove(arc.getId());
+		changeListenerSupport.firePropertyChange("arc_removed", arc, null);	
+	}
+	
+	/**
+	 * Overloads {@link PTNNet#removeArc(PTNArc arc)}. 
+	 * This way we can delete an arc by using its id.
+	 * 
+	 * @param arc {@link PTNArc}
+	 */
+	public void removeArc(String id) {
+		this.removeArc(this.getArcs().get(id));	
 	}
 
 	/**
@@ -458,6 +486,31 @@ public class PTNNet {
 		
 		return isActivated;
 		
+	}
+	
+	/**
+	 * 
+	 * @param l {@link PropertyChangeListener}
+	 */
+	public void addPropertyChangeListener(PropertyChangeListener l) {
+		changeListenerSupport.addPropertyChangeListener(l);
+	}
+	
+	/**
+	 * 
+	 * @param l {@link PropertyChangeListener}
+	 */
+	public void removePropertyChangeListener(PropertyChangeListener l) {
+		changeListenerSupport.removePropertyChangeListener(l);
+	}
+
+	/**
+	 * Returns all listeners that observe changings in this net. So node changes
+	 * might also be tracked.
+	 * @return
+	 */
+	public PropertyChangeListener[] getPropertyChangeListeners() {
+		return changeListenerSupport.getPropertyChangeListeners();
 	}
 
 }

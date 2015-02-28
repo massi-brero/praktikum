@@ -11,6 +11,7 @@ import q8388415.brero_massimiliano.PTNetEditor.models.PTNFileReader;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNFileWriter;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIFileListener;
+import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNetSavedChecker;
 import q8388415.brero_massimiliano.PTNetEditor.views.PlaceView;
 import q8388415.brero_massimiliano.PTNetEditor.views.TransitionView;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
@@ -19,6 +20,8 @@ import q8388415.brero_massimiliano.PTNetEditor.views.windows.PTNFileChooser;
 /**
  * Basic class to read from PNML files or write in those files. Handles the file
  * dialog windows. This class has a file read and a file write model.
+ * Will inform SacveActionListeners before a net is actually saved. This way we
+ * provide a hook for necessary operations before a net can be finally saved.
  * 
  * @see PTNFileReader
  * 
@@ -74,7 +77,7 @@ public class PTNFileController implements PTNIFileListener {
 		PlaceView.resetSize();
 		TransitionView.resetSize();
 		
-		if (true == this.openFileDialog()) {
+		if (true == this.openFileDialog() && PTNNetSavedChecker.netHasBeenSaved()) {
 			try {
 				
 				if (null != lastOpenedFilePath) {
@@ -138,8 +141,10 @@ public class PTNFileController implements PTNIFileListener {
 
 				if (confirmSave(lastOpenedFilePath)) {
 					PTNFileWriter writeModel = new PTNFileWriter(net);
+
 					try {
 						writeModel.writePNMLFile(lastOpenedFilePath);
+						PTNAppController.setNewestStateSaved(true);
 					} catch (PTNWriteException e) {
 						this.callWriteWarning(e.getMessage());
 					}
@@ -169,11 +174,11 @@ public class PTNFileController implements PTNIFileListener {
 	}
 
 	/**
-	 * Check if user really wants to overwrite an existing file;
+	 * Checks if user really wants to overwrite an existing file.
 	 * 
 	 * @param File
 	 * @return Boolean
-	 * 		True if ressource shall be saved false in all other cases.
+	 * 		True if resource shall be saved false in all other cases.
 	 */
 	private Boolean confirmSave(File file) {
 
@@ -211,5 +216,5 @@ public class PTNFileController implements PTNIFileListener {
 	private void callNetContructionWarning(String message) {
 		JOptionPane.showConfirmDialog(desktop, message, "Import Fehler", JOptionPane.WARNING_MESSAGE);
 	}
-
+	
 }

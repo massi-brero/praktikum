@@ -2,12 +2,15 @@ package q8388415.brero_massimiliano.PTNetEditor.views.windows;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNIModeListener;
+import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNetSavedChecker;
 import q8388415.brero_massimiliano.PTNetEditor.views.PTNMenu;
 import q8388415.brero_massimiliano.PTNetEditor.views.PTNSimAlertLabel;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNControlPanel;
@@ -50,7 +53,6 @@ public class MainFrame extends JFrame implements PTNIModeListener {
 		this.controlPanel = controlPanel;
 		this.setUpSimPanel();
 		this.setTitle(title);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.desktop = desktop;
 		this.setupScrollPane();
 		this.getContentPane().add(menu, BorderLayout.PAGE_START);
@@ -58,6 +60,17 @@ public class MainFrame extends JFrame implements PTNIModeListener {
 		this.getContentPane().add(controlPanel, BorderLayout.PAGE_END);
 		this.pack();
 		this.setVisible(true);
+		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		this.addWindowListener(new WindowAdapter() {
+		
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if (PTNNetSavedChecker.netHasBeenSaved())
+					System.exit(0);
+				
+			}
+			
+		});
 		
 	}
 
@@ -120,6 +133,6 @@ public class MainFrame extends JFrame implements PTNIModeListener {
 		menu.switchOnNodeMenu();
 		menu.switchOnFileMenu();
 		
-	}
+	}	
 
 }

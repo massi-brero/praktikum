@@ -4,6 +4,8 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -24,10 +26,10 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNIScaleListener;
  * @author 8388415 - Massimiliano Brero
  * 
  */
-public class PTNAppController implements KeyListener, PTNIScaleListener {
+public class PTNAppController implements KeyListener, PTNIScaleListener, PropertyChangeListener {
 
 	/**
-	 * Location a node is placed when it is created by the menu ba option.
+	 * Location a node is placed when it is created by the menu bar option.
 	 */
 	public static final Point DEFAULT_NODE_LOCATION = new Point(0, 0);
 	
@@ -41,6 +43,12 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 	public static boolean deselectAll = false;
 	public static boolean selectMode = false;
 	public static boolean redrawArcs = false;
+	
+	/*
+	 * This variables allows us to check if the net was saved after a change occurred.
+	 */
+	private static boolean newestStateSaved = true;
+	
 	/**
 	 * Classes that must be notified when we change from editor to simulation
 	 * modus and vice versa.
@@ -224,5 +232,32 @@ public class PTNAppController implements KeyListener, PTNIScaleListener {
 	 */
 	@Override
 	public void keyTyped(KeyEvent arg0) {}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		
+		PTNAppController.setNewestStateSaved(false);
+		System.out.println(evt.getPropertyName());
+		
+	}
+	
+	/**
+	 * Getter. Use this method to check if
+	 * a) net has been saved since it was changed the last time. Method will return true.
+	 * b) net has not been saved since it was changed the last time. Method will return false.
+	 * @return
+	 */
+	public static boolean isNewestStateSaved() {
+		return newestStateSaved;
+	}
+
+	/**
+	 * Setter. Used to internally set newestStateSaved.
+	 * @param newestStateSaved
+	 */
+	public static void setNewestStateSaved(boolean newestStateSaved) {
+		PTNAppController.newestStateSaved = newestStateSaved;
+	}
+
 
 }
