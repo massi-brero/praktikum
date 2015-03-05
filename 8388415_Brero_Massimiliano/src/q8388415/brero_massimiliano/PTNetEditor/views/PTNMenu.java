@@ -16,6 +16,7 @@ import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNAppController;
 import q8388415.brero_massimiliano.PTNetEditor.controllers.PTNFileController;
 import q8388415.brero_massimiliano.PTNetEditor.models.PTNNet;
 import q8388415.brero_massimiliano.PTNetEditor.utils.PTNInfoMessages;
+import q8388415.brero_massimiliano.PTNetEditor.utils.PTNNetSavedChecker;
 import q8388415.brero_massimiliano.PTNetEditor.views.desktop.PTNDesktop;
 
 /**
@@ -130,7 +131,7 @@ public class PTNMenu extends JMenuBar {
 		});
 
 		item2.setIcon(this.getIcon("/resources/icons/credits-icon.png"));
-		System.out.println(PTNInfoMessages.getCredits());
+		//System.out.println(PTNInfoMessages.getCredits());
 		item2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -192,7 +193,8 @@ public class PTNMenu extends JMenuBar {
 		item3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				if (PTNNetSavedChecker.netHasBeenSaved())
+					System.exit(0);
 			}
 		});
 		

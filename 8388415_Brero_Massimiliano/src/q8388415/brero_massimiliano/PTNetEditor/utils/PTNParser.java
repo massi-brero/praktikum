@@ -71,6 +71,8 @@ public class PTNParser extends PNMLParser {
     /**
      * Adds new place node to the net model. The id must be unique.
      * Otherwise a {@link PTNNodeConstructionException} is thrown.
+     * This method will also add the listeners to the node model, so
+     * they may listen to changes made.
      * 
      * @param id String
      * @throws PTNNodeConstructionException
@@ -82,6 +84,7 @@ public class PTNParser extends PNMLParser {
             if (!usedIdNodes.contains(id)) {
                 usedIdNodes.add(id);
                 net.addNode(place);
+                place.addPropertyChangeListener(net.getPropertyChangeListeners());
             } else {
                 throw new PTNNodeConstructionException("Die Knoten-ID " + id + " wurde mehrfach vergeben");
             }
@@ -92,6 +95,8 @@ public class PTNParser extends PNMLParser {
     /**
      * Adds new transition node to the net model. The id must be unique.
      * Otherwise a {@link PTNNodeConstructionException} is thrown.
+     * This method will also add the listeners to the node model, so
+     * they may listen to changes made.
      * 
 	 * @param id String
 	 * @throws PTNNodeConstructionException
@@ -103,6 +108,7 @@ public class PTNParser extends PNMLParser {
             if (!usedIdNodes.contains(id)) {
                 usedIdNodes.add(id);
                 net.addNode(transition);
+                transition.addPropertyChangeListener(net.getPropertyChangeListeners());
             } else {
                 throw new PTNNodeConstructionException("Die Knoten-ID " +  id + " wurde mehrfach vergeben");
             }

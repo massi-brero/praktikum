@@ -1,6 +1,8 @@
 package q8388415.brero_massimiliano.PTNetEditor.models;
 
 import java.awt.Point;
+import java.io.Serializable;
+import java.util.Date;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
@@ -10,18 +12,23 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  * Model representing a place. Needed e. g. for all writing and reading operations.
  * Since the business logic is completely in {@link PTNNet} this is more of a data 
  * container.
+ * Will fire a property Change Event
  * Derived from {@link PTNNode}.
  * 
  * @author q8388415 - Massimiliano Brero
  *
  */
-public class PTNTransition extends PTNNode {
+public class PTNTransition extends PTNNode implements Serializable {
 	
+	/**
+	 * default value... so we may use this class as a bean.
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * Is user allowed to switch this transition in simulation mode?
 	 */
 	private Boolean isActivated = false;
-
+	
 	/**
 	 * 
 	 * @param name String
@@ -40,6 +47,15 @@ public class PTNTransition extends PTNNode {
 	 */
 	public PTNTransition(String id) throws PTNNodeConstructionException {
 		super(id);
+	}
+	
+	/**
+	 * Standard Constructor so we can use this class as a bean.
+	 * Therefore we use a random id based on current time.
+	 * @throws PTNNodeConstructionException
+	 */
+	public PTNTransition() throws PTNNodeConstructionException {
+		this(new Date().toString().concat(String.valueOf(Math.random() * 100000)));
 	}
 	
 	/**
@@ -84,5 +100,24 @@ public class PTNTransition extends PTNNode {
 		return null;
 	}
 	
+	/**
+	 * Setter fires changed property event.
+	 */
+	@Override
+	public void setName(String name) {
+		if (changeListenerSupport != null)
+			changeListenerSupport.firePropertyChange("node_name_changed", super.getName(), name);	
+		super.setName(name);
+	}
+	
+	/**
+	 * Setter fires changed property event.
+	 */
+	@Override
+	public void setLocation(Point p) {
+		if (changeListenerSupport != null)
+			changeListenerSupport.firePropertyChange("node_position_changed", this.getLocation(), p);	
+		super.setLocation(p);
+	}
 
 }

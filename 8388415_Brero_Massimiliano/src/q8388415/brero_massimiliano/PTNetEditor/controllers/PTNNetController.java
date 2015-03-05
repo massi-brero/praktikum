@@ -88,6 +88,8 @@ public class PTNNetController implements Runnable {
             nodeHelper.initNodeView(node.getName(), nodeView, node.getLocation());
 
         }
+        
+        PTNAppController.setNewestStateSaved(true);
 
     }
 
@@ -126,7 +128,8 @@ public class PTNNetController implements Runnable {
             // TODO Fehler-Dialog öffnen
             System.out.println(e.getMessage());
         }
-
+        
+        PTNAppController.setNewestStateSaved(true);
         return arcViewList;
 
     }
@@ -239,7 +242,7 @@ public class PTNNetController implements Runnable {
     public void removeArcFromNetAndDesktop(String id) {
         PTNArc arcModel = net.getArcById(id);
         desktop.removeArc(id);
-        net.getArcs().remove(id);
+        net.removeArc(id);
 
        /**
         *  Check which transition status has to be updated. Arc model is now removed from the list but we still 
@@ -309,26 +312,29 @@ public class PTNNetController implements Runnable {
         int token = nodeInformation.getToken();
         NodeView nodeView = null;
         Point nodeLocation = nodeHelper.centerNodeLocation(nodeInformation);
+        PTNNode nodeModel = null;
 
             try {
                 if (type == PTNNodeTypes.STELLE) {
                 	
-                	PTNPlace place = new PTNPlace(name, id, nodeLocation);
-                	place.setToken(token);
-                    net.addNode(place);
+                	nodeModel = new PTNPlace(name, id, nodeLocation);
+                	((PTNPlace)nodeModel).setToken(token);
+                    net.addNode(nodeModel);
 
                     nodeView = new PlaceView(id, token);
                     nodeHelper.addPlaceListener((PlaceView) nodeView);
 
                 } else if (type == PTNNodeTypes.TRANSITION) {
-
-                    net.addNode(new PTNTransition(name, id, nodeLocation));
+                	
+                	nodeModel = new PTNTransition(name, id, nodeLocation);
+                    net.addNode(nodeModel);
 
                     nodeView = new TransitionView(id);
                     nodeHelper.addTransitionListener((TransitionView) nodeView);
 
                 }
 
+                nodeModel.addPropertyChangeListener(net.getPropertyChangeListeners());
                 nodeHelper.initNodeView(name, nodeView, nodeLocation);
 
             } catch (PTNNodeConstructionException e) {

@@ -54,7 +54,7 @@ public class PTNBootstrap {
         /**
          * Here the net is instantiates which basically all of the components will use.
          */
-        PTNNet net = new PTNNet();
+        final PTNNet net = new PTNNet();
         /**
          * Initialize controllers for drawing and basic control operations.
          */
@@ -68,6 +68,7 @@ public class PTNBootstrap {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	MainFrame mainframe = new MainFrame(desktop, controlPanel, menu);
+            	net.addPropertyChangeListener(appControl);
             	appControl.addSimulationListener(mainframe);
             }
         });

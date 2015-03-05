@@ -1,6 +1,9 @@
 package q8388415.brero_massimiliano.PTNetEditor.models;
 
 import java.awt.Point;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 
 import q8388415.brero_massimiliano.PTNetEditor.exceptions.PTNNodeConstructionException;
 import q8388415.brero_massimiliano.PTNetEditor.types.PTNINodeDTO;
@@ -14,7 +17,12 @@ import q8388415.brero_massimiliano.PTNetEditor.types.PTNNodeTypes;
  * @author q8388415 - Massimiliano Brero
  *
  */
-public abstract class PTNNode implements PTNINodeDTO {
+public abstract class PTNNode implements PTNINodeDTO, Serializable {
+	
+	/**
+	 * default value... so we may use this class as a bean.
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Basic attributes of a node. Corresponding information needed by the PNML file.
@@ -27,6 +35,11 @@ public abstract class PTNNode implements PTNINodeDTO {
      * Place or Transition? {@link PTNNodeTypes}
      */
     private PTNNodeTypes type;
+    
+	/**
+	 * Inform the listeners when a node property has been changed.
+	 */
+	transient protected PropertyChangeSupport changeListenerSupport = null;
 
     /**
      * 
@@ -38,9 +51,9 @@ public abstract class PTNNode implements PTNINodeDTO {
     public PTNNode(String name, String id, Point pos) throws PTNNodeConstructionException {
 
         if ("" == id) {
-
             throw new PTNNodeConstructionException("Vital information for this node is missing (id)!");
         } else {
+        	changeListenerSupport = new PropertyChangeSupport(this);
             this.setName(name);
             this.setId(id);
             this.setLocation(pos);
@@ -59,7 +72,7 @@ public abstract class PTNNode implements PTNINodeDTO {
     }
 
     /**
-     * Must be implemented by child class to do som basic initialization work.
+     * Must be implemented by child class to do some basic initialization work.
      */
     protected abstract void init();
 
@@ -133,5 +146,32 @@ public abstract class PTNNode implements PTNINodeDTO {
     public void setType(PTNNodeTypes type) {
         this.type = type;
     }
+    
+	/**
+	 * 
+	 * @param l {@link PropertyChangeListener}
+	 */
+	public void addPropertyChangeListener(PropertyChangeListener l) {
+		changeListenerSupport.addPropertyChangeListener(l);
+	}
+	
+	/**
+	 * Overrides {@link PTNNode#addPropertyChangeListener(PropertyChangeListener)}
+	 * so object accepts array of listeners.
+	 * @param l {@link PropertyChangeListener}
+	 */
+	public void addPropertyChangeListener(PropertyChangeListener[] l) {
+		if (l != null) 
+			for (PropertyChangeListener listener : l)
+				this.addPropertyChangeListener(listener);
+	}
+	
+	/**
+	 * 
+	 * @param l {@link PropertyChangeListener}
+	 */
+	public void removePropertyChangeListener(PropertyChangeListener l) {
+		changeListenerSupport.removePropertyChangeListener(l);
+	}
 
 }

@@ -237,7 +237,7 @@ public class PTNAppController implements KeyListener, PTNIScaleListener, Propert
 	public void propertyChange(PropertyChangeEvent evt) {
 		
 		PTNAppController.setNewestStateSaved(false);
-		System.out.println(evt.getPropertyName());
+		//System.out.println(evt.getPropertyName());
 		
 	}
 	

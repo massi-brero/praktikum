@@ -85,7 +85,7 @@ public class PTNDesktopController implements MouseMotionListener, MouseListener,
 				 * here we are drawing an arc
 				 */
 				if (!PTNAppController.moveNodes) {
-					;
+					
 					Point start = new Point(source.getLocation().x + source.getWidth() / 2, source.getLocation().y + source.getHeight() / 2);
 					Point end = new Point(e.getX(), e.getY());
 					desktop.updateArcs("", start, end);
